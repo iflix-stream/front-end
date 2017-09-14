@@ -1,6 +1,6 @@
-# iflix
+# iflix-front
 
-> Front-end do projeto iFlix
+> A Vue.js project
 
 ## Build Setup
 
