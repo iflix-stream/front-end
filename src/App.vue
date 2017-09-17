@@ -1,47 +1,36 @@
 <template>
-    <div id="app">
-        <h1>{{title}}</h1>
-        <p>{{msg}}</p>
-    </div>
+                <md-layout md-align="center">
+                    <md-card>
+                        <md-card-header>
+                            <div class="md-title">Login</div>
+                        </md-card-header>
+                        <md-card-content>
+                            <md-input-container>
+                                <md-icon>person</md-icon>
+                                <label>Email</label>
+                                <md-input email required  />
+                            </md-input-container>
+
+                            <md-input-container md-has-password>
+                                <md-icon>lock</md-icon>
+                                <label>Senha</label>
+                                <md-input type="password" required />
+                            </md-input-container>
+                        </md-card-content>
+                        <md-card-actions>
+                            <md-button class="md-raised md-primary">Cadastrar</md-button>
+                            <md-button class="md-raised md-accent">Login</md-button>
+                        </md-card-actions>
+                    </md-card>
+            </md-layout>
 </template>
 
 <script>
     export default {
-        name: 'app',
-        data() {
-            return {
-                title: 'iFlix',
-                msg: 'Seja bem vindo !'
-            }
-        }
+      name: 'app'
     }
 </script>
 
 <style>
-    #app {
-        font-family: 'Avenir', Helvetica, Arial, sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        text-align: center;
-        color: #2c3e50;
-        margin-top: 60px;
-    }
 
-    h1, h2 {
-        font-weight: normal;
-    }
-
-    ul {
-        list-style-type: none;
-        padding: 0;
-    }
-
-    li {
-        display: inline-block;
-        margin: 0 10px;
-    }
-
-    a {
-        color: #42b983;
-    }
 </style>
