@@ -1,28 +1,31 @@
 <template>
-                <md-layout md-align="center">
-                    <md-card>
-                        <md-card-header>
-                            <div class="md-title">Login</div>
-                        </md-card-header>
-                        <md-card-content>
-                            <md-input-container>
-                                <md-icon>person</md-icon>
-                                <label>Email</label>
-                                <md-input email required  />
-                            </md-input-container>
-
-                            <md-input-container md-has-password>
-                                <md-icon>lock</md-icon>
-                                <label>Senha</label>
-                                <md-input type="password" required />
-                            </md-input-container>
-                        </md-card-content>
-                        <md-card-actions>
-                            <md-button class="md-raised md-primary">Cadastrar</md-button>
-                            <md-button class="md-raised md-accent">Login</md-button>
-                        </md-card-actions>
-                    </md-card>
-            </md-layout>
+    <v-layout>
+        <v-flex xs12 sm6 offset-sm3 pt-5>
+            <v-card >
+                <v-card-title>
+                    <div>
+                        <h3 class="headline mb-0">Login</h3>
+                    </div>
+                </v-card-title>
+                <v-card-text>
+                    <v-form>
+                        <v-text-field
+                                label="Name"
+                                required
+                        ></v-text-field>
+                        <v-text-field
+                                label="E-mail"
+                                required
+                        ></v-text-field>
+                    </v-form>
+                </v-card-text>
+                <v-card-actions>
+                    <v-btn flat class="orange--text">Share</v-btn>
+                    <v-btn flat class="orange--text">Explore</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-flex>
+    </v-layout>
 </template>
 
 <script>
