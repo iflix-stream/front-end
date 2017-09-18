@@ -1,7 +1,8 @@
 <template>
+    <div class="wrapper">
     <v-layout>
-        <v-flex xs12 sm6 offset-sm3 pt-5>
-            <v-card >
+        <v-flex xs12 sm6 offset-sm3>
+            <v-card>
                 <v-card-title>
                     <div>
                         <h3 class="headline mb-0">Login</h3>
@@ -26,6 +27,7 @@
             </v-card>
         </v-flex>
     </v-layout>
+    </div>
 </template>
 
 <script>
@@ -35,5 +37,15 @@
 </script>
 
 <style>
+    .wrapper {
+        height: 100%;
+        min-height: 100%;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-align-items: center;
+        align-items: center;
+        -webkit-justify-content: center;
+        justify-content: center;
+    }
 
 </style>
