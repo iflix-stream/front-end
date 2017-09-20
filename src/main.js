@@ -3,10 +3,21 @@ import Vuetify from 'vuetify'
 import VueRouter from 'vue-router'
 import 'vuetify/dist/vuetify.min.css'
 import App from './App'
-import router from './routes'
+import Home from './components/Home'
+import Index from './components/Index'
+import Login from './components/Login'
 
 Vue.use(VueRouter)
 Vue.use(Vuetify)
+
+const routes = [
+    {path: '/login', component: Login},
+    {path: '/', component: Index, meta: {requireAuth: true}, children: [{path: 'home', component: Home}]}
+]
+
+const router = new VueRouter({
+  routes
+})
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requireAuth)) {
