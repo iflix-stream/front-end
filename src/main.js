@@ -3,8 +3,6 @@ import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 import App from './App'
 
-Vue.config.productionTip = false
-
 Vue.use(Vuetify)
 
 /* eslint-disable no-new */
