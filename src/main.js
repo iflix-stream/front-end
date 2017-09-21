@@ -19,23 +19,23 @@ const router = new VueRouter({
   routes
 })
 
-router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.requireAuth)) {
-        // this route requires auth, check if logged in
-        // if not, redirect to login page.
-    var a = true
-    if (a) {
-      next({
-        path: '/login'
-       // query: { redirect: to.fullPath }
-      })
-    } else {
-      next()
-    }
-  } else {
-    next() // make sure to always call next()!
-  }
-})
+// router.beforeEach((to, from, next) => {
+//   if (to.matched.some(record => record.meta.requireAuth)) {
+//         // this route requires auth, check if logged in
+//         // if not, redirect to login page.
+//     var a = true
+//     if (a) {
+//       next({
+//         path: '/login'
+//        // query: { redirect: to.fullPath }
+//       })
+//     } else {
+//       next()
+//     }
+//   } else {
+//     next() // make sure to always call next()!
+//   }
+// })
 
 /* eslint-disable no-new */
 new Vue({

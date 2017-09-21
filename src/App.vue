@@ -1,5 +1,9 @@
-<template>
-    <router-view></router-view>
+<template style="height: 100%;
+         min-height: 100%;">
+    <v-flex grey darken-3 style="height: 100%">
+        <router-view></router-view>
+    </v-flex>
+
 </template>
 
 <script>
@@ -13,19 +17,3 @@
     }
 </script>
 
-<style>
-    .wrapper {
-        height: 100%;
-        min-height: 100%;
-        display: -webkit-flex;
-        display: flex;
-        -webkit-align-items: center;
-        align-items: center;
-        -webkit-justify-content: center;
-        justify-content: center;
-    }.wrapper2 {
-        height: 100%;
-        min-height: 100%;
-    }
-
-</style>
