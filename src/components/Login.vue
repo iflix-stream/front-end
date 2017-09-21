@@ -76,14 +76,17 @@
     methods:
       {
         login: function () {
-          this.$http.post(Vue.prototype.$apiUrl + '/login',
-            {
-              email: this.email.text,
-              senha: this.senha.text
-            }
-            ).then(function (promisse) {
-            console.log(promisse.data)
-          })
+          const formData = {
+            email: this.email,
+            senha: this.senha
+          };
+
+          this.$http.post(Vue.prototype.$apiUrl + "/login", formData, {emulateJSON: true})
+            .then(response => {
+                localStorage.setItem("token", response.data.token)
+            }, response => {
+              console.error(response.body);
+            });
         }
       }
   }
