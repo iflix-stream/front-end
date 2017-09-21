@@ -6,7 +6,9 @@ import App from './App.vue'
 import Home from './components/Home.vue'
 import Index from './components/Index.vue'
 import Login from './components/Login.vue'
+import VueResource from 'vue-resource'
 
+Vue.use(VueResource)
 Vue.use(VueRouter)
 Vue.use(Vuetify)
 
@@ -14,6 +16,8 @@ const routes = [
   {path: '/login', component: Login},
   {path: '/', component: Index, meta: {requireAuth: true}, children: [{path: 'home', component: Home}]}
 ]
+
+Vue.prototype.$apiUrl = "http://localhost/iFlix/api";
 
 const router = new VueRouter({
   routes

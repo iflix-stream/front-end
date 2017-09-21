@@ -1,13 +1,17 @@
 <template>
 
     <v-flex>
+        <v-toolbar class="grey darken-4">
+            <v-container>
+                <v-toolbar-title class="white--text">iFlix</v-toolbar-title>
+            </v-container>
 
-        <v-parallax src="./static/login-background.jpg">
-
+        </v-toolbar>
+        <v-parallax src="./static/login-background.jpg" style="max-height: 400px">
         </v-parallax>
         <v-container>
             <v-flex offset-sm2 offset-md3 offset-lg4 xs12 sm8 md6 lg4 style="position: relative;">
-                <v-card style="margin-top: -350px" >
+                <v-card style="margin-top: -320px">
                     <v-card-text>
                         <h3 style="text-align: center;">iFlix</h3>
                         <v-flex xs12>
@@ -16,17 +20,19 @@
                                     <v-text-field
                                             label="E-mail"
                                             required
+                                            v-model="email"
                                     ></v-text-field>
                                     <v-text-field
                                             name="input-10-1"
                                             label="Senha"
                                             hint="A senha deve conter ao menos 8 caracteres"
-                                            min="8"
+                                            min="3"
                                             :append-icon="e1 ? 'visibility' : 'visibility_off'"
                                             :append-icon-cb="() => (e1 = !e1)"
                                             :type="e1 ? 'password' : 'text'"
                                             counter
                                             required
+                                            v-model="senha"
                                     ></v-text-field>
 
                                     <v-flex class="text-xs-right">
@@ -34,7 +40,7 @@
                                     </v-flex>
 
                                     <v-flex>
-                                        <v-btn block accent large>Login</v-btn>
+                                        <v-btn block accent large v-on:click="login">Login</v-btn>
                                     </v-flex>
                                     <v-flex>
                                         <v-btn block primary large>Registrar</v-btn>
@@ -45,19 +51,41 @@
                         </v-flex>
                     </v-card-text>
                 </v-card>
+
             </v-flex>
+            <!--<v-footer class="pa-3 grey darken-4">-->
+            <!--<p class="text&#45;&#45;white text-md-center">Feito com carinho e sem fins lucrativos © {{ new Date().getFullYear() }}</p>-->
+            <!--</v-footer>-->
         </v-container>
+
     </v-flex>
 </template>
 
 <script>
+  import Vue from 'vue'
+
   export default {
     name: 'app',
     data () {
       return {
-        e1: false
+        e1: false,
+        email: '',
+        senha: ''
       }
-    }
+    },
+    methods:
+      {
+        login: function () {
+          this.$http.post(Vue.prototype.$apiUrl + '/login',
+            {
+              email: this.email.text,
+              senha: this.senha.text
+            }
+            ).then(function (promisse) {
+            console.log(promisse.data)
+          })
+        }
+      }
   }
 </script>
 
