@@ -1,9 +1,7 @@
-<template style="height: 100%;
-         min-height: 100%;">
-    <v-flex grey darken-3 style="height: 100%">
+<template >
+    <v-app class="application--dark">
         <router-view></router-view>
-    </v-flex>
-
+    </v-app>
 </template>
 
 <script>
@@ -16,4 +14,8 @@
       }
     }
 </script>
+
+<style lang="stylus">
+    /*@require './iflix.styl';*/
+</style>
 
