@@ -2,17 +2,17 @@ import Vue from 'vue'
 import Vuetify from 'vuetify'
 import VueRouter from 'vue-router'
 import 'vuetify/dist/vuetify.min.css'
-import App from './App'
-import Home from './components/Home'
-import Index from './components/Index'
-import Login from './components/Login'
+import App from './App.vue'
+import Home from './components/Home.vue'
+import Index from './components/Index.vue'
+import Login from './components/Login.vue'
 
 Vue.use(VueRouter)
 Vue.use(Vuetify)
 
 const routes = [
-    {path: '/login', component: Login},
-    {path: '/', component: Index, meta: {requireAuth: true}, children: [{path: 'home', component: Home}]}
+  {path: '/login', component: Login},
+  {path: '/', component: Index, meta: {requireAuth: true}, children: [{path: 'home', component: Home}]}
 ]
 
 const router = new VueRouter({

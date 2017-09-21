@@ -16,6 +16,6 @@
 </script>
 
 <style lang="stylus">
-    /*@require './iflix.styl';*/
+    @require './iflix.styl';
 </style>
 
