@@ -7,6 +7,7 @@ import Home from './components/Home.vue'
 import Index from './components/Index.vue'
 import Login from './components/Login.vue'
 import Welcome from './components/Welcome.vue'
+import Dashboard from './components/Dashboard.vue'
 import VueResource from 'vue-resource'
 
 Vue.use(VueResource)
@@ -15,8 +16,9 @@ Vue.use(Vuetify)
 
 const routes = [
   {path: '/login', component: Login},
-  {path: '/', component: Index, meta: {requireAuth: true}, children: [{path: 'home', component: Home}]},
-  {path: '/in', component: Welcome, meta: {requireAuth: true}, children: [{path: 'home', component: Home}]}
+  {path: '/', component: Index, meta: {requireAuth: true}},
+  {path: '/in', component: Welcome, meta: {requireAuth: true}, children: [{path: 'home', component: Home}]},
+  {path: '/dashboard', component: Dashboard, meta: {requireAuth: true}, children: [{path: 'home', component: Home}]}
 ]
 
 Vue.prototype.$apiUrl = 'http://localhost/iFlix/api'
@@ -30,7 +32,7 @@ router.beforeEach((to, from, next) => {
     // this route requires auth, check if logged in
     // if not, redirect to login page.
 
-    if (!localStorage.getItem('token')) {
+    if (!localStorage.getItem('iflix-user-token')) {
       next({
         path: '/login',
         query: {redirect: to.fullPath}

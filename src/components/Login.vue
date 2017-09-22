@@ -64,7 +64,8 @@
 <script>
   import Vue from 'vue'
   import VueRouter from 'vue-router'
-  let jwtDecode = require('jwt-decode');
+
+  let jwtDecode = require('jwt-decode')
 
   export default {
     name: 'app',
@@ -78,23 +79,36 @@
     methods:
       {
         login: function () {
+
           const formData = {
             email: this.email,
             senha: this.senha
-          };
+          }
 
-          this.$http.post(Vue.prototype.$apiUrl + "/login", formData, {emulateJSON: true})
+          this.$http.post(Vue.prototype.$apiUrl + '/login', formData, {emulateJSON: true})
             .then(response => {
-                localStorage.setItem("token", response.data.token)
-                let decoded = jwtDecode(localStorage.getItem("token"))
-                console.log(decoded)
-              if(decoded.permicao === "admin"){
-                let v = new VueRouter;
-                v.go('/in')
+              localStorage.setItem('iflix-user-token', response.data.token)
+
+              let decoded = jwtDecode(localStorage.getItem('iflix-user-token'))
+              console.log(decoded.exp - Math.round(new Date().getTime() / 1000))
+
+              let router = new VueRouter
+
+              switch (decoded.permicao) {
+                case 'admin':
+                  router.push('/dashboard')
+                  break
+
+                case 'normal':
+                  router.push('/in')
+                  break
+
+                default:
+                  router.push('/in')
               }
             }, response => {
-              console.error(response.body);
-            });
+              console.error(response.body)
+            })
         }
       }
   }
