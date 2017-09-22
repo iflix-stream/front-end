@@ -63,6 +63,8 @@
 
 <script>
   import Vue from 'vue'
+  import VueRouter from 'vue-router'
+  let jwtDecode = require('jwt-decode');
 
   export default {
     name: 'app',
@@ -84,6 +86,12 @@
           this.$http.post(Vue.prototype.$apiUrl + "/login", formData, {emulateJSON: true})
             .then(response => {
                 localStorage.setItem("token", response.data.token)
+                let decoded = jwtDecode(localStorage.getItem("token"))
+                console.log(decoded)
+              if(decoded.permicao === "admin"){
+                let v = new VueRouter;
+                v.go('/in')
+              }
             }, response => {
               console.error(response.body);
             });
