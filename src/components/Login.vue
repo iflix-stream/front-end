@@ -87,24 +87,28 @@
 
           this.$http.post(Vue.prototype.$apiUrl + '/login', formData, {emulateJSON: true})
             .then(response => {
-              localStorage.setItem('iflix-user-token', response.data.token)
+              if (response.data.token !== undefined) {
 
-              let decoded = jwtDecode(localStorage.getItem('iflix-user-token'))
-              console.log(decoded.exp - Math.round(new Date().getTime() / 1000))
+                localStorage.setItem('iflix-user-token', response.data.token)
 
-              let router = new VueRouter
+                let decoded = jwtDecode(localStorage.getItem('iflix-user-token'))
 
-              switch (decoded.permicao) {
-                case 'admin':
-                  router.push('/dashboard')
-                  break
+                let router = new VueRouter
 
-                case 'normal':
-                  router.push('/in')
-                  break
+                switch (decoded.permicao) {
+                  case 'admin':
+                    router.push('/dashboard')
+                    break
 
-                default:
-                  router.push('/in')
+                  case 'normal':
+                    router.push('/in')
+                    break
+
+                  default:
+                    router.push('/in')
+                }
+              }else{
+
               }
             }, response => {
               console.error(response.body)
