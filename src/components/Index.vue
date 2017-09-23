@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>a</h1>
+        <h1>Menu aki</h1>
     <router-view></router-view>
     </div>
 </template>

@@ -62,72 +62,40 @@
 </template>
 
 <script>
-  import Vue from 'vue'
-  import VueRouter from 'vue-router'
+    import Vue from 'vue'
 
-  let jwtDecode = require('jwt-decode')
+    var jwtDecode = require('jwt-decode')
+    export default {
+        name: 'app',
+        data () {
+            return {
+                e1: true,
+                email: '',
+                senha: ''
+            }
+        },
+        methods: {
+            login: function () {
 
-  export default {
-    name: 'app',
-    data () {
-      return {
-        e1: false,
-        email: '',
-        senha: ''
-      }
-    },
-    methods:
-      {
-        login: function () {
-
-          const formData = {
-            email: this.email,
-            senha: this.senha
-          }
-
-          this.$http.post(Vue.prototype.$apiUrl + '/login', formData, {emulateJSON: true})
-            .then(response => {
-              if (response.data.token !== undefined) {
-
-                localStorage.setItem('iflix-user-token', response.data.token)
-
-                let decoded = jwtDecode(localStorage.getItem('iflix-user-token'))
-
-                let router = new VueRouter
-
-                switch (decoded.permicao) {
-                  case 'admin':
-                    router.push('/dashboard')
-                    break
-
-                  case 'normal':
-                    router.push('/in')
-                    break
-
-                  default:
-                    router.push('/in')
+                const formData = {
+                    email: this.email,
+                    senha: this.senha
                 }
-              }else{
 
-              }
-            }, response => {
-              console.error(response.body)
-            })
+                this.$http.post(Vue.prototype.$apiUrl + '/login', formData, {emulateJSON: true})
+                    .then(response => {
+                        if (response.data.token !== undefined) {
+                            localStorage.setItem('iflix-user-token', response.data.token)
+                            this.$router.go('/home')
+                        }
+                    }, response => {
+                        console.error(response.body)
+                    })
+            }
         }
-      }
-  }
+    }
 </script>
 
 <style>
-    .wrapper {
-        height: 100%;
-        min-height: 100%;
-        display: -webkit-flex;
-        display: flex;
-        -webkit-align-items: center;
-        align-items: center;
-        -webkit-justify-content: center;
-        justify-content: center;
-    }
 
 </style>
