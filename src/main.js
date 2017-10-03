@@ -9,10 +9,12 @@ import Login from './components/Login.vue'
 import CadastroFilme from './components/filme/CadastroFilme.vue'
 import Dashboard from './components/Admin.vue'
 import VueResource from 'vue-resource'
+import VueVideoPlayer from 'vue-video-player'
 
 Vue.use(VueResource)
 Vue.use(VueRouter)
 Vue.use(Vuetify)
+Vue.use(VueVideoPlayer)
 
 const routes = [
   {
@@ -57,10 +59,10 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requireAuth)) {
-    var jwtDecode = require('jwt-decode')
-    var token = localStorage.getItem('iflix-user-token')
+    let jwtDecode = require('jwt-decode')
+    let token = localStorage.getItem('iflix-user-token')
     if (token !== null) {
-      var decoded = jwtDecode(token)
+      let decoded = jwtDecode(token)
       if ((decoded.exp - Math.round(new Date().getTime() / 1000) <= 0)) {
         localStorage.removeItem('iflix-user-token')
         next({
