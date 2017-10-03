@@ -3,7 +3,7 @@
         <v-toolbar fixed style="background-color: rgba(20,20,20,0.95);">
             <v-toolbar-title class="white--text">IFlix</v-toolbar-title>
 
-            <v-menu offset-y>
+            <v-menu>
                 <v-btn flat>Categorias</v-btn>
                 <v-btn flat slot="activator" >Categorias</v-btn>
                 <v-list style="background-color: rgba(20,20,20,0.9);">

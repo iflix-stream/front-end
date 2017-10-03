@@ -7,7 +7,7 @@
             </v-container>
 
         </v-toolbar>
-        <v-parallax src="./static/login-background.jpg" style="max-height: 400px">
+        <v-parallax src="https://conta.nubank.com.br/images/sunrise.jpg" style="max-height: 400px">
         </v-parallax>
         <v-container>
             <v-flex offset-sm2 offset-md3 offset-lg4 xs12 sm8 md6 lg4 style="position: relative;">
