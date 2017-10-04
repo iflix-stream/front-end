@@ -7,6 +7,7 @@ import Home from './components/Home.vue'
 import Index from './components/Index.vue'
 import Login from './components/Login.vue'
 import CadastroFilme from './components/filme/CadastroFilme.vue'
+import AssistirFilme from './components/filme/AssistirFilme.vue'
 import Dashboard from './components/Admin.vue'
 import VueResource from 'vue-resource'
 import VueVideoPlayer from 'vue-video-player'
@@ -43,15 +44,15 @@ const routes = [
   },
   {
     meta: {
-      requireAuth: true
+      requireAuth: false
     },
-    path: '/admin',
-    component: Admin
+    path: '/watch',
+    component: AssistirFilme
   }
 
 ]
 
-Vue.prototype.$apiUrl = 'http://localhost/iFlix/api'
+Vue.prototype.$apiUrl = 'http://10.1.6.44/iFlix/api'
 
 const router = new VueRouter({
   routes
