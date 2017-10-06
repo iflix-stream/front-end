@@ -60,7 +60,9 @@
 </template>
 
 <script>
-  var tamanho
+  import Api from '../api'
+
+  let tamanho
 
   function reslize () {
 
@@ -72,47 +74,40 @@
   export default {
     name: 'app',
     mounted () {
-      let windowWidth = window.innerWidth;
-      if(windowWidth <= 520){
-        tamanho = 6;
+      let windowWidth = window.innerWidth
+      if (windowWidth <= 520) {
+        tamanho = 6
       }
-      else if(windowWidth <= 1000){
-        tamanho = 4;
+      else if (windowWidth <= 1000) {
+        tamanho = 4
       }
-      else if(windowWidth > 1000){
-        tamanho = 3;
+      else if (windowWidth > 1000) {
+        tamanho = 3
       }
     },
     data: () => ({
-      // adicionar o tanto de quadros dinamicamente atraves do tamanho da tela
-      cards: [
-        {
-          title: 'Esquadrão Suicida',
-          src: 'http://sm.ign.com/t/ign_br/screenshot/a/also-heade/also-headed-our-way-at-some-point-is-an-official-suicide-squ_shv9.640.jpg',
-          flex: tamanho
-        },
-        {
-          title: 'Esquadrão Suicida',
-          src: 'http://sm.ign.com/t/ign_br/screenshot/a/also-heade/also-headed-our-way-at-some-point-is-an-official-suicide-squ_shv9.640.jpg',
-          flex: tamanho
-        },
-        {
-          title: 'Esquadrão Suicida',
-          src: 'http://sm.ign.com/t/ign_br/screenshot/a/also-heade/also-headed-our-way-at-some-point-is-an-official-suicide-squ_shv9.640.jpg',
-          flex: tamanho
-        },
-        {
-          title: 'Esquadrão Suicida',
-          src: 'http://sm.ign.com/t/ign_br/screenshot/a/also-heade/also-headed-our-way-at-some-point-is-an-official-suicide-squ_shv9.640.jpg',
-          flex: tamanho
-        },
-        {
-          title: 'Esquadrão Suicida',
-          src: 'http://sm.ign.com/t/ign_br/screenshot/a/also-heade/also-headed-our-way-at-some-point-is-an-official-suicide-squ_shv9.640.jpg',
-          flex: tamanho
-        }
-      ]
-    })
+      filmes: [],
+      series: [],
+      filmesAndSeries: [],
+
+    }),
+    mounted () {
+      this.getFilmes()
+      this.getSeries()
+      this.mergeFilmesESeries()
+    },
+    methods: {
+      getFilmes: function () {
+        this.filmes = this.$http.get(Api.url + '/filme')
+      },
+      getSeries: function () {
+        this.series = this.$http.get(Api.url + '/serie')
+      },
+
+      mergeFilmesESeries: function () {
+        this.filmesAndSeries = this.filmes.concat(this.series).sort().reverse()
+      }
+    }
   }
 </script>
 
