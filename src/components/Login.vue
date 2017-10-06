@@ -62,38 +62,38 @@
 </template>
 
 <script>
-    import Vue from 'vue'
+  import { Api } from '../api'
 
-    var jwtDecode = require('jwt-decode')
-    export default {
-        name: 'app',
-        data () {
-            return {
-                e1: true,
-                email: '',
-                senha: ''
-            }
-        },
-        methods: {
-            login: function () {
+  var jwtDecode = require('jwt-decode')
+  export default {
+    name: 'app',
+    data () {
+      return {
+        e1: true,
+        email: '',
+        senha: ''
+      }
+    },
+    methods: {
+      login: function () {
 
-                const formData = {
-                    email: this.email,
-                    senha: this.senha
-                }
-
-                this.$http.post(Vue.prototype.$apiUrl + '/login', formData, {emulateJSON: true})
-                    .then(response => {
-                        if (response.data.token !== undefined) {
-                            localStorage.setItem('iflix-user-token', response.data.token)
-                            this.$router.go('/home')
-                        }
-                    }, response => {
-                        console.error(response.body)
-                    })
-            }
+        const formData = {
+          email: this.email,
+          senha: this.senha
         }
+
+        this.$http.post(Api.url + '/login', formData, {emulateJSON: true})
+          .then(response => {
+            if (response.data.token !== undefined) {
+              localStorage.setItem('iflix-user-token', response.data.token)
+              this.$router.go('/home')
+            }
+          }, response => {
+            console.error(response.body)
+          })
+      }
     }
+  }
 </script>
 
 <style>

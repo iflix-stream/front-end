@@ -1,4 +1,3 @@
-
 <template>
     <video-player class="vjs-custom-skin"
                   ref="videoPlayer"
@@ -21,6 +20,9 @@
 <script>
   require('video.js/dist/video-js.css')
   require('vue-video-player/src/custom-theme.css')
+
+  import {Api} from '../../api'
+
   export default {
     data () {
       return {
@@ -31,14 +33,13 @@
           playbackRates: [0.7, 1.0, 1.5, 2.0],
           sources: [{
             type: 'video/mp4',
-            src: 'http://10.1.6.44/iFlix/api/filme/?stream=true&id=1'
+            src: Api.url + '/filme/?stream=true&id='+this.$route.params.id
           }],
           poster: 'https://i.ytimg.com/vi/YnwsMEabmSo/0.jpg',
         }
       }
     },
     mounted () {
-      // console.log('this is current player instance object', this.player)
       setTimeout(() => {
         // console.log('dynamic change options', this.player)
         this.player.muted(false)
@@ -59,6 +60,7 @@
       },
       onPlayerEnded (player) {
         // console.log('player ended!', player)
+
       },
       onPlayerLoadeddata (player) {
         // console.log('player Loadeddata!', player)
