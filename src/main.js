@@ -7,16 +7,18 @@ import Home from './components/Home.vue'
 import Index from './components/Index.vue'
 import Login from './components/Login.vue'
 import CadastroFilme from './components/filme/CadastroFilme.vue'
-import AssistirFilme from './components/filme/AssistirFilme.vue'
-import Assistir from './components/Assistir.vue'
+import Filme from './components/filme/Filme.vue'
 import Dashboard from './components/Admin.vue'
 import VueResource from 'vue-resource'
 import VueVideoPlayer from 'vue-video-player'
+import VeeValidate from 'vee-validate';
+
 
 Vue.use(VueResource)
 Vue.use(VueRouter)
 Vue.use(Vuetify)
 Vue.use(VueVideoPlayer)
+Vue.use(VeeValidate)
 
 const routes = [
   {
@@ -45,19 +47,15 @@ const routes = [
   },
   {
     meta: {
-      requireAuth: false
+      requireAuth: true
     },
-    path: '/watch',
-    component: Assistir,
+    path: '/filme',
+    component: Filme,
     children: [
-      {
-        path: 'filme/:id',
-        component: AssistirFilme
-      },
-      {
-        path: 'serie/:id',
-        // component:
-      }
+        {
+            path: 'novo',
+            component: CadastroFilme
+        }
       ]
   }
 
