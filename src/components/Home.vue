@@ -3,20 +3,19 @@
         <v-container fluid grid-list-md>
             <h6>Ultimos Visualizados</h6>
             <v-layout darken-2 row wrap>
-                <v-flex
-                        v-bind="{ [`xs${card.flex}`]: true }"
-                        v-for="card in cards"
-                        :key="card.title"
+                <v-flex xs12 sm6 lg4 md3
+                        v-for="filme in filmesAndSeries"
+                        :key="filme.nome"
                 >
                     <v-card>
                         <v-card-media
-                                :src="card.src"
+                                :src="filme.thumbnail"
                                 height="200px"
                         >
                             <v-container fill-height fluid>
                                 <v-layout fill-height>
                                     <v-flex xs12 align-end flexbox>
-                                        <span class="headline white--text" v-text="card.title"></span>
+                                        <span class="headline white--text" v-text="filme.nome"></span>
                                     </v-flex>
                                 </v-layout>
 
@@ -30,20 +29,19 @@
             </v-layout>
             <h6>Lançamentos</h6>
             <v-layout darken-2 row wrap>
-                <v-flex
-                        v-bind="{ [`xs${card.flex}`]: true }"
-                        v-for="card in cards"
-                        :key="card.title"
+                <v-flex xs12 sm6 lg4 md3
+                        v-for="filme in filmesAndSeries"
+                        :key="filme.nome"
                 >
                     <v-card>
                         <v-card-media
-                                :src="card.src"
+                                :src="filme.thumbnail"
                                 height="200px"
                         >
                             <v-container fill-height fluid>
                                 <v-layout fill-height>
                                     <v-flex xs12 align-end flexbox>
-                                        <span class="headline white--text" v-text="card.title"></span>
+                                        <span class="headline white--text" v-text="filme.nome"></span>
                                     </v-flex>
                                 </v-layout>
 
@@ -60,55 +58,63 @@
 </template>
 
 <script>
-  import Api from '../api'
+    import {Api} from '../api'
 
-  let tamanho
+    let tamanho
 
-  function reslize () {
+    function reslize() {
 
-  }
-
-  window.onload = reslize
-  window.onresize = reslize
-
-  export default {
-    name: 'app',
-    mounted () {
-      let windowWidth = window.innerWidth
-      if (windowWidth <= 520) {
-        tamanho = 6
-      }
-      else if (windowWidth <= 1000) {
-        tamanho = 4
-      }
-      else if (windowWidth > 1000) {
-        tamanho = 3
-      }
-    },
-    data: () => ({
-      filmes: [],
-      series: [],
-      filmesAndSeries: [],
-
-    }),
-    mounted () {
-      this.getFilmes()
-      this.getSeries()
-      this.mergeFilmesESeries()
-    },
-    methods: {
-      getFilmes: function () {
-        this.filmes = this.$http.get(Api.url + '/filme')
-      },
-      getSeries: function () {
-        this.series = this.$http.get(Api.url + '/serie')
-      },
-
-      mergeFilmesESeries: function () {
-        this.filmesAndSeries = this.filmes.concat(this.series).sort().reverse()
-      }
     }
-  }
+
+    window.onload = reslize
+    window.onresize = reslize
+
+    export default {
+        name: 'app',
+        data: () => ({
+            filmes: [],
+            series: [],
+            filmesAndSeries: [],
+
+        }),
+        mounted () {
+            let windowWidth = window.innerWidth
+            if (windowWidth <= 520) {
+                tamanho = 6
+            }
+            else if (windowWidth <= 1000) {
+                tamanho = 4
+            }
+            else if (windowWidth > 1000) {
+                tamanho = 3
+            }
+            this.getFilmes()
+            this.getSeries()
+        },
+        methods: {
+            getFilmes: function () {
+                this.$http.get(Api.url + '/filme').then(
+                    response => {
+                        this.filmes = response.body;
+                        this.mergeFilmesESeries()
+                    }
+                )
+
+            },
+            getSeries: function () {
+                this.$http.get(Api.url + '/serie').then(
+                    response=>{
+                        this.series = response.body;
+                        this.mergeFilmesESeries()
+                    }
+                )
+            },
+
+            mergeFilmesESeries: function () {
+                this.filmesAndSeries = this.filmes.concat(this.series).sort().reverse()
+            }
+        }
+    }
 </script>
 
 <style>

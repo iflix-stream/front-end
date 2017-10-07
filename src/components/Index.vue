@@ -3,10 +3,9 @@
         <v-toolbar fixed style="background-color: rgba(20,20,20,0.95);">
             <v-toolbar-title class="white--text">IFlix</v-toolbar-title>
 
-            <v-menu>
-                <v-btn flat>Gêneros</v-btn>
+            <v-menu offset-y>
                 <v-btn flat slot="activator">Gêneros</v-btn>
-                <v-list style="background-color: rgba(20,20,20,0.9);">
+                <v-list style="background-color: rgba(20,20,20,0.9);position: fixed">
                     <v-list-tile v-for="item in items" :key="item.id" @click="">
                         <v-list-tile-title class="white--text" v-text="item.nome"></v-list-tile-title>
                     </v-list-tile>
