@@ -41,10 +41,15 @@ const routes = [
       {
         path: 'home',
         component: Home
-      },{
+      },
+      {
         path:'filme',
         component:CadastroFilme
-        }
+      },
+      {
+        path:'*',
+        redirect:'/home'
+      }
     ]
   }
 ]

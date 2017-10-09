@@ -102,7 +102,6 @@
                 this.$http.get(Api.url + '/filme').then(
                     response => {
                         this.filmes = response.body;
-                        console.log(this.filmes);
                         this.mergeFilmesESeries()
                     }
                 )

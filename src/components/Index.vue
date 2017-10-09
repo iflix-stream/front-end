@@ -11,6 +11,14 @@
                     </v-list-tile>
                 </v-list>
             </v-menu>
+            <v-menu v-if="permicao === 'admin'" offset-y>
+                <v-btn flat slot="activator">Cadastro</v-btn>
+                <v-list style="background-color: rgba(20,20,20,0.9);position: fixed">
+                    <v-list-tile v-for="cadastro in cadastros" :key="cadastro.id" :to="cadastro.acao">
+                        <v-list-tile-title class="white--text" v-text="cadastro.nome"></v-list-tile-title>
+                    </v-list-tile>
+                </v-list>
+            </v-menu>
         </v-toolbar>
         <main>
             <v-container fluid>
@@ -25,14 +33,29 @@
   export default {
     name: 'app',
     data: () => ({
-      items: []
+      items: [],
+      cadastros:[
+          {
+            id:0,
+            nome:"Cadastro de Filme",
+            acao:"filme"
+          }
+      ],
+      permicao:''
     }),
     mounted () {
-      this.getGeneros()
+      this.getGeneros();
+      this.getPermicao();
     },
     methods: {
+      getPermicao: function () {
+          let jwtDecode = require('jwt-decode');
+          let token = localStorage.getItem('iflix-user-token');
+          let decoded = jwtDecode(token);
+          this.permicao = decoded.permicao;
+      },
       getGeneros: function () {
-        this.items = this.$http.get(Api.url + '/genero').then(response => {
+        this.$http.get(Api.url + '/genero').then(response => {
           this.items = response.body.sort().reverse()
 
         }, response => {
