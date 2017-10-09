@@ -25,6 +25,30 @@
                                 data-vv-name="form.sinopse"
                                 required
                         ></v-text-field>
+                        <v-text-field
+                                label="Duracao"
+                                v-model="form.duracao"
+                                :error-messages="errors.collect('form.duracao')"
+                                v-validate="'required'"
+                                data-vv-name="form.duracao"
+                                required
+                        ></v-text-field>
+                        <v-text-field
+                                label="Thumbnail"
+                                v-model="form.thumbnail"
+                                :error-messages="errors.collect('form.thumbnail')"
+                                v-validate="'required'"
+                                data-vv-name="form.thumbnail"
+                                required
+                        ></v-text-field>
+                        <v-text-field
+                                label="Caminho do filme"
+                                v-model="form.caminho"
+                                :error-messages="errors.collect('form.caminho')"
+                                v-validate="'required'"
+                                data-vv-name="form.caminho"
+                                required
+                        ></v-text-field>
                         <v-select
                                 label="Gênero"
                                 v-model="form.genero"
@@ -38,11 +62,11 @@
                         ></v-select>
                         <v-select
                                 label="Idade recomendada"
-                                v-model="form.idade"
+                                v-model="form.idadeRecomendada"
                                 :items="idadesRecomendadas"
-                                :error-messages="errors.collect('form.idade')"
+                                :error-messages="errors.collect('form.idadeRecomendada')"
                                 v-validate="'required'"
-                                data-vv-name="form.idade"
+                                data-vv-name="form.idadeRecomendada"
                                 item-value="id"
                                 item-text="text"
                                 required
@@ -52,7 +76,6 @@
                             <v-btn @click="clear">clear</v-btn>
                         </v-card-actions>
                     </form>
-                    <Upload></Upload>
                 </v-card-text>
             </v-card>
         </v-flex>
@@ -61,7 +84,6 @@
 
 <script>
     import {Api} from '../../api'
-    import Upload from '../upload.vue'
     export default {
         $validates: true,
         data () {
@@ -69,7 +91,7 @@
                 valid: false,
                 nome: '',
                 sinopse: '',
-                form: [],
+                form: {},
                 generos: [],
                 idadesRecomendadas: [
                     {
@@ -98,9 +120,6 @@
         mounted(){
             this.getGeneros();
         },
-        components:{
-          Upload
-        },
         methods: {
             getGeneros: function () {
                 this.$http.get(Api.url + '/genero').then(
@@ -111,16 +130,30 @@
 
             },
             submit () {
+                const formData = {
+                    nome: this.form['nome'],
+                    idadeRecomendada: this.form['idadeRecomendada'],
+                    duracao: this.form['idadeRecomendada'],
+                    sinopse: this.form['sinopse'],
+                    thumbnail: this.form['thumbnail'],
+                    caminho: this.form['caminho'],
+                    genero: this.form['genero'],
+                };
                 this.$validator.validateAll().then((result)=> {
                     if (result) {
-                        console.log("Verificado")
-                        return;
-                    }
+                        this.$http.post(Api.url + '/filme', this.form, {emulateJSON: true})
+                            .then(response => {
+                                console.log(response.body);
+                            }, response => {
+                                console.error(response.body)
+                            })
+                    }else {
                         console.log("Erro");
+                    }
                     });
             },
             clear () {
-                this.$refs.form.reset()
+                this.form = {};
             }
         }
 

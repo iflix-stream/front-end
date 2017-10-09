@@ -7,7 +7,6 @@ import Home from './components/Home.vue'
 import Index from './components/Index.vue'
 import Login from './components/Login.vue'
 import CadastroFilme from './components/filme/CadastroFilme.vue'
-import Filme from './components/filme/Filme.vue'
 import Dashboard from './components/Admin.vue'
 import VueResource from 'vue-resource'
 import VueVideoPlayer from 'vue-video-player'
@@ -42,23 +41,12 @@ const routes = [
       {
         path: 'home',
         component: Home
-      }
-    ]
-  },
-  {
-    meta: {
-      requireAuth: true
-    },
-    path: '/filme',
-    component: Filme,
-    children: [
-        {
-            path: 'novo',
-            component: CadastroFilme
+      },{
+        path:'filme',
+        component:CadastroFilme
         }
-      ]
+    ]
   }
-
 ]
 
 
