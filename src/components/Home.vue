@@ -54,9 +54,8 @@
 
 <script>
     import {Api} from '../api'
-    import AssistirFilme from './filme/AssistirFilme.vue'
-    require('video.js/dist/video-js.css')
-    require('vue-video-player/src/custom-theme.css')
+    require('video.js/dist/video-js.css');
+    require('vue-video-player/src/custom-theme.css');
 
 
     export default {
@@ -75,9 +74,6 @@
                 // console.log('dynamic change options', this.player)
                 this.player.muted(false)
             }, 2000)
-        },
-        components: {
-            AssistirFilme
         },
         computed: {
             player () {
