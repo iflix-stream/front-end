@@ -67,6 +67,14 @@
       dialog: false,
       playerOptions: {}
     }),
+    watch: {
+      '$route.params.nome': function () {
+        this.getFilmesByGenero(this.$route.params.nome)
+        this.getSeriesByGenero(this.$route.params.nome)
+
+      }
+    },
+
     mounted () {
       this.getFilmesByGenero(this.$route.params.nome)
       this.getSeriesByGenero(this.$route.params.nome)

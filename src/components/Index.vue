@@ -8,7 +8,7 @@
                     <v-btn flat slot="activator">Gêneros</v-btn>
                     <v-list style="background-color: rgba(20,20,20,0.9);position: fixed;top: 11%">
                         <v-list-tile v-for="genero in menuGeneros" :key="genero.id"
-                                     @click="ir('/genero/'+genero.nome)">
+                                     :to="'/genero/'+genero.nome">
                             <v-list-tile-title class="white--text" v-text="genero.nome"></v-list-tile-title>
                         </v-list-tile>
                     </v-list>
@@ -167,9 +167,6 @@
       this.getUsuario()
     },
     methods: {
-      ir: function (onde) {
-        this.$router.push(onde)
-      },
       go: function (a) {
         switch (a) {
           case 'perfil':
