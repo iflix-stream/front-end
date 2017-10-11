@@ -87,7 +87,7 @@
       // player is ready
       playerReadied (player) {
         // seek to 10s
-        player.currentTime(10)
+//        player.currentTime(10)
         // console.log('example 01: the player is readied', player)
       }
     }

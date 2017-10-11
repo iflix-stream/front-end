@@ -53,7 +53,7 @@
 </template>
 
 <script>
-  import { Api } from '../api'
+  import { Api } from '../../api'
 
   require('video.js/dist/video-js.css')
   require('vue-video-player/src/custom-theme.css')
@@ -68,8 +68,9 @@
       playerOptions: {}
     }),
     mounted () {
-      this.getFilmes()
-      this.getSeries()
+      this.getFilmesByGenero(this.$route.params.nome)
+      this.getSeriesByGenero(this.$route.params.nome)
+
       setTimeout(() => {
         // console.log('dynamic change options', this.player)
         this.player.muted(false)
@@ -94,20 +95,21 @@
         }
         this.dialog = true
       },
-      getFilmes: function () {
-        this.$http.get(Api.url + '/filme').then(
+
+      getFilmesByGenero: function (genero) {
+        this.$http.get(Api.url + '/filme/genero/' + genero).then(
           response => {
             this.filmes = response.body
-            this.mergeFilmesESeries()
+            console.log(this.filmes)
+            this.mergeFilmesESeries();
           }
         )
-
       },
-      getSeries: function () {
-        this.$http.get(Api.url + '/serie').then(
+      getSeriesByGenero: function (genero) {
+        this.$http.get(Api.url + '/serie/genero/' + genero).then(
           response => {
             this.series = response.body
-            this.mergeFilmesESeries()
+            this.mergeFilmesESeries();
           }
         )
       },

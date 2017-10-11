@@ -10,8 +10,8 @@ import CadastroFilme from './components/filme/CadastroFilme.vue'
 import Dashboard from './components/Admin.vue'
 import VueResource from 'vue-resource'
 import VueVideoPlayer from 'vue-video-player'
-import VeeValidate from 'vee-validate';
-
+import VeeValidate from 'vee-validate'
+import Genero from './components/pesquisa/Genero.vue'
 
 Vue.use(VueResource)
 Vue.use(VueRouter)
@@ -43,17 +43,16 @@ const routes = [
         component: Home
       },
       {
-        path:'filme',
-        component:CadastroFilme
+        path: 'filme',
+        component: CadastroFilme
       },
       {
-        path:'*',
-        redirect:'/home'
+        path: 'genero/:nome',
+        component: Genero
       }
     ]
   }
 ]
-
 
 const router = new VueRouter({
   routes

@@ -84,6 +84,7 @@
 
         this.$http.post(Api.url + '/login', formData, {emulateJSON: true})
           .then(response => {
+            console.log(response.data);
             if (response.data.token !== undefined) {
               localStorage.setItem('iflix-user-token', response.data.token)
               this.$router.go('/home')
