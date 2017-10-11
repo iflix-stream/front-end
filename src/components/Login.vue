@@ -13,6 +13,9 @@
             <v-flex offset-sm2 offset-md3 offset-lg4 xs12 sm8 md6 lg4 style="position: relative;">
                 <v-card style="margin-top: -320px">
                     <v-card-text>
+                        <v-alert color="info" icon="info" dismissible v-model="alert">
+                            {{mensagem}}
+                        </v-alert>
                         <h3 style="text-align: center;">iFlix</h3>
                         <v-flex xs12>
                             <v-form>
@@ -50,6 +53,7 @@
                             </v-form>
                         </v-flex>
                     </v-card-text>
+
                 </v-card>
 
             </v-flex>
@@ -71,7 +75,9 @@
       return {
         e1: true,
         email: '',
-        senha: ''
+        senha: '',
+        alert: false,
+        mensagem: ''
       }
     },
     methods: {
@@ -84,7 +90,10 @@
 
         this.$http.post(Api.url + '/login', formData, {emulateJSON: true})
           .then(response => {
-            console.log(response.data);
+            this.mensagem = response.data.message
+            if (response.data.message === 500) {
+              this.mensagem = response.data.msg
+            }
             if (response.data.token !== undefined) {
               localStorage.setItem('iflix-user-token', response.data.token)
               this.$router.go('/home')
