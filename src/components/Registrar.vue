@@ -20,10 +20,12 @@
                                                 label="Nome"
                                                 required
                                                 v-model="nome"
+                                                :rules="regrasDeNome"
                                         ></v-text-field>
                                         <v-text-field
                                                 label="E-mail"
                                                 required
+                                                :rules="regrasDeEmail"
                                                 v-model="email"
                                         ></v-text-field>
                                         <v-text-field
@@ -31,6 +33,7 @@
                                                 label="Senha"
                                                 hint="A senha deve conter ao menos 8 caracteres"
                                                 min="3"
+                                                :rules="regrasDeSenha"
                                                 :append-icon="e1 ? 'visibility' : 'visibility_off'"
                                                 :append-icon-cb="() => (e1 = !e1)"
                                                 :type="e1 ? 'password' : 'text'"
@@ -93,6 +96,17 @@
     data () {
       return {
         e1: true,
+        regrasDeNome: [
+          (v) => !!v || 'O nome é requirido',
+          (v) => v && v.length <= 3 || 'O nome tem que ser maior que 3 caracteres'
+        ],
+        regrasDeEmail: [
+          (v) => !!v || 'O E-mail é requirido',
+          (v) => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'O e-mail digitado é inválido'
+        ],
+        regrasDeSenha: [
+          (v) => !!v || 'A senha é requirida',
+        ],
         corAlert: '',
         icone: '',
         nome: '',
