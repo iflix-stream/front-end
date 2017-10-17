@@ -6,7 +6,7 @@
             <v-container>
 
                 <v-flex offset-sm2 offset-md3 offset-lg4 xs12 sm12 md6 lg4 style="position: relative;">
-                    <v-card style="margin-top: 39%">
+                    <v-card style="margin-top: 25%">
                         <v-card-text>
 
                             <h3 style="text-align: center;">iFlix</h3>
