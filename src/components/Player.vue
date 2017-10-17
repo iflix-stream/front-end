@@ -24,21 +24,18 @@
     export default {
         name: 'app',
         data: () => ({
-            dialog: false,
-            playerOptions : {
-            muted: false,
-            language: 'en',
-            playbackRates: [0.7, 1.0, 1.5, 2.0],
-            sources: [{
-                type: 'video/mp4',
-                src: Api.url + '/filme/?stream=true&id=' + 1
-            }],
-            poster: 'http://google.com',
-        }
+            playerOptions: {
+                muted: false,
+                language: 'en',
+                playbackRates: [0.7, 1.0, 1.5, 2.0],
+                sources: [{
+                    type: 'video/mp4',
+                    src: Api.url + '/filme/?stream=true&id=' + 1
+                }],
+                poster: 'http://google.com',
+            }
         }),
         mounted () {
-            this.getFilmes()
-            this.getSeries()
             setTimeout(() => {
                 // console.log('dynamic change options', this.player)
                 this.player.muted(false)
@@ -50,29 +47,6 @@
             }
         },
         methods: {
-            getFilmes: function () {
-                this.$http.get(Api.url + '/filme').then(
-                    response => {
-                        this.filmes = response.body
-                        this.mergeFilmesESeries()
-                    }
-                )
-
-            },
-            getSeries: function () {
-                this.$http.get(Api.url + '/serie').then(
-                    response => {
-                        this.series = response.body
-                        this.mergeFilmesESeries()
-                    }
-                )
-            },
-
-            mergeFilmesESeries: function () {
-                this.filmesAndSeries = this.filmes.concat(this.series).sort().reverse()
-
-            },
-
             // listen event
             onPlayerPlay (player) {
                 // console.log('player play!', player)
