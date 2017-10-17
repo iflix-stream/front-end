@@ -122,7 +122,7 @@
           </v-dialog>
         </v-layout>
       </v-container>
-      <v-card class="hidden-md-and-up " style="position: fixed; bottom: 0; right: 0; left: 0; z-index: 999;">
+      <v-card class="hidden-md-and-up " style="position: fixed; bottom: 0; right: 0; left: 0;">
         <v-bottom-nav
           absolute
           shift
@@ -158,7 +158,6 @@
     name: 'app',
     data: () => ({
       bottomTabs: 1,
-      isBottomTabs: true,
       dialog: false,
       notifications: false,
       sound: true,
