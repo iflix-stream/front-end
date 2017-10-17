@@ -27,73 +27,114 @@
         </v-flex>
       </v-layout>
     </v-container>
-    <v-layout row justify-center>
-      <v-dialog v-model="dialogAssistir" fullscreen style="position: absolute" persistent transition="dialog-bottom-transition" :overlay=false>
+    <v-layout row>
+      <v-dialog v-model="dialogAssistir" fullscreen style="position: absolute; max-height: 100%;" persistent
+                transition="dialog-bottom-transition" :overlay=true>
         <v-toolbar dark color="primary">
+
+          <v-toolbar-title>Assistindo {{videoSelecionado.nome}}</v-toolbar-title>
+          <v-spacer></v-spacer>
           <v-btn icon @click.native="dialogAssistir = false" dark>
             <v-icon>close</v-icon>
           </v-btn>
-          <v-toolbar-title>Assistir {{videoSelecionado.nome}}</v-toolbar-title>
         </v-toolbar>
-        <v-layout row wrap style="background-color: red;
+        <v-layout row wrap style="background-color: red; height: 90.4%;
    -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;">
-          <v-flex xs12 sm12 md9 lg9 style="margin-top: 10%">
-            <video-player class="vjs-custom-skin"
-                          ref="videoPlayer"
-                          :options="playerOptions"
-                          :playsinline="true"
-                          @play="onPlayerPlay($event)"
-                          @pause="onPlayerPause($event)"
-                          @ended="onPlayerEnded($event)"
-                          @loadeddata="onPlayerLoadeddata($event)"
-                          @waiting="onPlayerWaiting($event)"
-                          @playing="onPlayerPlaying($event)"
-                          @timeupdate="onPlayerTimeupdate($event)"
-                          @canplay="onPlayerCanplay($event)"
-                          @canplaythrough="onPlayerCanplaythrough($event)"
-                          @ready="playerReadied"
-                          @statechanged="playerStateChanged($event)">
-            </video-player>
+
+          <v-flex xs12 sm12 md9 lg9 style="height: 95.5%">
+            <v-layout column>
+
+              <v-flex xs12>
+                <video-player class="vjs-custom-skin"
+                              ref="videoPlayer"
+                              :options="playerOptions"
+                              :playsinline="true"
+                              @play="onPlayerPlay($event)"
+                              @pause="onPlayerPause($event)"
+                              @ended="onPlayerEnded($event)"
+                              @loadeddata="onPlayerLoadeddata($event)"
+                              @waiting="onPlayerWaiting($event)"
+                              @playing="onPlayerPlaying($event)"
+                              @timeupdate="onPlayerTimeupdate($event)"
+                              @canplay="onPlayerCanplay($event)"
+                              @canplaythrough="onPlayerCanplaythrough($event)"
+                              @ready="playerReadied"
+                              @statechanged="playerStateChanged($event)">
+                </video-player>
+
+              </v-flex>
+              <v-flex>
+                Adicionar a minha lista, bla bla bla
+              </v-flex>
+            </v-layout>
           </v-flex>
+
           <v-flex xs12 sm12 md3 lg3>
-            <v-list three-line subheader>
-              <v-subheader>Temporadas</v-subheader>
-              <v-list-tile avatar>
-                <v-list-tile-content>
-                  <v-list-tile-title>Content filtering</v-list-tile-title>
-                  <v-list-tile-sub-title>Set the content filtering level to restrict appts that
-                    can be downloaded
-                  </v-list-tile-sub-title>
-                </v-list-tile-content>
-              </v-list-tile>
-              <v-list-tile avatar>
-                <v-list-tile-content>
-                  <v-list-tile-title>Content filtering</v-list-tile-title>
-                  <v-list-tile-sub-title>Set the content filtering level to restrict appts that
-                    can be downloaded
-                  </v-list-tile-sub-title>
-                </v-list-tile-content>
-              </v-list-tile>
-              <v-list-tile avatar>
-                <v-list-tile-content>
-                  <v-list-tile-title>Content filtering</v-list-tile-title>
-                  <v-list-tile-sub-title>Set the content filtering level to restrict appts that
-                    can be downloaded
-                  </v-list-tile-sub-title>
-                </v-list-tile-content>
-              </v-list-tile>
-              <v-list-tile avatar>
-                <v-list-tile-content>
-                  <v-list-tile-title>Content filtering</v-list-tile-title>
-                  <v-list-tile-sub-title>Set the content filtering level to restrict appts that
-                    can be downloaded
-                  </v-list-tile-sub-title>
-                </v-list-tile-content>
-              </v-list-tile>
-            </v-list>
+            <div style="max-height: 100% !important; overflow: auto">
+              <v-flex>
+                <v-card class="white--text purple darken-2">
+                  <v-container fluid grid-list-lg>
+                    <v-layout row>
+                      <v-flex xs5>
+                        <v-card-media
+                          :src="videoSelecionado.thumbnail"
+                          height="125px"
+
+                        ></v-card-media>
+                      </v-flex>
+                      <v-flex xs7>
+                        <v-container>
+                          <div class="headline">{{videoSelecionado.nome}}</div>
+                          <div>Classificação: {{videoSelecionado.classificacao}}</div>
+                        </v-container>
+                      </v-flex>
+
+                    </v-layout>
+                    <v-flex xs12>
+                      <div>Sinopse: {{videoSelecionado.sinopse}}</div>
+                    </v-flex>
+                  </v-container>
+                </v-card>
+              </v-flex>
+              <v-list three-line subheader>
+                <v-subheader>Temporadas</v-subheader>
+                <v-list-tile avatar>
+                  <v-list-tile-content>
+                    <v-list-tile-title>Content filtering</v-list-tile-title>
+                    <v-list-tile-sub-title>Set the content filtering level to restrict appts that
+                      can be downloaded
+                    </v-list-tile-sub-title>
+                  </v-list-tile-content>
+                </v-list-tile>
+                <v-list-tile avatar>
+                  <v-list-tile-content>
+                    <v-list-tile-title>Content filtering</v-list-tile-title>
+                    <v-list-tile-sub-title>Set the content filtering level to restrict appts that
+                      can be downloaded
+                    </v-list-tile-sub-title>
+                  </v-list-tile-content>
+                </v-list-tile>
+                <v-list-tile avatar>
+                  <v-list-tile-content>
+                    <v-list-tile-title>Content filtering</v-list-tile-title>
+                    <v-list-tile-sub-title>Set the content filtering level to restrict appts that
+                      can be downloaded
+                    </v-list-tile-sub-title>
+                  </v-list-tile-content>
+                </v-list-tile>
+                <v-list-tile avatar>
+                  <v-list-tile-content>
+                    <v-list-tile-title>Content filtering</v-list-tile-title>
+                    <v-list-tile-sub-title>Set the content filtering level to restrict appts that
+                      can be downloaded
+                    </v-list-tile-sub-title>
+                  </v-list-tile-content>
+                </v-list-tile>
+              </v-list>
+            </div>
           </v-flex>
         </v-layout>
       </v-dialog>

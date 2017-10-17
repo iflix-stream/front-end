@@ -20,7 +20,7 @@
 
 
     require('video.js/dist/video-js.css')
-    require('vue-video-player/src/custom-theme.css')
+    require('/static/css/iflix-player-theme.css')
 
     export default {
         name: 'app',
