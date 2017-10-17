@@ -77,7 +77,6 @@
         mensagem: ''
       }
     },
-
     methods: {
       login: function () {
 
