@@ -45,6 +45,7 @@
                                             <v-btn block primary large to="registrar">Registrar</v-btn>
                                         </v-flex>
 
+
                                     </v-container>
                                 </v-form>
                             </v-flex>

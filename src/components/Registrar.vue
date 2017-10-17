@@ -64,7 +64,7 @@
                                         </v-flex>
                                         <v-flex>
                                             <v-btn block primary large v-on:click="registrar">Registrar</v-btn>
-                                            <a href="login">Voltar ao login</a>
+                                            <a href="#/login">Voltar ao login</a>
                                         </v-flex>
 
                                     </v-container>

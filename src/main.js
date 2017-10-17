@@ -57,10 +57,6 @@ const routes = [
         component: Genero
       }
     ]
-  },
-  {
-    path: '*',
-    redirect: '/home'
   }
 ]
 
