@@ -28,24 +28,9 @@
                 </v-flex>
             </v-layout>
             <v-layout row justify-center>
-                <v-dialog v-model="dialog" persistent width="50%">
+                <v-dialog v-model="dialog" fullscreen transition="dialog-bottom-transition" :overlay="false">
                     <!-- tamanho a ser modificado para ficar responsivo-->
-                    <video-player class="vjs-custom-skin"
-                                  ref="videoPlayer"
-                                  :options="playerOptions"
-                                  :playsinline="true"
-                                  @play="onPlayerPlay($event)"
-                                  @pause="onPlayerPause($event)"
-                                  @ended="onPlayerEnded($event)"
-                                  @loadeddata="onPlayerLoadeddata($event)"
-                                  @waiting="onPlayerWaiting($event)"
-                                  @playing="onPlayerPlaying($event)"
-                                  @timeupdate="onPlayerTimeupdate($event)"
-                                  @canplay="onPlayerCanplay($event)"
-                                  @canplaythrough="onPlayerCanplaythrough($event)"
-                                  @ready="playerReadied"
-                                  @statechanged="playerStateChanged($event)">
-                    </video-player>
+                    <Player></Player>
                 </v-dialog>
             </v-layout>
         </v-container>
@@ -54,9 +39,6 @@
 
 <script>
   import { Api } from '../api'
-
-  require('video.js/dist/video-js.css')
-  require('vue-video-player/src/custom-theme.css')
 
   export default {
     name: 'app',
