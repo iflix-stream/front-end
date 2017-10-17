@@ -6,7 +6,7 @@
             <v-toolbar-items class="hidden-sm-and-down">
                 <v-menu>
                     <v-btn flat slot="activator">Gêneros</v-btn>
-                    <v-list style="background-color: rgba(20,20,20,0.9);position: fixed;top: 11%">
+                    <v-list style="background-color: rgba(20,20,20,0.9);position: fixed;top:64px">
                         <v-list-tile v-for="genero in menuGeneros" :key="genero.id"
                                      :to="'/genero/'+genero.nome">
                             <v-list-tile-title class="white--text" v-text="genero.nome"></v-list-tile-title>
@@ -126,81 +126,81 @@
     </v-app>
 </template>
 <script>
-  import { Api } from '../api'
+    import {Api} from '../api'
 
-  export default {
-    name: 'app',
-    data: () => ({
-      dialog: false,
-      notifications: false,
-      sound: true,
-      widgets: false,
-      api: Api,
-      menuGeneros: [],
-      menuCadastros: [
-        {
-          id: 0,
-          nome: 'Filmes',
-          acao: 'filme'
-        }
-      ], menuUsuario: [
-        {
-          id: 0,
-          nome: 'Perfil',
-          acao: 'perfil'
+    export default {
+        name: 'app',
+        data: () => ({
+            dialog: false,
+            notifications: false,
+            sound: true,
+            widgets: false,
+            api: Api,
+            menuGeneros: [],
+            menuCadastros: [
+                {
+                    id: 0,
+                    nome: 'Filmes',
+                    acao: 'filme'
+                }
+            ], menuUsuario: [
+                {
+                    id: 0,
+                    nome: 'Perfil',
+                    acao: 'perfil'
+                },
+                {
+                    id: 1,
+                    nome: 'Sair',
+                    acao: 'sair'
+                }
+            ],
+            permicao: '',
+            usuario: {
+                id: '',
+                nome: '',
+                avatar: ''
+            }
+        }),
+        mounted () {
+            this.getGeneros()
+            this.getUsuario()
         },
-        {
-          id: 1,
-          nome: 'Sair',
-          acao: 'sair'
-        }
-      ],
-      permicao: '',
-      usuario: {
-        id: '',
-        nome: '',
-        avatar: ''
-      }
-    }),
-    mounted () {
-      this.getGeneros()
-      this.getUsuario()
-    },
-    methods: {
-      go: function (a) {
-        switch (a) {
-          case 'perfil':
-            this.dialog = true
-            break
-          case 'sair':
-            localStorage.removeItem('iflix-user-token')
-            this.$router.go('/login')
-            break
-        }
-      },
-      getUsuario: function () {
-        let jwtDecode = require('jwt-decode')
-        let token = localStorage.getItem('iflix-user-token')
-        let decoded = jwtDecode(token)
-        this.usuario = decoded.usuario
-        if (decoded.usuario.nome.length > 15) {
+        methods: {
+            go: function (a) {
+                switch (a) {
+                    case 'perfil':
+                        this.dialog = true
+                        break
+                    case 'sair':
+                        localStorage.removeItem('iflix-user-token')
+                        this.$router.go('/login')
+                        break
+                }
+            },
+            getUsuario: function () {
+                let jwtDecode = require('jwt-decode')
+                let token = localStorage.getItem('iflix-user-token')
+                let decoded = jwtDecode(token)
+                this.usuario = decoded.usuario
+                if (decoded.usuario.nome.length > 15) {
 
-          this.usuario.nome = decoded.usuario.nome.substring(0, 12) + '...'
+                    this.usuario.nome = decoded.usuario.nome.substring(0, 12) + '...'
+                }
+                else {
+                    this.usuario.nome = decoded.usuario.nome
+                }
+                this.usuario.permissao = decoded.permicao
+            },
+            getGeneros: function () {
+                this.$http.get(Api.url + '/genero').then(response => {
+                    this.menuGeneros = response.body.sort().reverse()
+                }, response => {
+                    console.error(response.body)
+                })
+            }
         }
-        else {
-          this.usuario.nome = decoded.usuario.nome
-        }
-        this.usuario.permissao = decoded.permicao
-      },
-      getGeneros: function () {
-        this.$http.get(Api.url + '/genero').then(response => {
-          this.menuGeneros = response.body.sort().reverse()
-        }, response => {
-          console.error(response.body)
-        })
-      }
     }
-  }
 </script>
 
 <style>
