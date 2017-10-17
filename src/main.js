@@ -12,6 +12,7 @@ import VueResource from 'vue-resource'
 import VueVideoPlayer from 'vue-video-player'
 import VeeValidate from 'vee-validate'
 import Genero from './components/pesquisa/Genero.vue'
+import Registrar from './components/Registrar.vue'
 
 Vue.use(VueResource)
 Vue.use(VueRouter)
@@ -28,8 +29,13 @@ const routes = [
     }
   },
   {
+    path: '/registrar',
+    component: Registrar,
+  },
+  {
     path: '/',
     component: Index,
+    redirect: '/home',
     meta: {
       requireAuth: true
     },
@@ -51,6 +57,10 @@ const routes = [
         component: Genero
       }
     ]
+  },
+  {
+    path: '*',
+    redirect: '/home'
   }
 ]
 
