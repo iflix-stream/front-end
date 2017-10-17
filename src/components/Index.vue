@@ -8,7 +8,7 @@
                     <v-btn flat slot="activator">Gêneros</v-btn>
                     <v-list style="background-color: rgba(20,20,20,0.9);position: fixed;top:64px">
                         <v-list-tile v-for="genero in menuGeneros" :key="genero.id"
-                                     :to="'/genero/'+genero.nome">
+                                     :to="'/genero/'+genero.nome.toLowerCase()">
                             <v-list-tile-title class="white--text" v-text="genero.nome"></v-list-tile-title>
                         </v-list-tile>
                     </v-list>

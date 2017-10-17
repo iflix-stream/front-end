@@ -7,11 +7,10 @@
                         v-for="filme in filmesAndSeries"
                         :key="filme.id" @click="setId(filme.caminho,filme.thumbnail)"
                 >
-                    <v-card>
-                        <v-card-media
+                    <v-card class="card-filmes">
+                        <v-card-media class="image-card-filme"
                                 :src="filme.thumbnail"
-                                height="200px"
-                        >
+                                height="200px">
                             <v-container fill-height fluid>
                                 <v-layout fill-height>
                                     <v-flex xs12 align-end flexbox>
@@ -143,5 +142,12 @@
 </script>
 
 <style>
+    .card-filmes {
+        cursor: pointer;
+    }
 
+    .image-card-filme:hover {
+        background-color: #000;
+        opacity: 0.8;
+    }
 </style>
