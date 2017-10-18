@@ -1,124 +1,135 @@
 <template>
-    <v-flex xs12 sm12 lg12 md12>
-        <v-container fluid grid-list-md>
-            <h6>Lançamentos</h6>
-            <v-layout darken-2 row wrap>
-                <v-flex xs12 sm6 md4 lg3 xl3
-                        v-for="video in filmesAndSeries"
-                        :key="video.id"
-                        v-on:click="dialogAssistir=true; videoSelecionado = video; updatePlayerOptionsWithSelectedVideo(video)">
-                    <v-card class="card-filmes">
-                        <v-card-media class="image-card-filme"
-                                      :src="video.thumbnail"
-                                      height="200px">
-                            <v-container fill-height fluid>
-                                <v-layout fill-height>
-                                    <v-flex xs12 align-end flexbox>
-                                        <span class="headline white--text" v-text="video.nome"></span>
-                                    </v-flex>
-                                </v-layout>
-
-                            </v-container>
-                            <v-progress-linear style="position: absolute;bottom: 0;" value="80" color-front="purple"
-                                               color-back="blue-grey"></v-progress-linear>
-
-                        </v-card-media>
-                    </v-card>
-                </v-flex>
-            </v-layout>
-        </v-container>
-        <v-layout row>
-            <v-dialog v-model="dialogAssistir" fullscreen style="position: absolute; max-height: 100%;" persistent
-                      transition="dialog-bottom-transition" :overlay=true>
-                <v-toolbar dark color="primary" fixed>
-
-                    <v-toolbar-title>Assistindo {{videoSelecionado.nome}}</v-toolbar-title>
-                    <v-spacer></v-spacer>
-                    <v-btn icon @click.native="dialogAssistir = false" dark>
-                        <v-icon>close</v-icon>
-                    </v-btn>
-                </v-toolbar>
-                <v-layout row wrap style="background-color: #212121; height: 90.4%; margin-top:64px">
-
-                    <v-flex xs12 sm12 md9 lg9 style="height: 95.5%">
-
-                            <v-flex xs12>
-                                <video-player class="vjs-custom-skin"
-                                              ref="videoPlayer"
-                                              :options="playerOptions"
-                                              :playsinline="true"
-                                              @play="onPlayerPlay($event)"
-                                              @pause="onPlayerPause($event)"
-                                              @ended="onPlayerEnded($event)"
-                                              @loadeddata="onPlayerLoadeddata($event)"
-                                              @waiting="onPlayerWaiting($event)"
-                                              @playing="onPlayerPlaying($event)"
-                                              @timeupdate="onPlayerTimeupdate($event)"
-                                              @canplay="onPlayerCanplay($event)"
-                                              @canplaythrough="onPlayerCanplaythrough($event)"
-                                              @ready="playerReadied"
-                                              @statechanged="playerStateChanged($event)">
-                                </video-player>
-
-                            </v-flex>
-                            <v-flex>
-                                Adicionar a minha lista, bla bla bla
-                            </v-flex>
-
-                    </v-flex>
-
-                    <v-flex xs12 sm12 md3 lg3>
-                        <div style="height: 100% !important; overflow: auto">
-                            <v-flex>
-                                <v-card class="white--text purple darken-2">
-                                    <v-container fluid grid-list-lg>
-                                        <v-layout row>
-                                            <v-flex xs5>
-                                                <v-card-media
-                                                        :src="videoSelecionado.thumbnail"
-                                                        height="125px"
-
-                                                ></v-card-media>
-                                            </v-flex>
-                                            <v-flex xs7>
-                                                <v-container>
-                                                    <div class="headline">{{videoSelecionado.nome}}</div>
-                                                    <div>Classificação: {{videoSelecionado.classificacao}}</div>
-                                                </v-container>
-                                            </v-flex>
-
-                                        </v-layout>
-                                        <v-flex xs12>
-                                            <div>Sinopse: {{videoSelecionado.sinopse}}</div>
-                                        </v-flex>
-                                    </v-container>
-                                </v-card>
-                            </v-flex >
-                            <v-list style="min-height: 67.5%">
-                                <v-list-group v-for="temporada in videoSelecionado.temporadas" :value="temporada.active" v-bind:key="temporada.nome">
-                                    <v-list-tile slot="item" @click="">
-
-                                        <v-list-tile-content>
-                                            <v-list-tile-title>{{ temporada.numero }}º Temporada</v-list-tile-title>
-                                        </v-list-tile-content>
-                                        <v-list-tile-action>
-                                            <v-icon>keyboard_arrow_down</v-icon>
-                                        </v-list-tile-action>
-                                    </v-list-tile>
-                                    <v-list-tile v-for="episodio in temporada.episodios" v-bind:key="episodio.nome" @click="">
-                                        <v-list-tile-content>
-                                            <v-list-tile-title>{{ episodio.nome }}</v-list-tile-title>
-                                        </v-list-tile-content>
-
-                                    </v-list-tile>
-                                </v-list-group>
-                            </v-list>
-                        </div>
-                    </v-flex>
+  <v-flex xs12 sm12 lg12 md12>
+    <v-container fluid grid-list-md>
+      <h6>Lançamentos</h6>
+      <v-layout darken-2 row wrap>
+        <v-flex xs12 sm6 md4 lg3 xl3
+                v-for="video in filmesAndSeries"
+                :key="video.id"
+                v-on:click="dialogAssistir=true; videoSelecionado = video; updatePlayerOptionsWithSelectedVideo(video); formatarSinopse()">
+          <v-card class="card-filmes">
+            <v-card-media class="image-card-filme"
+                          :src="video.thumbnail"
+                          height="200px">
+              <v-container fill-height fluid>
+                <v-layout fill-height>
+                  <v-flex xs12 align-end flexbox>
+                    <span class="headline white--text" v-text="video.nome"></span>
+                  </v-flex>
                 </v-layout>
-            </v-dialog>
+
+              </v-container>
+              <v-progress-linear style="position: absolute;bottom: 0;" value="80" color-front="purple"
+                                 color-back="blue-grey"></v-progress-linear>
+
+            </v-card-media>
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </v-container>
+    <v-layout row>
+      <v-dialog v-model="dialogAssistir" fullscreen style="position: absolute; max-height: 100%;" persistent
+                transition="dialog-bottom-transition" :overlay=true>
+        <v-toolbar dark color="primary" fixed>
+
+          <v-toolbar-title>Assistindo {{videoSelecionado.nome}}</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-btn icon @click.native="dialogAssistir = false" dark>
+            <v-icon>close</v-icon>
+          </v-btn>
+        </v-toolbar>
+        <v-layout row wrap style="background-color: #212121; height: 90.4%; margin-top:64px">
+
+          <v-flex xs12 sm12 md9 lg9 style="height: 95.5%">
+
+            <v-flex xs12>
+              <video-player class="vjs-custom-skin"
+                            ref="videoPlayer"
+                            :options="playerOptions"
+                            :playsinline="true"
+                            @play="onPlayerPlay($event)"
+                            @pause="onPlayerPause($event)"
+                            @ended="onPlayerEnded($event)"
+                            @loadeddata="onPlayerLoadeddata($event)"
+                            @waiting="onPlayerWaiting($event)"
+                            @playing="onPlayerPlaying($event)"
+                            @timeupdate="onPlayerTimeupdate($event)"
+                            @canplay="onPlayerCanplay($event)"
+                            @canplaythrough="onPlayerCanplaythrough($event)"
+                            @ready="playerReadied"
+                            @statechanged="playerStateChanged($event)">
+              </video-player>
+
+            </v-flex>
+            <v-flex>
+              Adicionar a minha lista, bla bla bla
+            </v-flex>
+
+          </v-flex>
+
+          <v-flex xs12 sm12 md3 lg3>
+            <div style="height: 100% !important; overflow: auto">
+              <v-flex>
+                <v-card class="white--text purple darken-2">
+                  <v-container fluid grid-list-lg>
+                    <v-layout row>
+                      <v-flex xs5>
+                        <v-card-media
+                          :src="videoSelecionado.thumbnail"
+                          height="125px"
+
+                        ></v-card-media>
+                      </v-flex>
+                      <v-flex xs7>
+                        <v-container>
+                          <div class="headline">{{videoSelecionado.nome}}</div>
+                          <div>Classificação: {{videoSelecionado.classificacao}}</div>
+                        </v-container>
+                      </v-flex>
+
+                    </v-layout>
+                    <v-flex xs12>
+                      <div v-if="!spoilerSinopse && !isMaiorQue183">Sinopse: {{decodeURIComponent(videoSelecionado.sinopse)}}</div>
+                      <div v-else-if="!spoilerSinopse && isMaiorQue183">Sinopse: {{decodeURIComponent(videoSelecionado.sinopsePequena)}}</div>
+                      <div v-else-if="spoilerSinopse && isMaiorQue183">Sinopse: {{decodeURIComponent(videoSelecionado.sinopseInteira)}}</div>
+                      <v-btn  v-if="!spoilerSinopse && isBotaoSpoilerSinopse" @click.native="spoilerSinopse = true" dark>
+                       Mostrar mais
+                      </v-btn>
+                      <v-btn v-else-if="spoilerSinopse == true && isBotaoSpoilerSinopse" @click.native="spoilerSinopse = false" dark>
+                       Mostrar menos
+                      </v-btn>
+                      <!--<v-btn v-on:click="spoilerSinopse = true" v-if="!spoilerSinopse">Mostrar mais</v-btn>-->
+                      <!--<v-btn :click="spoilerSinopse = false" v-if="spoilerSinopse">Mostrar menos</v-btn>-->
+                    </v-flex>
+                  </v-container>
+                </v-card>
+              </v-flex>
+              <v-list style="min-height: 67.5%">
+                <v-list-group v-for="temporada in videoSelecionado.temporadas" :value="temporada.active"
+                              v-bind:key="temporada.nome">
+                  <v-list-tile slot="item" @click="">
+
+                    <v-list-tile-content>
+                      <v-list-tile-title>{{ temporada.numero }}º Temporada</v-list-tile-title>
+                    </v-list-tile-content>
+                    <v-list-tile-action>
+                      <v-icon>keyboard_arrow_down</v-icon>
+                    </v-list-tile-action>
+                  </v-list-tile>
+                  <v-list-tile v-for="episodio in temporada.episodios" v-bind:key="episodio.nome" @click="">
+                    <v-list-tile-content>
+                      <v-list-tile-title>{{ episodio.nome }}</v-list-tile-title>
+                    </v-list-tile-content>
+
+                  </v-list-tile>
+                </v-list-group>
+              </v-list>
+            </div>
+          </v-flex>
         </v-layout>
-    </v-flex>
+      </v-dialog>
+    </v-layout>
+  </v-flex>
 </template>
 
 <script>
@@ -130,6 +141,9 @@
       videoSelecionado: '',
       filmes: [],
       series: [],
+      spoilerSinopse: false,
+      isBotaoSpoilerSinopse: false,
+      isMaiorQue183: false,
       filmesAndSeries: [],
       dialogAssistir: false,
       playerOptions: {
@@ -141,61 +155,7 @@
           src: ''
         }],
         poster: '',
-      },
-      items: [
-        {
-          action: 'local_activity',
-          title: 'Attractions',
-          items: [
-            { title: 'List Item' }
-          ]
-        },
-        {
-          action: 'restaurant',
-          title: 'Dining',
-          active: true,
-          items: [
-            { title: 'Breakfast & brunch' },
-            { title: 'New American' },
-            { title: 'Sushi' }
-          ]
-        },
-        {
-          action: 'school',
-          title: 'Education',
-          items: [
-            { title: 'List Item' }
-          ]
-        },
-        {
-          action: 'directions_run',
-          title: 'Family',
-          items: [
-            { title: 'List Item' }
-          ]
-        },
-        {
-          action: 'healing',
-          title: 'Health',
-          items: [
-            { title: 'List Item' }
-          ]
-        },
-        {
-          action: 'content_cut',
-          title: 'Office',
-          items: [
-            { title: 'List Item' }
-          ]
-        },
-        {
-          action: 'local_offer',
-          title: 'Promotions',
-          items: [
-            { title: 'List Item' }
-          ]
-        }
-      ]
+      }
     }),
     mounted () {
 
@@ -215,7 +175,17 @@
       updatePlayerOptionsWithSelectedVideo: function (video) {
         this.playerOptions.sources[0].src = Api.url + '/' + video.tipo + '/?stream=true&id=' + video.caminho
         this.playerOptions.poster = video.thumbnail
-        console.log(videoSelecionado)
+      },
+      formatarSinopse: function () {
+        this.isBotaoSpoilerSinopse = false;
+        this.spoilerSinopse = false;
+        this.isMaiorQue183 = false;
+        if (this.videoSelecionado.sinopse.length > 183) {
+          this.isBotaoSpoilerSinopse = true;
+          this.isMaiorQue183 = true;
+          this.videoSelecionado.sinopseInteira = this.videoSelecionado.sinopse
+          this.videoSelecionado.sinopsePequena = this.videoSelecionado.sinopse.substring(0, 183) + '...'
+        }
       },
 
       getFilmes: function () {
@@ -290,12 +260,12 @@
 </script>
 
 <style>
-    .card-filmes {
-        cursor: pointer;
-    }
+  .card-filmes {
+    cursor: pointer;
+  }
 
-    .image-card-filme:hover {
-        background-color: #000;
-        opacity: 0.8;
-    }
+  .image-card-filme:hover {
+    background-color: #000;
+    opacity: 0.8;
+  }
 </style>
