@@ -1,12 +1,12 @@
 <template>
 
-    <v-flex>
+    <v-flex style="height: 100vh">
         <v-parallax src="https://conta.nubank.com.br/images/sunrise.jpg" style="height: 100%">
 
             <v-container>
 
                 <v-flex offset-sm2 offset-md3 offset-lg4 xs12 sm12 md6 lg4 style="position: relative;">
-                    <v-card style="margin-top: 40%">
+                    <v-card style="">
                         <v-card-text>
 
                             <h3 style="text-align: center;">iFlix</h3>

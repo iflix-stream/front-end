@@ -41,12 +41,13 @@
                 <v-layout row wrap style="background-color: #212121; height: 90.4%; margin-top:64px">
 
                     <v-flex xs12 sm12 md9 lg9>
-                        <v-container fluid grid-list-md class="grey lighten-4" style="height: 100%">
-                            <v-layout row wrap style="height: 100% !important;" ref="playerDeVideo">
+                        <v-container fluid grid-list-md class="grey darken-4 subtrai-paddings-tela"
+                                     style="height: 100%">
+                            <v-layout row wrap style="" ref="playerDeVideo">
                                 <v-flex>
                                     <v-card>
 
-                                        <video-player class="vjs-custom-skin" fill-height fluid
+                                        <video-player class="vjs-custom-skin"
                                                       ref="videoPlayer"
                                                       :options="playerOptions"
                                                       :playsinline="true"
@@ -86,7 +87,7 @@
                         <div style="height: 100% !important; overflow: auto">
                             <v-flex>
                                 <v-card class="white--text purple darken-2">
-                                    <v-container fluid grid-list-lg>
+                                    <v-container fluid grid-list-lg class="subtrai-margin-tela">
                                         <v-layout row>
                                             <v-flex xs5>
                                                 <v-card-media
@@ -125,7 +126,7 @@
                                     </v-container>
                                 </v-card>
                             </v-flex>
-                            <v-list style="min-height: 67.5%">
+                            <v-list v-if="videoSelecionado.tipo == 'serie'" style="min-height: 67.5%">
                                 <v-list-group v-for="temporada in videoSelecionado.temporadas" :value="temporada.active"
                                               v-bind:key="temporada.nome">
                                     <v-list-tile slot="item" @click="">
@@ -155,145 +156,146 @@
 </template>
 
 <script>
-    import {Api} from '../api'
+  import { Api } from '../api'
 
-    export default {
-        name: 'app',
-        data: () => ({
-            videoSelecionado: '',
-            filmes: [],
-            series: [],
-            spoilerSinopse: false,
-            isBotaoSpoilerSinopse: false,
-            isMaiorQue183: false,
-            filmesAndSeries: [],
-            dialogAssistir: false,
-            playerOptions: {
-//        height: '667',
-                muted: false,
-                language: 'en',
-                playbackRates: [0.7, 1.0, 1.5, 2.0],
-                sources: [{
-                    type: 'video/mp4',
-                    src: ''
-                }],
-                poster: '',
-            }
-        }),
-        mounted () {
-            this.getFilmes()
-            this.getSeries()
-            setTimeout(() => {
-                // console.log('dynamic change options', this.player)
-                this.player.muted(false)
-            }, 2000)
-        },
-        computed: {
-            player () {
-                return this.$refs.videoPlayer.player
-            }
-        },
-        methods: {
-            fecharDialog: function () {
-               this.dialogAssistir = false;
-               this.$http.post(Api.url + '/contagem', {subtrair: true}, {emulateJSON: true});
-            },
-            renderizarCinema: function (video) {
-                this.dialogAssistir = true;
-                this.videoSelecionado = video;
-                this.updatePlayerOptionsWithSelectedVideo(video);
-                this.formatarSinopse();
+  require('video.js/dist/video-js.css')
+  require('../../static/css/iflix-player-theme.css')
+  export default {
+    name: 'app',
+    data: () => ({
+      videoSelecionado: '',
+      filmes: [],
+      series: [],
+      spoilerSinopse: false,
+      isBotaoSpoilerSinopse: false,
+      isMaiorQue183: false,
+      filmesAndSeries: [],
+      dialogAssistir: false,
+      playerOptions: {
+        muted: false,
+        language: 'en',
+        playbackRates: [0.7, 1.0, 1.5, 2.0],
+        sources: [{
+          type: 'video/mp4',
+          src: ''
+        }],
+        poster: '',
+      }
+    }),
+    mounted () {
+      this.getFilmes()
+      this.getSeries()
+      setTimeout(() => {
+        // console.log('dynamic change options', this.player)
+        this.player.muted(false)
+      }, 2000)
+    },
+    computed: {
+      player () {
+        return this.$refs.videoPlayer.player
+      }
+    },
+    methods: {
+      fecharDialog: function () {
+        this.dialogAssistir = false
+        this.$http.post(Api.url + '/contagem', {subtrair: true}, {emulateJSON: true})
+      },
+      renderizarCinema: function (video) {
+        this.dialogAssistir = true
+        this.videoSelecionado = video
+        this.updatePlayerOptionsWithSelectedVideo(video)
+        this.formatarSinopse()
 //        this.calcularAlturaPlayer()
-            },
-            updatePlayerOptionsWithSelectedVideo: function (video) {
-                this.playerOptions.sources[0].src = Api.url + '/' + video.tipo + '/?stream=true&id=' + video.caminho
-                this.playerOptions.poster = video.thumbnail
+      },
+      updatePlayerOptionsWithSelectedVideo: function (video) {
+        this.playerOptions.sources[0].src = Api.url + '/' + video.tipo + '/?stream=true&id=' + video.caminho
+        this.playerOptions.poster = video.thumbnail
 
-            },
-            setEpisode: function (episodio) {
-                this.playerOptions.sources[0].src = Api.url + '/serie/?stream=true&id=' + episodio.caminho
-                console.log(episodio)
-            },
-            formatarSinopse: function () {
-                this.isBotaoSpoilerSinopse = false
-                this.spoilerSinopse = false
-                this.isMaiorQue183 = false
-                if (this.videoSelecionado.sinopse.length > 183) {
-                    this.isBotaoSpoilerSinopse = true
-                    this.isMaiorQue183 = true
-                    this.videoSelecionado.sinopseInteira = this.videoSelecionado.sinopse
-                    this.videoSelecionado.sinopsePequena = this.videoSelecionado.sinopse.substring(0, 183) + '...'
-                }
-            },
-
-            getFilmes: function () {
-                this.$http.get(Api.url + '/filme').then(
-                    response => {
-                        this.filmes = response.body
-                        for (let i = 0; i < this.filmes.length; i++) {
-                            this.filmes[i].tipo = 'filme'
-                        }
-                        this.mergeFilmesESeries()
-                    }
-                )
-
-            },
-            getSeries: function () {
-                this.$http.get(Api.url + '/serie').then(
-                    response => {
-                        this.series = response.body
-                        for (let i = 0; i < this.series.length; i++) {
-                            this.series[i].tipo = 'serie'
-                        }
-                        this.mergeFilmesESeries()
-                    }
-                )
-            },
-
-            mergeFilmesESeries: function () {
-                this.filmesAndSeries = this.filmes.concat(this.series).sort().reverse()
-            },
-
-            // listen event
-            onPlayerPlay (player) {
-                this.$http.post(Api.url + '/contagem', {somar: true}, {emulateJSON: true});
-            },
-            onPlayerPause (player) {
-                this.$http.post(Api.url + '/contagem', {subtrair: true}, {emulateJSON: true});
-            },
-            onPlayerEnded (player) {
-                this.$http.post(Api.url + '/contagem', {subtrair: true}, {emulateJSON: true});
-            },
-            onPlayerLoadeddata (player) {
-                // console.log('player Loadeddata!', player)
-            },
-            onPlayerWaiting (player) {
-                // console.log('player Waiting!', player)
-            },
-            onPlayerPlaying (player) {
-                // console.log('player Playing!', player)
-            },
-            onPlayerTimeupdate (player) {
-                // console.log('player Timeupdate!', player.currentTime())
-            },
-            onPlayerCanplay (player) {
-                // console.log('player Canplay!', player)
-            },
-            onPlayerCanplaythrough (player) {
-                // console.log('player Canplaythrough!', player)
-            },
-            // or listen state event
-            playerStateChanged (playerCurrentState) {
-                // console.log('player current update state', playerCurrentState)
-            },
-            // player is ready
-            playerReadied (player) {
-                // seek to 10s
-                player.currentTime(0)
-                // console.log('example 01: the player is readied', player)
-            }
+      },
+      setEpisode: function (episodio) {
+        this.playerOptions.sources[0].src = Api.url + '/serie/?stream=true&id=' + episodio.caminho
+        console.log(episodio)
+      },
+      formatarSinopse: function () {
+        this.isBotaoSpoilerSinopse = false
+        this.spoilerSinopse = false
+        this.isMaiorQue183 = false
+        if (this.videoSelecionado.sinopse.length > 183) {
+          this.isBotaoSpoilerSinopse = true
+          this.isMaiorQue183 = true
+          this.videoSelecionado.sinopseInteira = this.videoSelecionado.sinopse
+          this.videoSelecionado.sinopsePequena = this.videoSelecionado.sinopse.substring(0, 183) + '...'
         }
+      },
+
+      getFilmes: function () {
+        this.$http.get(Api.url + '/filme').then(
+          response => {
+            this.filmes = response.body
+            for (let i = 0; i < this.filmes.length; i++) {
+              this.filmes[i].tipo = 'filme'
+            }
+            this.mergeFilmesESeries()
+          }
+        )
+
+      },
+      getSeries: function () {
+        this.$http.get(Api.url + '/serie').then(
+          response => {
+            this.series = response.body
+            for (let i = 0; i < this.series.length; i++) {
+              this.series[i].tipo = 'serie'
+            }
+            this.mergeFilmesESeries()
+          }
+        )
+      },
+
+      mergeFilmesESeries: function () {
+        this.filmesAndSeries = this.filmes.concat(this.series).sort().reverse()
+      },
+
+      // listen event
+      onPlayerPlay (player) {
+        this.$http.post(Api.url + '/contagem', {somar: true}, {emulateJSON: true})
+      },
+      onPlayerPause (player) {
+        this.$http.post(Api.url + '/contagem', {subtrair: true}, {emulateJSON: true})
+      },
+      onPlayerEnded (player) {
+        this.$http.post(Api.url + '/contagem', {subtrair: true}, {emulateJSON: true})
+      },
+      onPlayerLoadeddata (player) {
+        // console.log('player Loadeddata!', player)
+      },
+      onPlayerWaiting (player) {
+        // console.log('player Waiting!', player)
+      },
+      onPlayerPlaying (player) {
+        // console.log('player Playing!', player)
+      },
+      onPlayerTimeupdate (player) {
+        // console.log('player Timeupdate!', player.currentTime())
+      },
+      onPlayerCanplay (player) {
+        // console.log('player Canplay!', player)
+      },
+      onPlayerCanplaythrough (player) {
+        // console.log('player Canplaythrough!', player)
+      },
+      // or listen state event
+      playerStateChanged (playerCurrentState) {
+        // console.log('player current update state', playerCurrentState)
+      },
+      // player is ready
+      playerReadied (player) {
+        // seek to 10s
+        player.currentTime(0)
+        // console.log('example 01: the player is readied', player)
+      }
     }
+  }
 </script>
 
 <style>
@@ -306,14 +308,71 @@
         opacity: 0.8;
     }
 
-    .video-js {
-        position: relative !important;
-        width: 100% !important;
-        height: auto !important;
+    @media screen and (max-width: 480px){
+        .video-js {
+            /*position: inherit !important;*/
+            width: 100% !important;
+            height: 200px !important;
+        }
+
+        .subtrai-paddings-tela {
+            padding: 0 !important;
+            margin: 0 auto;
+        }
     }
 
+    @media screen and (max-width: 600px) and (min-width: 481px){
+        .video-js {
+            /*position: inherit !important;*/
+            width: 100% !important;
+            height: 260px !important;
+        }
+
+        .subtrai-paddings-tela {
+            padding: 0 !important;
+            margin: 0 auto;
+        }
+    }
+
+    @media screen and (max-width: 720px) and (min-width: 601px){
+        .video-js {
+            /*position: inherit !important;*/
+            width: 100% !important;
+            height: 260px !important;
+        }
+
+        .subtrai-paddings-tela {
+            padding: 0 !important;
+            margin: 0 auto;
+        }
+    }
+
+    @media screen and (max-width: 960px) and (min-width: 601px){
+        .video-js {
+            /*position: inherit !important;*/
+            width: 100% !important;
+            height: 260px !important;
+        }
+
+        .subtrai-paddings-tela {
+            padding: 0 !important;
+            margin: 0 auto;
+        }
+    }
+
+    @media screen and (min-width: 961px){
+        .video-js {
+            /*position: inherit !important;*/
+            width: 100% !important;
+            height: calc(100vh - 20vh);
+        }
+
+
+    }
+
+
     .vjs-poster {
-        position: absolute !important;
+        /*position: absolute !important;*/
         left: 0;
         right: 0;
         top: 0;

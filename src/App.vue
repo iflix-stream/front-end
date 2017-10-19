@@ -1,4 +1,4 @@
-<template >
+<template style="height: 100vh;">
     <v-app class="application--light grey darken-4" >
         <router-view></router-view>
     </v-app>
