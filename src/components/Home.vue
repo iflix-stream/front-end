@@ -32,7 +32,7 @@
 
     <v-flex >
       <v-layout row style="width: 100%;">
-        <v-dialog v-model="dialogAssistir" fullscreen transition="dialog-bottom-transition" :overlay=false>
+        <v-dialog v-model="dialogAssistir" fullscreen transition="dialog-bottom-transition" :overlay=false persistent>
           <v-toolbar dark color="primary" fixed >
 
             <v-toolbar-title>Assistindo {{videoSelecionado.nome}}</v-toolbar-title>
