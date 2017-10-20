@@ -1,5 +1,5 @@
 <template>
-    <v-flex xs12 sm12 lg12 md12>
+    <v-flex xs12 sm12 lg12 md12 >
         <v-container fluid grid-list-md>
             <h6>Lançamentos</h6>
             <v-layout darken-2 row wrap>
@@ -19,7 +19,7 @@
                                 </v-layout>
 
                             </v-container>
-                            <v-progress-linear style="position: absolute;bottom: 0;" value="80" color-front="purple"
+                            <v-progress-linear style="position: absolute;bottom: 0;" value="80" color-front="primary"
                                                color-back="blue-grey"></v-progress-linear>
 
                         </v-card-media>
@@ -28,9 +28,9 @@
             </v-layout>
         </v-container>
         <v-layout row>
-            <v-dialog v-model="dialogAssistir" fullscreen style="position: absolute; max-height: 100%;" persistent
-                      transition="dialog-bottom-transition" :overlay=true>
-                <v-toolbar dark color="primary" fixed>
+            <v-dialog v-model="dialogAssistir" fullscreen style="height: 100vh;" persistent
+                      transition="dialog-bottom-transition">
+                <v-toolbar dark color="primary" fixed style="height: 65px !important; padding-top: 7px">
 
                     <v-toolbar-title>Assistindo {{videoSelecionado.nome}}</v-toolbar-title>
                     <v-spacer></v-spacer>
@@ -38,12 +38,12 @@
                         <v-icon>close</v-icon>
                     </v-btn>
                 </v-toolbar>
-                <v-layout row wrap style="background-color: #212121; height: 90.4%; margin-top:64px">
+                <v-layout row wrap class="grey darken-4" style="margin-top:64px; ">
 
                     <v-flex xs12 sm12 md9 lg9>
-                        <v-container fluid grid-list-md class="grey darken-4 subtrai-paddings-tela"
+                        <v-container fluid grid-list-md class="subtrai-paddings-tela"
                                      style="height: 100%">
-                            <v-layout row wrap style="" ref="playerDeVideo">
+                            <v-layout row ref="playerDeVideo">
                                 <v-flex>
                                     <v-card>
 
@@ -63,7 +63,7 @@
                                                       @ready="playerReadied"
                                                       @statechanged="playerStateChanged($event)">
                                         </video-player>
-                                        <v-card-actions class="purple darken-2">
+                                        <v-card-actions class="primary">
                                             <v-spacer></v-spacer>
                                             <v-btn icon>
                                                 <v-icon>favorite</v-icon>
@@ -84,9 +84,9 @@
 
 
                     <v-flex xs12 sm12 md3 lg3>
-                        <div style="height: 100% !important; overflow: auto">
+                        <div style="height: 50vh !important; overflow: auto">
                             <v-flex>
-                                <v-card class="white--text purple darken-2">
+                                <v-card class="white--text primary">
                                     <v-container fluid grid-list-lg class="subtrai-margin-tela">
                                         <v-layout row>
                                             <v-flex xs5>
@@ -312,7 +312,7 @@
         .video-js {
             /*position: inherit !important;*/
             width: 100% !important;
-            height: 200px !important;
+            height: 180px !important;
         }
 
         .subtrai-paddings-tela {
