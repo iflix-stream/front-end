@@ -3,7 +3,7 @@ import Vuetify from 'vuetify'
 import VueRouter from 'vue-router'
 import 'vuetify/dist/vuetify.min.css'
 import App from './App.vue'
-import Home from './components/Home.vue'
+import Home from './components/home/Home.vue'
 import Index from './components/Index.vue'
 import Login from './components/Login.vue'
 import CadastroFilme from './components/filme/CadastroFilme.vue'
@@ -13,7 +13,10 @@ import VueVideoPlayer from 'vue-video-player'
 import VeeValidate from 'vee-validate'
 import Genero from './components/pesquisa/Genero.vue'
 import Registrar from './components/Registrar.vue'
+import Vuex from 'vuex'
+import store from '../src/vuex/store'
 
+Vue.use(Vuex)
 Vue.use(VueResource)
 Vue.use(VueRouter)
 Vue.use(Vuetify)
@@ -103,7 +106,9 @@ router.beforeEach((to, from, next) => {
 
 /* eslint-disable no-new */
 new Vue({
+  store,
   el: '#app',
   router,
+
   render: h => h(App)
 })

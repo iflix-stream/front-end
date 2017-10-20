@@ -155,10 +155,10 @@
 </template>
 
 <script>
-  import { Api } from '../api'
+  import { Api } from '../../api'
 
   require('video.js/dist/video-js.css')
-  require('../../static/css/iflix-player-theme.css')
+  require('../../../static/css/iflix-player-theme.css')
   export default {
     name: 'app',
     data: () => ({
