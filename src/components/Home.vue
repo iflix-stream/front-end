@@ -1,13 +1,10 @@
 <template>
   <v-layout row>
-    <v-flex xs12 sm12 lg12 md12>
+    <v-flex xs12 sm12 lg12 md12 style="margin-top: 68px">
       <v-container fluid grid-list-md>
         <h6>Lançamentos</h6>
         <v-layout darken-2 row wrap>
-          <v-flex xs12 sm6 md4 lg3 xl3
-                  v-for="video in filmesAndSeries"
-                  :key="video.id"
-                  v-on:click="renderizarCinema(video)">
+          <v-flex xs12 sm6 md4 lg3 xl3 v-for="video in filmesAndSeries" :key="video.id" v-on:click="renderizarCinema(video)">
             <v-card class="card-filmes">
               <v-card-media class="image-card-filme"
                             :src="video.thumbnail"
