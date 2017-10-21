@@ -13,10 +13,9 @@ import VueVideoPlayer from 'vue-video-player'
 import VeeValidate from 'vee-validate'
 import Genero from './components/pesquisa/Genero.vue'
 import Registrar from './components/Registrar.vue'
-import Vuex from 'vuex'
-import store from '../src/vuex/store'
 
-Vue.use(Vuex)
+
+
 Vue.use(VueResource)
 Vue.use(VueRouter)
 Vue.use(Vuetify)
@@ -106,7 +105,7 @@ router.beforeEach((to, from, next) => {
 
 /* eslint-disable no-new */
 new Vue({
-  store,
+
   el: '#app',
   router,
 
