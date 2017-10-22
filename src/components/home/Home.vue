@@ -33,6 +33,8 @@
 </template>
 
 <script>
+  /* eslint-disable no-trailing-spaces,padded-blocks,semi */
+
   import bus from '../eventBus/bus'
   import { Api } from '../../api'
   import Vue from 'vue'
@@ -47,7 +49,7 @@
       videoSelecionado: '',
       filmes: [],
       series: [],
-      filmesAndSeries: [],
+      filmesAndSeries: []
     }),
     components: {
       Cinema,
@@ -58,9 +60,7 @@
     mounted () {
       this.getFilmes()
       this.getSeries()
-
     },
-
     methods: {
       handler: function handler (event) {
         if (this.diminuir) {
@@ -73,17 +73,16 @@
 //        if (this.diminuir) {
 //          this.$http.post(Api.url + '/contagem', {subtrair: true}, {emulateJSON: true})
 //        }
-
         bus.$emit('fecharCinema')
-
       },
+
       renderizarCinema: function (video) {
 //        this.dialogAssistir = true
 //        this.videoSelecionado = video
 //        this.updatePlayerOptionsWithSelectedVideo(video)
 //        this.formatarSinopse()
 //        this.calcularAlturaPlayer()
-
+        console.log(video)
         bus.$emit('renderizarCinema', video)
 
       },

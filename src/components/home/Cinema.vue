@@ -1,7 +1,7 @@
 <template>
   <v-flex>
     <v-layout row style="width: 100%;">
-      <v-dialog v-model="dialogAssistir" fullscreen transition="dialog-bottom-transition" :overlay=false persistent>
+      <v-dialog v-model="dialogAssistir" fullscreen transition="dialog-bottom-transition" hide-overlay=""  :overlay=false persistent v-if="ativadorDialog">
         <v-toolbar dark color="primary" fixed>
 
           <v-toolbar-title>Assistindo {{videoSelecionado.nome}}</v-toolbar-title>
@@ -125,6 +125,8 @@
   </v-flex>
 </template>
 <script>
+
+
   import bus from '../eventBus/bus'
   import { Api } from '../../api'
 
@@ -137,6 +139,8 @@
         spoilerSinopse: false,
         isBotaoSpoilerSinopse: false,
         isMaiorQue183: false,
+
+        ativadorDialog: false,
 
         playerOptions: {
           muted: false,
@@ -169,9 +173,9 @@
     },
     methods: {
 
-
-
       renderizarCinema: function (video) {
+
+        this.ativadorDialog = true
         this.dialogAssistir = true
         this.videoSelecionado = video
         this.updatePlayerOptionsWithSelectedVideo(video)
@@ -180,7 +184,9 @@
       },
 
       fecharDialog: function () {
+
         this.dialogAssistir = false
+        this.AtivadorDialog = false
         if (this.diminuir) {
           this.$http.post(Api.url + '/contagem', {subtrair: true}, {emulateJSON: true})
         }
