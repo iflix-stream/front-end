@@ -4,7 +4,8 @@
       <v-container fluid grid-list-md>
         <h6>Lançamentos</h6>
         <v-layout darken-2 row wrap>
-          <v-flex xs12 sm6 md4 lg3 xl3 v-for="video in filmesAndSeries" :key="video.id" v-on:click="renderizarCinema(video)">
+          <v-flex xs12 sm6 md4 lg3 xl3 v-for="video in filmesAndSeries" :key="video.id"
+                  v-on:click="renderizarCinema(video)">
             <v-card class="card-filmes">
               <v-card-media class="image-card-filme"
                             :src="video.thumbnail"
@@ -34,6 +35,7 @@
 <script>
   import bus from '../eventBus/bus'
   import { Api } from '../../api'
+  import Vue from 'vue'
 
   import Cinema from './Cinema.vue'
 
@@ -47,7 +49,7 @@
       series: [],
       filmesAndSeries: [],
     }),
-    components:{
+    components: {
       Cinema,
     },
     created () {
@@ -72,7 +74,7 @@
 //          this.$http.post(Api.url + '/contagem', {subtrair: true}, {emulateJSON: true})
 //        }
 
-        bus.$emit('fecharCinema');
+        bus.$emit('fecharCinema')
 
       },
       renderizarCinema: function (video) {
@@ -87,7 +89,12 @@
       },
 
       getFilmes: function () {
-        this.$http.get(Api.url + '/filme').then(
+
+        this.$http.get(Api.url + '/filme', {
+         headers: {
+            'Authorization': localStorage.getItem('iflix-user-token'),
+          }
+        }).then(
           response => {
             this.filmes = response.body
             for (let i = 0; i < this.filmes.length; i++) {
@@ -98,7 +105,12 @@
         )
       },
       getSeries: function () {
-        this.$http.get(Api.url + '/serie').then(
+        this.$http.get(Api.url + '/serie', {
+            headers: {
+              'Authorization': localStorage.getItem('iflix-user-token')
+            }
+          }
+        ).then(
           response => {
             this.series = response.body
             for (let i = 0; i < this.series.length; i++) {
