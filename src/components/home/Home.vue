@@ -35,14 +35,15 @@
 <script>
   /* eslint-disable no-trailing-spaces,padded-blocks,semi */
 
-  import bus from '../eventBus/bus'
-  import { Api } from '../../api'
+  import bus from '../../util/bus'
   import Vue from 'vue'
 
+  import { Api } from '../../api'
   import Cinema from './Cinema.vue'
 
   require('video.js/dist/video-js.css')
   require('../../../static/css/iflix-player-theme.css')
+
   export default {
     name: 'app',
     data: () => ({
@@ -77,21 +78,14 @@
       },
 
       renderizarCinema: function (video) {
-//        this.dialogAssistir = true
-//        this.videoSelecionado = video
-//        this.updatePlayerOptionsWithSelectedVideo(video)
-//        this.formatarSinopse()
-//        this.calcularAlturaPlayer()
-        console.log(video)
         bus.$emit('renderizarCinema', video)
-
       },
 
       getFilmes: function () {
 
         this.$http.get(Api.url + '/filme', {
          headers: {
-            'Authorization': localStorage.getItem('iflix-user-token'),
+            'Authorization': "'"+localStorage.getItem('iflix-user-token')+"'",
           }
         }).then(
           response => {

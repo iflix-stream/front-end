@@ -125,9 +125,7 @@
   </v-flex>
 </template>
 <script>
-
-
-  import bus from '../eventBus/bus'
+  import bus from '../../util/bus'
   import { Api } from '../../api'
 
   export default {
