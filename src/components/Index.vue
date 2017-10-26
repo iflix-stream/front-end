@@ -63,7 +63,7 @@
       <v-layout row justify-center>
         <v-dialog v-model="dialog" fullscreen transition="dialog-bottom-transition" :overlay=false>
           <v-card>
-            <v-toolbar dark class="primary">
+            <v-toolbar dark primary>
               <v-btn icon @click.native="dialog = false" dark>
                 <v-icon>close</v-icon>
               </v-btn>
@@ -133,17 +133,13 @@
     </v-flex>
 
     <v-flex>
-      <v-card class="hidden-md-and-up " style="position: fixed; bottom: 0; right: 0; left: 0;">
+      <v-card class="hidden-md-and-up " style="z-index: 1 ;position: fixed; bottom: 0; right: 0; left: 0;">
         <v-bottom-nav
           absolute
           shift
           :value="true"
           :active.sync="bottomTabs"
-          :class="{
-        'red': bottomTabs === 0,
-        'purple': bottomTabs === 1,
-        'brown': bottomTabs === 2
-      }"
+          primary
         >
           <v-btn dark>
             <span>Favoritos</span>

@@ -17,7 +17,7 @@ background-position: center; background-repeat: no-repeat; background-size:cover
             <v-flex xs12>
               <v-form>
                 <v-container grid-list-x1>
-                  <v-text-field
+                  <v-text-field autofocus
                     label="Nome"
                     required
                     v-model="nome"

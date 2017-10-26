@@ -16,7 +16,7 @@ background-position: center; background-repeat: no-repeat; background-size:cover
             <v-flex xs12>
               <v-form>
                 <v-container grid-list-x1>
-                  <v-text-field
+                  <v-text-field autofocus
                     label="E-mail"
                     required
                     v-model="email"
@@ -39,10 +39,10 @@ background-position: center; background-repeat: no-repeat; background-size:cover
                   </v-flex>
 
                   <v-flex>
-                    <v-btn block accent large v-on:click="login">Login</v-btn>
+                    <v-btn block primary large v-on:click="login">Login</v-btn>
                   </v-flex>
                   <v-flex>
-                    <v-btn block primary large to="registrar">Registrar</v-btn>
+                    <v-btn block accent large to="registrar">Registrar</v-btn>
                   </v-flex>
 
 
