@@ -1,7 +1,8 @@
 <template>
   <v-flex>
     <v-layout row style="width: 100%;">
-      <v-dialog v-model="dialogAssistir" fullscreen transition="dialog-bottom-transition" hide-overlay=""  :overlay=false persistent v-if="ativadorDialog">
+      <v-dialog v-model="dialogAssistir" fullscreen transition="dialog-bottom-transition" hide-overlay="" :overlay=false
+                persistent v-if="ativadorDialog">
         <v-toolbar dark color="primary" fixed>
 
           <v-toolbar-title>Assistindo {{videoSelecionado.nome}}</v-toolbar-title>
@@ -37,7 +38,7 @@
                     </video-player>
                     <v-card-actions class="primary">
                       <v-spacer></v-spacer>
-                      <v-btn icon>
+                      <v-btn icon @click.native="adicionarMinhaLista()">
                         <v-icon>favorite</v-icon>
                       </v-btn>
                       <v-btn icon>
@@ -122,6 +123,14 @@
         </v-layout>
       </v-dialog>
     </v-layout>
+    <v-snackbar
+      :timeout="3000"
+      :bottom="'bottom'"
+      v-model="snackbar.show"
+    >
+      {{ snackbar.text}}
+      <v-btn flat primary @click.native="snackbar.show = false">Fechar</v-btn>
+    </v-snackbar>
   </v-flex>
 </template>
 <script>
@@ -130,8 +139,12 @@
 
   export default {
 
-    data() {
+    data () {
       return {
+        snackbar: {
+          text: '',
+          show: false
+        },
         dialogAssistir: false,
         diminuir: false,
         spoilerSinopse: false,
@@ -154,15 +167,15 @@
       }
     },
 
-    mounted() {
-      bus.$on('renderizarCinema', (video) => this.renderizarCinema(video));
-      bus.$on('fecharCinema', this.fecharDialog());
+    mounted () {
+      bus.$on('renderizarCinema', (video) => this.renderizarCinema(video))
+      bus.$on('fecharCinema', this.fecharDialog())
 
       setTimeout(() => {
         // console.log('dynamic change options', this.player)
         this.player.muted(false)
-      }, 2000);
-  },
+      }, 2000)
+    },
 
     computed: {
       player () {
@@ -192,9 +205,9 @@
 
       calculaAlturaCinema: function () {
         if (this.videoSelecionado.tipo === 'serie') {
-          return "margin-top:58px,  width: 100% !important; height: 64vh";
+          return 'margin-top:58px,  width: 100% !important; height: 64vh'
         }
-        return "margin-top:58px;  width: 100% !important; height: 91vh"
+        return 'margin-top:58px;  width: 100% !important; height: 91vh'
       },
 
       formatarSinopse: function () {
@@ -216,6 +229,22 @@
       setEpisode: function (episodio) {
         this.playerOptions.sources[0].src = Api.url + '/serie/?stream=true&id=' + episodio.caminho
         console.log(episodio)
+      },
+
+      adicionarMinhaLista: function () {
+        let jwtDecode = require('jwt-decode')
+        let token = localStorage.getItem('iflix-user-token')
+        this.$http.post(Api.url + '/lista',
+          {
+            tipo: this.videoSelecionado.tipo,
+            usuario: jwtDecode(token).usuario.id,
+            id: this.videoSelecionado.id
+          },
+          {emulateJSON: true}
+        ).then(response => {
+          this.snackbar.show = true
+          this.snackbar.text = response.body.message
+        })
       },
 
       onPlayerPlay (player) {
