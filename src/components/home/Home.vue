@@ -40,9 +40,11 @@
 
   import { Api } from '../../api'
   import Cinema from './Cinema.vue'
+  import jwtDecode from 'jwt-decode'
 
   require('video.js/dist/video-js.css')
   require('../../../static/css/iflix-player-theme.css')
+
 
   export default {
     name: 'app',
@@ -83,22 +85,30 @@
 
       getFilmes: function () {
 
-        this.$http.get(Api.url + '/filme', {
-         headers: {
-            'Authorization': "'"+localStorage.getItem('iflix-user-token')+"'",
+        this.$http.get(Api.url + '/filme/', {
+          params: {
+            user: jwtDecode(localStorage.getItem('iflix-user-token')).usuario.id
+          },
+          headers: {
+            'Authorization': '\'' + localStorage.getItem('iflix-user-token') + '\'',
           }
         }).then(
           response => {
             this.filmes = response.body
-            for (let i = 0; i < this.filmes.length; i++) {
-              this.filmes[i].tipo = 'filme'
+            if (this.filmes !== undefined) {
+              for (let i = 0; i < this.filmes.length; i++) {
+                this.filmes[i].tipo = 'filme'
+              }
+              this.mergeFilmesESeries()
             }
-            this.mergeFilmesESeries()
           }
         )
       },
       getSeries: function () {
-        this.$http.get(Api.url + '/serie', {
+        this.$http.get(Api.url + '/serie/', {
+            params: {
+              user: jwtDecode(localStorage.getItem('iflix-user-token')).usuario.id
+            },
             headers: {
               'Authorization': localStorage.getItem('iflix-user-token')
             }
@@ -106,10 +116,13 @@
         ).then(
           response => {
             this.series = response.body
-            for (let i = 0; i < this.series.length; i++) {
-              this.series[i].tipo = 'serie'
+            console.log(this.series);
+            if (this.series !== undefined) {
+              for (let i = 0; i < this.series.length; i++) {
+                this.series[i].tipo = 'serie'
+              }
+              this.mergeFilmesESeries()
             }
-            this.mergeFilmesESeries()
           }
         )
       },

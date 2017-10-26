@@ -136,6 +136,7 @@
 <script>
   import bus from '../../util/bus'
   import { Api } from '../../api'
+  import jwtDecode from 'jwt-decode'
 
   export default {
 
@@ -170,22 +171,12 @@
     mounted () {
       bus.$on('renderizarCinema', (video) => this.renderizarCinema(video))
       bus.$on('fecharCinema', this.fecharDialog())
-
-      setTimeout(() => {
-        // console.log('dynamic change options', this.player)
-        this.player.muted(false)
-      }, 2000)
     },
 
-    computed: {
-      player () {
-        return this.$refs.videoPlayer.player
-      }
-    },
+    computed: {},
     methods: {
 
       renderizarCinema: function (video) {
-
         this.ativadorDialog = true
         this.dialogAssistir = true
         this.videoSelecionado = video
@@ -227,12 +218,12 @@
 
       },
       setEpisode: function (episodio) {
+        this.episodioSelecionado = episodio
         this.playerOptions.sources[0].src = Api.url + '/serie/?stream=true&id=' + episodio.caminho
         console.log(episodio)
       },
 
       adicionarMinhaLista: function () {
-        let jwtDecode = require('jwt-decode')
         let token = localStorage.getItem('iflix-user-token')
         this.$http.post(Api.url + '/lista',
           {
@@ -250,10 +241,24 @@
       onPlayerPlay (player) {
         this.diminuir = true
         this.$http.post(Api.url + '/contagem', {somar: true}, {emulateJSON: true})
+
       },
       onPlayerPause (player) {
         this.diminuir = false
         this.$http.post(Api.url + '/contagem', {subtrair: true}, {emulateJSON: true})
+        this.$http.post(Api.url + '/tempo',
+          {
+            usuario: jwtDecode(localStorage.getItem('iflix-user-token')).usuario.id,
+            id: this.videoSelecionado.id,
+            tipo: this.videoSelecionado.tipo,
+            tempo: player.currentTime(),
+          },
+          {
+            emulateJSON: true
+          }).then(res =>{
+            console.log(res);
+        })
+
       },
       onPlayerEnded (player) {
         this.diminuir = false
@@ -283,8 +288,12 @@
       },
       // player is ready
       playerReadied (player) {
-        // seek to 10s
-        player.currentTime(0)
+        let tempoAssistido = this.videoSelecionado.tempoAssistido
+        console.log(this.videoSelecionado)
+        if (this.videoSelecionado.tipo === 'serie') {
+          tempoAssistido = this.episodioSelecionado.tempoAssistido
+        }
+        player.currentTime(tempoAssistido)
         // console.log('example 01: the player is readied', player)
       }
 

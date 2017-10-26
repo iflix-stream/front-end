@@ -3,11 +3,12 @@
   <v-layout row>
     <v-flex>
       <v-toolbar fixed row style="background-color: rgba(20,20,20,0.9);">
-        <v-toolbar-title to="/home" class="white--text">IFlix</v-toolbar-title>
         <v-toolbar-items class="hidden-sm-and-down">
+          <v-btn to="/home" flat>IFlix</v-btn>
           <v-menu>
             <v-btn flat slot="activator">Gêneros</v-btn>
             <v-list style="background-color: rgba(20,20,20,0.9);position: fixed;top:64px">
+
               <v-list-tile v-for="genero in menuGeneros" :key="genero.id"
                            :to="'/genero/'+genero.nome.toLowerCase()">
                 <v-list-tile-title class="white--text" v-text="genero.nome"></v-list-tile-title>
@@ -23,6 +24,7 @@
               </v-list-tile>
             </v-list>
           </v-menu>
+
         </v-toolbar-items>
         <v-flex style="margin-right: 25px">
           <v-layout align-center row spacer slot="header" style="float: right">
