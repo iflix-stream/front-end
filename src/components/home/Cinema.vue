@@ -38,7 +38,7 @@
                     </video-player>
                     <v-card-actions class="primary">
                       <v-spacer></v-spacer>
-                      <v-btn icon @click.native="adicionarMinhaLista()">
+                      <v-btn icon @click.native="adicionarMinhaLista()" class="active">
                         <v-icon>favorite</v-icon>
                       </v-btn>
                       <v-btn icon>
@@ -220,7 +220,6 @@
       setEpisode: function (episodio) {
         this.episodioSelecionado = episodio
         this.playerOptions.sources[0].src = Api.url + '/serie/?stream=true&id=' + episodio.caminho
-        console.log(episodio)
       },
 
       adicionarMinhaLista: function () {
@@ -290,7 +289,7 @@
       playerReadied (player) {
         let tempoAssistido = this.videoSelecionado.tempoAssistido
         console.log(this.videoSelecionado)
-        if (this.videoSelecionado.tipo === 'serie') {
+        if (this.videoSelecionado.tipo === 'serie' && this.episodioSelecionado !== undefined) {
           tempoAssistido = this.episodioSelecionado.tempoAssistido
         }
         player.currentTime(tempoAssistido)

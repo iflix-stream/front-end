@@ -14,18 +14,18 @@ background-position: center; background-repeat: no-repeat; background-size:cover
               {{mensagem}}
             </v-alert>
             <v-flex xs12>
-              <v-form>
+              <v-form v-model="valido" ref="loginForm" lazy-validation>
                 <v-container grid-list-x1>
                   <v-text-field autofocus
-                    label="E-mail"
-                    required
-                    v-model="email"
+                                label="E-mail"
+                                :rules="emailRules"
+                                required
+                                v-model="email"
                   ></v-text-field>
                   <v-text-field
-                    name="input-10-1"
+                    name="inputSenha"
                     label="Senha"
-                    hint="A senha deve conter ao menos 8 caracteres"
-                    min="3"
+                    :rules="senhaRules"
                     :append-icon="e1 ? 'visibility' : 'visibility_off'"
                     :append-icon-cb="() => (e1 = !e1)"
                     :type="e1 ? 'password' : 'text'"
@@ -39,7 +39,9 @@ background-position: center; background-repeat: no-repeat; background-size:cover
                   </v-flex>
 
                   <v-flex>
-                    <v-btn block primary large v-on:click="login">Login</v-btn>
+                    <v-btn block primary large @click="login"
+                           :disabled="!valido">Login
+                    </v-btn>
                   </v-flex>
                   <v-flex>
                     <v-btn block accent large to="registrar">Registrar</v-btn>
@@ -71,6 +73,15 @@ background-position: center; background-repeat: no-repeat; background-size:cover
     data () {
       return {
         e1: true,
+        valido: false,
+        emailRules: [
+          (v) => !!v || 'O e-mail é requirido.',
+          (v) => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'O e-mail tem que ser válido.'
+        ],
+        senhaRules: [
+          (v) => !!v || 'A senha é requirida',
+          (v) => v && v.length >= 3 || 'A senha deve ter ao menos 3 caracteres.'
+        ],
         email: '',
         senha: '',
         alert: false,
@@ -85,20 +96,22 @@ background-position: center; background-repeat: no-repeat; background-size:cover
           senha: this.senha
         }
 
-        this.$http.post(Api.url + '/login', formData, {emulateJSON: true})
-          .then(response => {
-            if (response.data.code === 500) {
-              this.mensagem = response.data.message
+        if (this.$refs.loginForm.validate()) {
+          this.$http.post(Api.url + '/login', formData, {emulateJSON: true})
+            .then(response => {
+              if (response.data.code === 500) {
+                this.mensagem = response.data.message
+                this.alert = true
+              }
+              if (response.data.token !== undefined) {
+                localStorage.setItem('iflix-user-token', response.data.token)
+                this.$router.go('/home')
+              }
+            }, function () {
+              this.mensagem = 'Ops, o servidor parece estar offline.'
               this.alert = true
-            }
-            if (response.data.token !== undefined) {
-              localStorage.setItem('iflix-user-token', response.data.token)
-              this.$router.go('/home')
-            }
-          }, function () {
-            this.mensagem = 'Ops, o servidor parece estar offline.'
-            this.alert = true
-          })
+            })
+        }
       }
     }
   }

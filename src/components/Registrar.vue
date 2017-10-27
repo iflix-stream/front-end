@@ -15,13 +15,13 @@ background-position: center; background-repeat: no-repeat; background-size:cover
               {{mensagem}}
             </v-alert>
             <v-flex xs12>
-              <v-form>
+              <v-form v-model="valido" ref="registerForm" >
                 <v-container grid-list-x1>
                   <v-text-field autofocus
-                    label="Nome"
-                    required
-                    v-model="nome"
-                    :rules="regrasDeNome"
+                                label="Nome"
+                                required
+                                v-model="nome"
+                                :rules="regrasDeNome"
                   ></v-text-field>
                   <v-text-field
                     label="E-mail"
@@ -52,11 +52,14 @@ background-position: center; background-repeat: no-repeat; background-size:cover
                       <v-text-field
                         slot="activator"
                         label="Data de nascimento"
-                        v-model="data_nascimento"
+                        v-model="dataNascimentoFormatada"
                         readonly
                       ></v-text-field>
-                      <v-date-picker v-model="data_nascimento" scrollable actions>
-                        <template scope="{ save, cancel }">
+                      <v-date-picker v-model="data_nascimento" locale="pt-br" v-mask="'##/##/####'"
+                                     :date-format="date=>
+                                      new Date(date).toLocaleDateString()"
+                                     :formatted-value.sync="dataNascimentoFormatada">
+                        <template slot-scope="{ save, cancel }">
                           <v-card-actions>
                             <v-spacer></v-spacer>
                             <v-btn flat color="primary" @click="cancel">Cancelar</v-btn>
@@ -67,7 +70,7 @@ background-position: center; background-repeat: no-repeat; background-size:cover
                     </v-dialog>
                   </v-flex>
                   <v-flex>
-                    <v-btn block primary large v-on:click="registrar">Registrar</v-btn>
+                    <v-btn block primary large v-on:click="registrar" :disabled="!valido">Registrar</v-btn>
                     <a href="#/login">Voltar ao login</a>
                   </v-flex>
 
@@ -96,9 +99,11 @@ background-position: center; background-repeat: no-repeat; background-size:cover
     data () {
       return {
         e1: true,
+        valido: false,
+
         regrasDeNome: [
           (v) => !!v || 'O nome é requirido',
-          (v) => v && v.length <= 3 || 'O nome tem que ser maior que 3 caracteres'
+          (v) => v && v.length >= 3 || 'O nome tem que ser maior que 3 caracteres'
         ],
         regrasDeEmail: [
           (v) => !!v || 'O E-mail é requirido',
@@ -112,6 +117,7 @@ background-position: center; background-repeat: no-repeat; background-size:cover
         nome: '',
         modalData: '',
         data_nascimento: '',
+        dataNascimentoFormatada: null,
         avatar: 1,
         email: '',
         senha: '',
@@ -129,26 +135,28 @@ background-position: center; background-repeat: no-repeat; background-size:cover
           email: this.email,
           senha: this.senha
         }
+        if (this.$refs.registerForm.validate()) {
+          this.$http.post(Api.url + '/usuario', formData, {emulateJSON: true})
+            .then(response => {
+              if (response.data.type === 'success') {
+                this.mensagem = response.data.message
+                this.alert = true
+                this.icone = 'done'
+                this.corAlert = 'green'
+              }
 
-        this.$http.post(Api.url + '/usuario', formData, {emulateJSON: true})
-          .then(response => {
-            if (response.data.type === 'success') {
-              this.mensagem = response.data.message
-              this.alert = true
-              this.icone = 'done'
-              this.corAlert = 'green'
-            }
+              else if (response.data.type === 'error') {
+                this.mensagem = response.data.message
+                this.alert = true
+                this.icone = 'error'
+                this.corAlert = 'red'
+              }
 
-            else if (response.data.type === 'error') {
-              this.mensagem = response.data.message
-              this.alert = true
-              this.icone = 'error'
-              this.corAlert = 'red'
-            }
+            }, response => {
+              console.error(response.body)
+            })
+        }
 
-          }, response => {
-            console.error(response.body)
-          })
       }
     }
   }
