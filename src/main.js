@@ -12,7 +12,6 @@ import CadastroFilme from './components/filme/CadastroFilme.vue'
 import Dashboard from './components/Admin.vue'
 import VueVideoPlayer from 'vue-video-player'
 import VeeValidate from 'vee-validate'
-import Genero from './components/pesquisa/Genero.vue'
 import Registrar from './components/Registrar.vue'
 import VueMask from 'v-mask'
 
@@ -57,7 +56,11 @@ const routes = [
         component: CadastroFilme
       },
       {
-        path: 'genero/:nome',
+        path: 'genero/:nomegenero',
+        component: Home
+      },
+      {
+        path: 'search/:nome',
         component: Home
       }
     ]

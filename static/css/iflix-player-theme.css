@@ -71,11 +71,11 @@
 }
 
 .video-js:hover .vjs-big-play-button,.vjs-custom-skin > .video-js .vjs-big-play-button:focus,.vjs-custom-skin > .video-js .vjs-big-play-button:active {
-  background-color: #ab47bc
+  background-color: #B71C1C
 }
 
 .vjs-custom-skin > .video-js .vjs-loading-spinner {
-  border-color: #9c27b0
+  border-color: #B31B1B
 }
 
 .vjs-custom-skin > .video-js .vjs-control-bar2 {
@@ -89,7 +89,7 @@
 }
 
 .vjs-custom-skin > .video-js .vjs-play-progress,.vjs-custom-skin > .video-js  .vjs-volume-level {
-  background-color: #9c27b0
+  background-color: #B71C1C
 }
 
 .vjs-custom-skin > .video-js .vjs-play-progress:before {

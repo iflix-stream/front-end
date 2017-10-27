@@ -1,8 +1,8 @@
 <template>
   <v-flex>
-    <v-layout row style="width: 100%;">
-      <v-dialog v-model="dialogAssistir" fullscreen transition="dialog-bottom-transition" hide-overlay="" :overlay=false
-                persistent v-if="ativadorDialog">
+    <v-layout row style="width: 100%; ">
+      <v-dialog v-model="dialogAssistir" fullscreen transition="dialog-bottom-transition" hide-overlay="" :overlay="true"
+                persistent v-if="ativadorDialog" style="">
         <v-toolbar dark color="primary" fixed>
 
           <v-toolbar-title>Assistindo {{videoSelecionado.nome}}</v-toolbar-title>
@@ -17,9 +17,8 @@
             <v-container fluid grid-list-md class="subtrai-paddings-tela"
                          style="">
               <v-layout row ref="playerDeVideo" style="width: 100%; margin: 0">
-                <v-flex style=" margin: 0; padding: 0">
+                <v-flex style="padding: 0">
                   <v-card>
-
                     <video-player class="vjs-custom-skin"
                                   ref="videoPlayer"
                                   :options="playerOptions"
@@ -54,8 +53,8 @@
             </v-container>
 
           </v-flex>
-          <v-flex xs12 sm12 md3 lg3 style="margin: 0">
-            <div style="height: 54.5vh; overflow: auto">
+          <v-flex xs12 sm12 md3 lg3 style="height: 60vh;margin: 0">
+            <div style="height: 60vh; overflow: auto">
               <v-flex>
                 <v-card class="white--text primary">
                   <v-container fluid grid-list-lg class="subtrai-margin-tela">
@@ -195,8 +194,9 @@
       },
 
       calculaAlturaCinema: function () {
+
         if (this.videoSelecionado.tipo === 'serie') {
-          return 'margin-top:58px,  width: 100% !important; height: 64vh'
+          return 'margin-top:58px;  width: 100% !important; height: 64vh'
         }
         return 'margin-top:58px;  width: 100% !important; height: 91vh'
       },
@@ -268,6 +268,7 @@
       onPlayerEnded (player) {
         this.diminuir = false
         this.$http.post(Api.url + '/contagem', {subtrair: true}, {emulateJSON: true})
+        this.salvarTempo(player);
       },
       onPlayerLoadeddata (player) {
         // console.log('player Loadeddata!', player)

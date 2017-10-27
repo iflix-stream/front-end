@@ -45,7 +45,6 @@
   require('video.js/dist/video-js.css')
   require('../../../static/css/iflix-player-theme.css')
 
-
   export default {
     name: 'app',
     data: () => ({
@@ -54,83 +53,97 @@
       series: [],
       filmesAndSeries: []
     }),
-    components: {
-      Cinema,
-    },
-    created () {
-      document.addEventListener('beforeunload', this.handler)
-    },
-    mounted () {
-      this.getFilmes()
-      this.getSeries()
-    },
-    methods: {
-      handler: function handler (event) {
-        if (this.diminuir) {
-          this.$http.post(Api.url + '/contagem', {subtrair: true}, {emulateJSON: true})
-        }
-        return null
+    watch: {
+      '$route.params.nomegenero': function () {
+        this.getFilmes()
+        this.getSeries()
+
       },
-      fecharDialog: function () {
+    },
+      components: {
+        Cinema,
+      },
+      created () {
+        document.addEventListener('beforeunload', this.handler)
+      },
+      mounted () {
+        this.getFilmes()
+        this.getSeries()
+      },
+      methods: {
+        handler: function handler (event) {
+          if (this.diminuir) {
+            this.$http.post(Api.url + '/contagem', {subtrair: true}, {emulateJSON: true})
+          }
+          return null
+        },
+        fecharDialog: function () {
 //        this.dialogAssistir = false
 //        if (this.diminuir) {
 //          this.$http.post(Api.url + '/contagem', {subtrair: true}, {emulateJSON: true})
 //        }
-        bus.$emit('fecharCinema')
-      },
+          bus.$emit('fecharCinema')
+        },
 
-      renderizarCinema: function (video) {
-        bus.$emit('renderizarCinema', video)
-      },
+        renderizarCinema: function (video) {
+          bus.$emit('renderizarCinema', video)
+        },
 
-      getFilmes: function () {
-
-        this.$http.get(Api.url + '/filme/', {
-          params: {
-            user: jwtDecode(localStorage.getItem('iflix-user-token')).usuario.id
-          },
-          headers: {
-            'Authorization': '\'' + localStorage.getItem('iflix-user-token') + '\'',
+        getFilmes: function () {
+          let url = Api.url + '/filme/'
+          if (this.$route.params.nomegenero !== undefined) {
+            url = Api.url + '/filme/genero/' + this.$route.params.nomegenero + '/'
           }
-        }).then(
-          response => {
-            this.filmes = response.body
-            if (this.filmes !== undefined) {
-              for (let i = 0; i < this.filmes.length; i++) {
-                this.filmes[i].tipo = 'filme'
-              }
-              this.mergeFilmesESeries()
-            }
-          }
-        )
-      },
-      getSeries: function () {
-        this.$http.get(Api.url + '/serie/', {
+          this.$http.get(url, {
             params: {
               user: jwtDecode(localStorage.getItem('iflix-user-token')).usuario.id
             },
             headers: {
-              'Authorization': localStorage.getItem('iflix-user-token')
+              'Authorization': '\'' + localStorage.getItem('iflix-user-token') + '\'',
             }
-          }
-        ).then(
-          response => {
-            this.series = response.body
-            console.log(this.series);
-            if (this.series !== undefined) {
-              for (let i = 0; i < this.series.length; i++) {
-                this.series[i].tipo = 'serie'
+          }).then(
+            response => {
+              this.filmes = response.body
+              if (this.filmes !== undefined) {
+                for (let i = 0; i < this.filmes.length; i++) {
+                  this.filmes[i].tipo = 'filme'
+                }
+                this.mergeFilmesESeries()
               }
-              this.mergeFilmesESeries()
             }
+          )
+        },
+        getSeries: function () {
+          let url = Api.url + '/serie/'
+          if (this.$route.params.nomegenero !== undefined) {
+            url = Api.url + '/serie/genero/' + this.$route.params.nomegenero + '/'
           }
-        )
-      },
-      mergeFilmesESeries: function () {
-        this.filmesAndSeries = this.filmes.concat(this.series).sort().reverse()
-      },
+          this.$http.get(url, {
+              params: {
+                user: jwtDecode(localStorage.getItem('iflix-user-token')).usuario.id
+              },
+              headers: {
+                'Authorization': localStorage.getItem('iflix-user-token')
+              }
+            }
+          ).then(
+            response => {
+              this.series = response.body
+              console.log(this.series)
+              if (this.series !== undefined) {
+                for (let i = 0; i < this.series.length; i++) {
+                  this.series[i].tipo = 'serie'
+                }
+                this.mergeFilmesESeries()
+              }
+            }
+          )
+        },
+        mergeFilmesESeries: function () {
+          this.filmesAndSeries = this.filmes.concat(this.series).sort().reverse()
+        },
+      }
     }
-  }
 </script>
 
 <style>
