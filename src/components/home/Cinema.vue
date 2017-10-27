@@ -38,7 +38,7 @@
                     </video-player>
                     <v-card-actions class="primary">
                       <v-spacer></v-spacer>
-                      <v-btn icon @click.native="adicionarMinhaLista()" class="active">
+                      <v-btn icon @click.native="adicionarMinhaLista()">
                         <v-icon>favorite</v-icon>
                       </v-btn>
                       <v-btn icon>
@@ -212,11 +212,13 @@
           this.videoSelecionado.sinopsePequena = this.videoSelecionado.sinopse.substring(0, 183) + '...'
         }
       },
+
       updatePlayerOptionsWithSelectedVideo: function (video) {
         this.playerOptions.sources[0].src = Api.url + '/' + video.tipo + '/?stream=true&id=' + video.caminho
         this.playerOptions.poster = video.thumbnail
 
       },
+
       setEpisode: function (episodio) {
         this.episodioSelecionado = episodio
         this.playerOptions.sources[0].src = Api.url + '/serie/?stream=true&id=' + episodio.caminho
@@ -236,15 +238,7 @@
           this.snackbar.text = response.body.message
         })
       },
-
-      onPlayerPlay (player) {
-        this.diminuir = true
-        this.$http.post(Api.url + '/contagem', {somar: true}, {emulateJSON: true})
-
-      },
-      onPlayerPause (player) {
-        this.diminuir = false
-        this.$http.post(Api.url + '/contagem', {subtrair: true}, {emulateJSON: true})
+      salvarTempo: function (player) {
         this.$http.post(Api.url + '/tempo',
           {
             usuario: jwtDecode(localStorage.getItem('iflix-user-token')).usuario.id,
@@ -254,9 +248,21 @@
           },
           {
             emulateJSON: true
-          }).then(res =>{
-            console.log(res);
+          }).then(res => {
         })
+      },
+
+      onPlayerPlay (player) {
+        this.diminuir = true
+        this.$http.post(Api.url + '/contagem', {somar: true}, {emulateJSON: true})
+        setInterval(function () {
+          this.salvarTempo(player)
+        }.bind(this), 15000)
+      },
+      onPlayerPause (player) {
+        this.diminuir = false
+        this.$http.post(Api.url + '/contagem', {subtrair: true}, {emulateJSON: true})
+        this.salvarTempo(player)
 
       },
       onPlayerEnded (player) {
