@@ -1,7 +1,8 @@
 <template>
   <v-flex>
     <v-layout row style="width: 100%; ">
-      <v-dialog v-model="dialogAssistir" fullscreen transition="dialog-bottom-transition" hide-overlay="" :overlay="true"
+      <v-dialog v-model="dialogAssistir" fullscreen transition="dialog-bottom-transition" hide-overlay=""
+                :overlay="true"
                 persistent v-if="ativadorDialog" style="">
         <v-toolbar dark color="primary" fixed>
 
@@ -37,13 +38,11 @@
                     </video-player>
                     <v-card-actions class="primary">
                       <v-spacer></v-spacer>
-                      <v-btn icon @click.native="adicionarMinhaLista()">
+                      <v-btn icon @click.native="adicionarMinhaLista()" :style="isAdicionadoStyle">
                         <v-icon>favorite</v-icon>
                       </v-btn>
-                      <v-btn icon>
-                        <v-icon>bookmark</v-icon>
-                      </v-btn>
-                      <v-btn icon>
+
+                      <v-btn icon disabled>
                         <v-icon>share</v-icon>
                       </v-btn>
                     </v-card-actions>
@@ -150,7 +149,7 @@
         spoilerSinopse: false,
         isBotaoSpoilerSinopse: false,
         isMaiorQue183: false,
-
+        isAdicionadoStyle: '',
         ativadorDialog: false,
 
         playerOptions: {
@@ -170,6 +169,7 @@
     mounted () {
       bus.$on('renderizarCinema', (video) => this.renderizarCinema(video))
       bus.$on('fecharCinema', this.fecharDialog())
+
     },
 
     computed: {},
@@ -179,8 +179,10 @@
         this.ativadorDialog = true
         this.dialogAssistir = true
         this.videoSelecionado = video
+        this.isAdicionado()
         this.updatePlayerOptionsWithSelectedVideo(video)
         this.formatarSinopse()
+        console.log(Api.url + '/' + video.tipo + '/?stream=true&id=' + video.caminho)
 //        this.calcularAlturaPlayer()
       },
 
@@ -236,16 +238,38 @@
         ).then(response => {
           this.snackbar.show = true
           this.snackbar.text = response.body.message
+          this.isAdicionado()
+        })
+      },
+      isAdicionado: function () {
+        let token = localStorage.getItem('iflix-user-token')
+        this.$http.get(Api.url + '/lista/tipo/' + this.videoSelecionado.tipo + '/usuario/' + jwtDecode(token).usuario.id
+          + '/id/' + this.videoSelecionado.id,
+          {
+            tipo: this.videoSelecionado.tipo,
+            usuario: jwtDecode(token).usuario.id,
+            id: this.videoSelecionado.id
+          }
+        ).then(response => {
+          if (response.body.isAdicionado === true) {
+            this.isAdicionadoStyle = 'color: #EEEEEE'
+          } else {
+            this.isAdicionadoStyle = ''
+          }
         })
       },
       salvarTempo: function (player) {
+        let params = {
+          usuario: jwtDecode(localStorage.getItem('iflix-user-token')).usuario.id,
+          id: this.videoSelecionado.id,
+          tipo: this.videoSelecionado.tipo,
+          tempo: player.currentTime(),
+        }
+        if(this.videoSelecionado.tipo === "serie"){
+          params.id = this.episodioSelecionado.id;
+        }
         this.$http.post(Api.url + '/tempo',
-          {
-            usuario: jwtDecode(localStorage.getItem('iflix-user-token')).usuario.id,
-            id: this.videoSelecionado.id,
-            tipo: this.videoSelecionado.tipo,
-            tempo: player.currentTime(),
-          },
+          params,
           {
             emulateJSON: true
           }).then(res => {
@@ -254,21 +278,21 @@
 
       onPlayerPlay (player) {
         this.diminuir = true
-        this.$http.post(Api.url + '/contagem', {somar: true}, {emulateJSON: true})
+//        this.$http.post(Api.url + '/contagem', {somar: true}, {emulateJSON: true})
         setInterval(function () {
           this.salvarTempo(player)
         }.bind(this), 15000)
       },
       onPlayerPause (player) {
         this.diminuir = false
-        this.$http.post(Api.url + '/contagem', {subtrair: true}, {emulateJSON: true})
+//        this.$http.post(Api.url + '/contagem', {subtrair: true}, {emulateJSON: true})
         this.salvarTempo(player)
 
       },
       onPlayerEnded (player) {
         this.diminuir = false
-        this.$http.post(Api.url + '/contagem', {subtrair: true}, {emulateJSON: true})
-        this.salvarTempo(player);
+//        this.$http.post(Api.url + '/contagem', {subtrair: true}, {emulateJSON: true})
+        this.salvarTempo(player)
       },
       onPlayerLoadeddata (player) {
         // console.log('player Loadeddata!', player)
@@ -295,7 +319,6 @@
       // player is ready
       playerReadied (player) {
         let tempoAssistido = this.videoSelecionado.tempoAssistido
-        console.log(this.videoSelecionado)
         if (this.videoSelecionado.tipo === 'serie' && this.episodioSelecionado !== undefined) {
           tempoAssistido = this.episodioSelecionado.tempoAssistido
         }

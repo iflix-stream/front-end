@@ -143,12 +143,12 @@
                     if (result) {
                         this.$http.post(Api.url + '/filme', this.form, {emulateJSON: true})
                             .then(response => {
-                                console.log(response.body);
+//                                console.log(response.body);
                             }, response => {
-                                console.error(response.body)
+//                                console.error(response.body)
                             })
                     }else {
-                        console.log("Erro");
+//                        console.log("Erro");
                     }
                     });
             },

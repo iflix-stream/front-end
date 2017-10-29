@@ -1,8 +1,8 @@
 <template>
   <v-layout row>
-    <v-flex xs12 sm12 lg12 md12 style="margin-top: 68px">
+    <v-flex xs12 sm12 lg12 md12 class="subtrai-margin-top">
       <v-container fluid grid-list-md>
-        <h6>Lançamentos</h6>
+        <h5>Lançamentos</h5>
         <v-layout darken-2 row wrap>
           <v-flex xs12 sm6 md4 lg3 xl3 v-for="video in filmesAndSeries" :key="video.id"
                   v-on:click="renderizarCinema(video)">
@@ -129,7 +129,6 @@
           ).then(
             response => {
               this.series = response.body
-              console.log(this.series)
               if (this.series !== undefined) {
                 for (let i = 0; i < this.series.length; i++) {
                   this.series[i].tipo = 'serie'
@@ -155,8 +154,14 @@
     background-color: #000;
     opacity: 0.8;
   }
+  .subtrai-margin-top {
+    margin-top: 67px;
+  }
 
   @media screen and (max-width: 480px) {
+    .subtrai-margin-top {
+      margin-top: 0;
+    }
     .video-js {
       /*position: inherit !important;*/
       width: 100% !important;
@@ -170,6 +175,9 @@
   }
 
   @media screen and (max-width: 600px) and (min-width: 481px) {
+    .subtrai-margin-top {
+      margin-top: 0;
+    }
     .video-js {
       /*position: inherit !important;*/
       width: 100% !important;

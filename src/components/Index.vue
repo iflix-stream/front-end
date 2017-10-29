@@ -2,11 +2,11 @@
   <v-app dark>
   <v-layout row>
     <v-flex>
-      <v-toolbar fixed row style="background-color: rgba(20,20,20,0.9);">
-        <v-toolbar-items class="hidden-sm-and-down">
+      <v-toolbar fixed row style="background-color: rgba(20,20,20,0.9);" class="hidden-sm-and-down">
+        <v-toolbar-items >
           <v-btn to="/home" flat>IFlix</v-btn>
           <v-menu>
-            <v-btn flat slot="activator">Gêneros</v-btn>
+            <v-btn flat slot="activator" disabled>Gêneros</v-btn>
             <v-list style="background-color: rgba(20,20,20,0.9);position: fixed;top:64px">
 
               <v-list-tile v-for="genero in menuGeneros" :key="genero.id"
@@ -63,7 +63,7 @@
       <v-layout row justify-center>
         <v-dialog v-model="dialog" fullscreen transition="dialog-bottom-transition" :overlay=false>
           <v-card>
-            <v-toolbar dark primary>
+            <v-toolbar dark primary >
               <v-btn icon @click.native="dialog = false" dark>
                 <v-icon>close</v-icon>
               </v-btn>
