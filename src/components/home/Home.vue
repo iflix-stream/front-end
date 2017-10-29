@@ -39,7 +39,7 @@
   import Vue from 'vue'
 
   import { Api } from '../../api'
-  import Cinema from './Cinema.vue'
+  import Cinema from '../cinema/Cinema.vue'
   import jwtDecode from 'jwt-decode'
 
   require('video.js/dist/video-js.css')
@@ -92,7 +92,7 @@
         getFilmes: function () {
           let url = Api.url + '/filme/'
           if (this.$route.params.nomegenero !== undefined) {
-            url = Api.url + '/filme/genero/' + this.$route.params.nomegenero + '/'
+            url += 'genero/' + this.$route.params.nomegenero + '/'
           }
           this.$http.get(url, {
             params: {

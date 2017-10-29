@@ -15,7 +15,7 @@ background-position: center; background-repeat: no-repeat; background-size:cover
               {{mensagem}}
             </v-alert>
             <v-flex xs12>
-              <v-form v-model="valido" ref="registerForm" >
+              <v-form v-model="valido" ref="registerForm">
                 <v-container grid-list-x1>
                   <v-text-field autofocus
                                 label="Nome"
@@ -92,8 +92,8 @@ background-position: center; background-repeat: no-repeat; background-size:cover
 
 <script>
   import { Api } from '../api'
+  import {IflixMailer} from '../util/mailer'
 
-  var jwtDecode = require('jwt-decode')
   export default {
     name: 'app',
     data () {
@@ -143,9 +143,13 @@ background-position: center; background-repeat: no-repeat; background-size:cover
                 this.alert = true
                 this.icone = 'done'
                 this.corAlert = 'green'
-              }
-
-              else if (response.data.type === 'error') {
+                IflixMailer.formData.assunto = 'Usuario Criado com sucesso!'
+                IflixMailer.formData.para.email = this.email
+                IflixMailer.formData.para.nome = this.nome
+                IflixMailer.formData.template = 'novo-usuario'
+                IflixMailer.formData.variaveisTemplates.nomepessoa = this.nome
+                IflixMailer.formData.url = Api.frontUrl + '/#/login'
+              } else if (response.data.type === 'error') {
                 this.mensagem = response.data.message
                 this.alert = true
                 this.icone = 'error'
@@ -155,6 +159,7 @@ background-position: center; background-repeat: no-repeat; background-size:cover
             }, response => {
               console.error(response.body)
             })
+          IflixMailer.send();
         }
 
       }

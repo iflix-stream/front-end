@@ -151,10 +151,10 @@
         isMaiorQue183: false,
         isAdicionadoStyle: '',
         ativadorDialog: false,
-
+        podeSalvarDe15Em15: true,
         playerOptions: {
           muted: false,
-          language: 'en',
+          language: 'pt',
           playbackRates: [0.7, 1.0, 1.5, 2.0],
           sources: [{
             type: 'video/mp4',
@@ -182,7 +182,6 @@
         this.isAdicionado()
         this.updatePlayerOptionsWithSelectedVideo(video)
         this.formatarSinopse()
-        console.log(Api.url + '/' + video.tipo + '/?stream=true&id=' + video.caminho)
 //        this.calcularAlturaPlayer()
       },
 
@@ -216,12 +215,24 @@
       },
 
       updatePlayerOptionsWithSelectedVideo: function (video) {
+
         this.playerOptions.sources[0].src = Api.url + '/' + video.tipo + '/?stream=true&id=' + video.caminho
+        if (video.tipo === 'serie') {
+          this.setEpisode(video.primeiro_episodio)
+          this.playerOptions.sources[0].src = Api.url + '/' + video.tipo + '/?stream=true&id=' + video.primeiro_episodio.caminho
+          if (video.ultimo_ep_assistido != 0) {
+            this.setEpisode(video.ultimo_ep_assistido)
+            this.playerOptions.sources[0].src = Api.url + '/' + video.tipo + '/?stream=true&id=' + video.ultimo_ep_assistido.caminho
+          }
+
+        }
+
         this.playerOptions.poster = video.thumbnail
 
       },
 
       setEpisode: function (episodio) {
+        this.podeSalvarDe15Em15 = false;
         this.episodioSelecionado = episodio
         this.playerOptions.sources[0].src = Api.url + '/serie/?stream=true&id=' + episodio.caminho
       },
@@ -265,8 +276,8 @@
           tipo: this.videoSelecionado.tipo,
           tempo: player.currentTime(),
         }
-        if(this.videoSelecionado.tipo === "serie"){
-          params.id = this.episodioSelecionado.id;
+        if (this.videoSelecionado.tipo === 'serie') {
+          params.id = this.episodioSelecionado.id
         }
         this.$http.post(Api.url + '/tempo',
           params,
@@ -279,11 +290,15 @@
       onPlayerPlay (player) {
         this.diminuir = true
 //        this.$http.post(Api.url + '/contagem', {somar: true}, {emulateJSON: true})
-        setInterval(function () {
-          this.salvarTempo(player)
-        }.bind(this), 15000)
+        if(this.podeSalvarDe15Em15){
+         setInterval(function () {
+           this.salvarTempo(player)
+         }.bind(this), 15000)
+
+       }
       },
       onPlayerPause (player) {
+        this.podeSalvarDe15Em15 = false;
         this.diminuir = false
 //        this.$http.post(Api.url + '/contagem', {subtrair: true}, {emulateJSON: true})
         this.salvarTempo(player)
