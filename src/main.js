@@ -13,6 +13,7 @@ import Dashboard from './components/Admin.vue'
 import VueVideoPlayer from 'vue-video-player'
 import VeeValidate from 'vee-validate'
 import Registrar from './components/Registrar.vue'
+import Cinema from './components/cinema/Cinema.vue'
 import VueMask from 'v-mask'
 
 
@@ -62,6 +63,10 @@ const routes = [
       {
         path: 'search/:nome',
         component: Home
+      },
+      {
+        path: 'watch/:tipo/:id',
+        component: Cinema
       }
     ]
   }

@@ -1,12 +1,14 @@
 <template>
-  <v-layout row>
-    <v-flex xs12 sm12 lg12 md12 class="subtrai-margin-top">
-      <v-container fluid grid-list-md>
+  <v-layout column class="subtrai-margin-top">
+    <section id="lancamentos">
+      <v-flex xs12>
         <h5>Lançamentos</h5>
-        <v-layout darken-2 row wrap>
-          <v-flex xs12 sm6 md4 lg3 xl3 v-for="video in filmesAndSeries" :key="video.id"
-                  v-on:click="renderizarCinema(video)">
-            <v-card class="card-filmes">
+      </v-flex>
+      <v-flex>
+        <v-layout row wrap>
+          <v-flex v-for="video in filmesAndSeries" xs12 sm6 md4 lg3 xl2
+                  :key="video.id">
+            <v-card class="card-filmes" v-on:click="renderizarCinema(video)">
               <v-card-media class="image-card-filme"
                             :src="video.thumbnail"
                             height="200px">
@@ -25,10 +27,13 @@
             </v-card>
           </v-flex>
         </v-layout>
-      </v-container>
+      </v-flex>
+    </section>
+    <v-flex>
+      <!--<aside>-->
+      <!--<cinema></cinema>-->
+      <!--</aside>-->
     </v-flex>
-
-    <cinema></cinema>
   </v-layout>
 </template>
 
@@ -60,100 +65,109 @@
 
       },
     },
-      components: {
-        Cinema,
+    components: {
+      Cinema,
+    },
+    created () {
+      document.addEventListener('beforeunload', this.handler)
+    },
+    mounted () {
+      this.getFilmes()
+      this.getSeries()
+    },
+    methods: {
+      handler: function handler (event) {
+        if (this.diminuir) {
+          this.$http.post(Api.url + '/contagem', {subtrair: true}, {emulateJSON: true})
+        }
+        return null
       },
-      created () {
-        document.addEventListener('beforeunload', this.handler)
-      },
-      mounted () {
-        this.getFilmes()
-        this.getSeries()
-      },
-      methods: {
-        handler: function handler (event) {
-          if (this.diminuir) {
-            this.$http.post(Api.url + '/contagem', {subtrair: true}, {emulateJSON: true})
-          }
-          return null
-        },
-        fecharDialog: function () {
+      fecharDialog: function () {
 //        this.dialogAssistir = false
 //        if (this.diminuir) {
 //          this.$http.post(Api.url + '/contagem', {subtrair: true}, {emulateJSON: true})
 //        }
-          bus.$emit('fecharCinema')
-        },
+        bus.$emit('fecharCinema')
+      },
 
-        renderizarCinema: function (video) {
-          bus.$emit('renderizarCinema', video)
-        },
+      renderizarCinema: function (video) {
+//        bus.$emit('renderizarCinema', video)
+        console.log(this.$route)
+        this.$router.push('/watch/' + video.tipo + '/' + video.id + '?ref=' + this.retornaReferencia())
+      },
 
-        getFilmes: function () {
-          let url = Api.url + '/filme/'
-          if (this.$route.params.nomegenero !== undefined) {
-            url += 'genero/' + this.$route.params.nomegenero + '/'
+      retornaReferencia: function () {
+        let str = this.$route.fullPath.replace(/\//g, '-');
+        return str.substring(1)
+      },
+
+      getFilmes: function () {
+        let url = Api.url + '/filme/'
+        if (this.$route.params.nomegenero !== undefined) {
+          url += 'genero/' + this.$route.params.nomegenero + '/'
+        }
+        this.$http.get(url, {
+          params: {
+            user: jwtDecode(localStorage.getItem('iflix-user-token')).usuario.id
+          },
+          headers: {
+            'Authorization': '\'' + localStorage.getItem('iflix-user-token') + '\'',
           }
-          this.$http.get(url, {
+        }).then(
+          response => {
+            this.filmes = response.body
+            if (this.filmes !== undefined) {
+              for (let i = 0; i < this.filmes.length; i++) {
+                this.filmes[i].tipo = 'filme'
+              }
+              this.mergeFilmesESeries()
+            }
+          }
+        )
+      },
+      getSeries: function () {
+        let url = Api.url + '/serie/'
+        if (this.$route.params.nomegenero !== undefined) {
+          url = Api.url + '/serie/genero/' + this.$route.params.nomegenero + '/'
+        }
+        this.$http.get(url, {
             params: {
               user: jwtDecode(localStorage.getItem('iflix-user-token')).usuario.id
             },
             headers: {
-              'Authorization': '\'' + localStorage.getItem('iflix-user-token') + '\'',
+              'Authorization': localStorage.getItem('iflix-user-token')
             }
-          }).then(
-            response => {
-              this.filmes = response.body
-              if (this.filmes !== undefined) {
-                for (let i = 0; i < this.filmes.length; i++) {
-                  this.filmes[i].tipo = 'filme'
-                }
-                this.mergeFilmesESeries()
-              }
-            }
-          )
-        },
-        getSeries: function () {
-          let url = Api.url + '/serie/'
-          if (this.$route.params.nomegenero !== undefined) {
-            url = Api.url + '/serie/genero/' + this.$route.params.nomegenero + '/'
           }
-          this.$http.get(url, {
-              params: {
-                user: jwtDecode(localStorage.getItem('iflix-user-token')).usuario.id
-              },
-              headers: {
-                'Authorization': localStorage.getItem('iflix-user-token')
+        ).then(
+          response => {
+            this.series = response.body
+            if (this.series !== undefined) {
+              for (let i = 0; i < this.series.length; i++) {
+                this.series[i].tipo = 'serie'
               }
+              this.mergeFilmesESeries()
             }
-          ).then(
-            response => {
-              this.series = response.body
-              if (this.series !== undefined) {
-                for (let i = 0; i < this.series.length; i++) {
-                  this.series[i].tipo = 'serie'
-                }
-                this.mergeFilmesESeries()
-              }
-            }
-          )
-        },
-        mergeFilmesESeries: function () {
-          this.filmesAndSeries = this.filmes.concat(this.series).sort().reverse()
-        },
-      }
+          }
+        )
+      },
+      mergeFilmesESeries: function () {
+        this.filmesAndSeries = this.filmes.concat(this.series).sort().reverse()
+      },
     }
+  }
 </script>
 
 <style>
   .card-filmes {
     cursor: pointer;
+    margin: 5px
   }
 
   .image-card-filme:hover {
     background-color: #000;
     opacity: 0.8;
   }
+
   .subtrai-margin-top {
     margin-top: 67px;
   }
@@ -162,6 +176,7 @@
     .subtrai-margin-top {
       margin-top: 0;
     }
+
     .video-js {
       /*position: inherit !important;*/
       width: 100% !important;
@@ -178,6 +193,7 @@
     .subtrai-margin-top {
       margin-top: 0;
     }
+
     .video-js {
       /*position: inherit !important;*/
       width: 100% !important;

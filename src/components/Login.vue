@@ -14,7 +14,7 @@ background-position: center; background-repeat: no-repeat; background-size:cover
               {{mensagem}}
             </v-alert>
             <v-flex xs12>
-              <v-form v-model="valido" ref="loginForm" lazy-validation>
+              <v-form v-model="valido" ref="loginForm" >
                 <v-container grid-list-x1>
                   <v-text-field autofocus
                                 label="E-mail"

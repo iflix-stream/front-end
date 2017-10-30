@@ -132,7 +132,6 @@
   </v-flex>
 </template>
 <script>
-  import bus from '../../util/bus'
   import { Api } from '../../api'
   import jwtDecode from 'jwt-decode'
 
@@ -144,7 +143,8 @@
           text: '',
           show: false
         },
-        dialogAssistir: false,
+        videoSelecionado: '',
+        dialogAssistir: true,
         diminuir: false,
         spoilerSinopse: false,
         isBotaoSpoilerSinopse: false,
@@ -167,28 +167,46 @@
     },
 
     mounted () {
-      bus.$on('renderizarCinema', (video) => this.renderizarCinema(video))
-      bus.$on('fecharCinema', this.fecharDialog())
+      this.buscaVideo()
+
+      this.dialogAssistir = true
+//      bus.$on('configurarCinema', (video) => this.configurarCinema(video))
+
+//      bus.$on('fecharCinema', this.fecharDialog())
 
     },
 
     computed: {},
     methods: {
+      defineTipo: function () {
+        this.videoSelecionado.tipo = this.$route.params.tipo
+      },
 
-      renderizarCinema: function (video) {
+      buscaVideo: function () {
+        this.$http.get(Api.url + '/' + this.$route.params.tipo + '/id/' + this.$route.params.id + '/', {
+          params: {
+            user: jwtDecode(localStorage.getItem('iflix-user-token')).usuario.id
+          }
+        }).then(res => {
+          this.videoSelecionado = res.body[0]
+          this.configurarCinema()
+        })
+      },
+
+      configurarCinema: function () {
+        this.defineTipo();
         this.ativadorDialog = true
         this.dialogAssistir = true
-        this.videoSelecionado = video
         this.isAdicionado()
-        this.updatePlayerOptionsWithSelectedVideo(video)
+        this.updatePlayerOptionsWithSelectedVideo(this.videoSelecionado)
         this.formatarSinopse()
 //        this.calcularAlturaPlayer()
       },
 
       fecharDialog: function () {
-
         this.dialogAssistir = false
         this.AtivadorDialog = false
+        this.$router.push('/'+this.$route.query.ref.replace(/-/g, '/'));
         if (this.diminuir) {
           this.$http.post(Api.url + '/contagem', {subtrair: true}, {emulateJSON: true})
         }
@@ -215,7 +233,6 @@
       },
 
       updatePlayerOptionsWithSelectedVideo: function (video) {
-
         this.playerOptions.sources[0].src = Api.url + '/' + video.tipo + '/?stream=true&id=' + video.caminho
         if (video.tipo === 'serie') {
           this.setEpisode(video.primeiro_episodio)
@@ -232,7 +249,7 @@
       },
 
       setEpisode: function (episodio) {
-        this.podeSalvarDe15Em15 = false;
+        this.podeSalvarDe15Em15 = false
         this.episodioSelecionado = episodio
         this.playerOptions.sources[0].src = Api.url + '/serie/?stream=true&id=' + episodio.caminho
       },
@@ -290,15 +307,15 @@
       onPlayerPlay (player) {
         this.diminuir = true
 //        this.$http.post(Api.url + '/contagem', {somar: true}, {emulateJSON: true})
-        if(this.podeSalvarDe15Em15){
-         setInterval(function () {
-           this.salvarTempo(player)
-         }.bind(this), 15000)
+        if (this.podeSalvarDe15Em15) {
+          setInterval(function () {
+            this.salvarTempo(player)
+          }.bind(this), 15000)
 
-       }
+        }
       },
       onPlayerPause (player) {
-        this.podeSalvarDe15Em15 = false;
+        this.podeSalvarDe15Em15 = false
         this.diminuir = false
 //        this.$http.post(Api.url + '/contagem', {subtrair: true}, {emulateJSON: true})
         this.salvarTempo(player)

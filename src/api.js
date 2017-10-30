@@ -5,7 +5,7 @@ export const Api = new Vue({
     return {
       url: 'http://192.168.1.10:8081/iFlix/api',
       shortUrl: 'http://192.168.1.10:8081/iFlix',
-      frontUrl: 'http://localhost:8080'
+      frontUrl: 'http://192.168.1.10:8080'
     }
   }
 })
