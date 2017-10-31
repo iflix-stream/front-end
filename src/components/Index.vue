@@ -31,7 +31,8 @@
             <v-flex>
               <v-menu>
                 <v-list style="background-color: rgba(20,20,20,0.9); position: fixed; top: 64px">
-                  <v-list-tile v-for="usuario in menuUsuario" :key="usuario.id" @click="go(usuario.acao)">
+                  <v-list-tile v-for="usuario in menuUsuario" :key="usuario.id" @click="go(usuario.acao)"
+                                >
                     <v-list-tile-title class="white--text" v-text="usuario.nome"></v-list-tile-title>
                   </v-list-tile>
                 </v-list>
@@ -91,7 +92,8 @@
 </template>
 <script>
   import { Api } from '../api'
-
+  import perfil from '../components/usuario/Perfil.vue'
+  import bus from '../util/bus'
   export default {
     name: 'app',
     data: () => ({
@@ -100,6 +102,7 @@
       notifications: false,
       sound: true,
       widgets: false,
+      dial: perfil.dialog,
       api: Api,
       menuGeneros: [],
       menuCadastros: [
@@ -108,16 +111,20 @@
           nome: 'Filmes',
           acao: 'filme'
         }
-      ], menuUsuario: [
+      ],
+      menuUsuario: [
         {
           id: 0,
           nome: 'Perfil',
-          acao: 'perfil'
+          acao: 'perfil',
+          path: '/perfil',
+
         },
         {
           id: 1,
           nome: 'Sair',
-          acao: 'sair'
+          acao: 'sair',
+          path: ''
         }
       ],
       permicao: '',
@@ -131,11 +138,17 @@
       this.getGeneros()
       this.getUsuario()
     },
+    components:{
+      perfil
+    },
     methods: {
       go: function (a) {
         switch (a) {
           case 'perfil':
-            this.dialog = true
+            perfil.dialog = true
+            alert(perfil.dialog);
+            bus.$emit('abreperfil', this.dial)
+//            this.$router.go('/home/perfil')
             break
           case 'sair':
             localStorage.removeItem('iflix-user-token')

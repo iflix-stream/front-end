@@ -7,6 +7,7 @@ import 'vuetify/dist/vuetify.min.css'
 import App from './App.vue'
 import Home from './components/home/Home.vue'
 import Index from './components/Index.vue'
+import Perfil from './components/usuario/Perfil.vue'
 import Login from './components/Login.vue'
 import CadastroFilme from './components/filme/CadastroFilme.vue'
 import Dashboard from './components/Admin.vue'
@@ -15,6 +16,7 @@ import VeeValidate from 'vee-validate'
 import Registrar from './components/Registrar.vue'
 import Cinema from './components/cinema/Cinema.vue'
 import VueMask from 'v-mask'
+
 
 Vue.use(VueMask);
 Vue.use(VueResource)
@@ -32,6 +34,7 @@ const routes = [
       requireAuth: true
     }
   },
+
   {
     path: '/registrar',
     component: Registrar,
@@ -43,7 +46,7 @@ const routes = [
     meta: {
       requireAuth: true
     },
-    children: [
+    children:[
       {
         path: 'dashboard',
         component: Dashboard
@@ -52,6 +55,10 @@ const routes = [
         path: 'home',
         component: Home
       },
+      // {
+      //   path: 'perfil',
+      //   component: Perfil,
+      // },
       {
         path: 'filme',
         component: CadastroFilme

@@ -26,6 +26,7 @@
               </v-card-media>
             </v-card>
           </v-flex>
+          <perfil></perfil>
         </v-layout>
       </v-flex>
     </section>
@@ -42,6 +43,7 @@
 
   import bus from '../../util/bus'
   import Vue from 'vue'
+  import Perfil from '../usuario/Perfil.vue'
 
   import { Api } from '../../api'
   import Cinema from '../cinema/Cinema.vue'
@@ -67,6 +69,7 @@
     },
     components: {
       Cinema,
+      Perfil
     },
     created () {
       document.addEventListener('beforeunload', this.handler)
