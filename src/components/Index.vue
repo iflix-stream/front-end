@@ -117,7 +117,8 @@
           id: 0,
           nome: 'Perfil',
           acao: 'perfil',
-          path: '/perfil',
+          path: '/perfil?ref=',
+
 
         },
         {
@@ -145,10 +146,10 @@
       go: function (a) {
         switch (a) {
           case 'perfil':
-            perfil.dialog = true
-            alert(perfil.dialog);
-            bus.$emit('abreperfil', this.dial)
-//            this.$router.go('/home/perfil')
+//            perfil.dialog = true
+//            alert(perfil.dialog);
+//            bus.$emit('abreperfil', this.dial)
+            this.$router.push(this.menuUsuario[0].path+this.retornaReferencia())
             break
           case 'sair':
             localStorage.removeItem('iflix-user-token')
@@ -156,6 +157,11 @@
             break
         }
       },
+      retornaReferencia: function () {
+        let str = this.$route.fullPath.replace(/\//g, '-');
+        return str.substring(1)
+      },
+
       getUsuario: function () {
         let jwtDecode = require('jwt-decode')
         let token = localStorage.getItem('iflix-user-token')

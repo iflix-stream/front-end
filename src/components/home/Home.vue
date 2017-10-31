@@ -26,7 +26,6 @@
               </v-card-media>
             </v-card>
           </v-flex>
-          <perfil></perfil>
         </v-layout>
       </v-flex>
     </section>

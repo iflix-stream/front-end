@@ -3,7 +3,7 @@
         <v-dialog v-model="dialog" fullscreen transition="dialog-bottom-transition" :overlay=false>
             <v-card>
                 <v-toolbar dark primary>
-                    <v-btn icon @click.native="dialog = false" dark>
+                    <v-btn icon @click="fecharDialog()" dark>
                         <v-icon>close</v-icon>
                     </v-btn>
                     <v-toolbar-title>Configurações</v-toolbar-title>
@@ -76,12 +76,21 @@
   export default {
     data () {
       return {
-        dialog: false,
+        dialog: true,
+      }
+    },
+    methods:{
+      fecharDialog: function () {
+        this.dialog = false
+        this.$router.push('/' + this.$route.query.ref.replace(/-/g, '/'));
+        if (this.diminuir) {
+          this.$http.delete(Api.url + '/contagem')
+        }
       }
     },
     mounted(){
 
-        bus.$on('abreperfil', (dial)=> this.dialog = true)
+//        bus.$on('abreperfil', (dial)=> this.dialog = true)
 
     }
   }

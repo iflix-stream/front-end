@@ -55,10 +55,10 @@ const routes = [
         path: 'home',
         component: Home
       },
-      // {
-      //   path: 'perfil',
-      //   component: Perfil,
-      // },
+      {
+        path: 'perfil',
+        component: Perfil,
+      },
       {
         path: 'filme',
         component: CadastroFilme
