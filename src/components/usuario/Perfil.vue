@@ -6,66 +6,42 @@
                     <v-btn icon @click="fecharDialog()" dark>
                         <v-icon>close</v-icon>
                     </v-btn>
-                    <v-toolbar-title>Configurações</v-toolbar-title>
+                    <v-toolbar-title>Configurações de Perfil</v-toolbar-title>
                     <v-spacer></v-spacer>
                     <v-toolbar-items>
-                        <v-btn dark flat @click.native="dialog = false">Save</v-btn>
+                        <v-btn dark flat @click.native="dialog = false">Salvar</v-btn>
                     </v-toolbar-items>
                 </v-toolbar>
-                <v-list three-line subheader>
-                    <v-subheader>Perfil</v-subheader>
-                    <v-list-tile avatar>
-                        <v-list-tile-content>
-                            <v-list-tile-title>Content filtering</v-list-tile-title>
-                            <v-list-tile-sub-title>Set the content filtering level to restrict appts that
-                                can be downloaded
-                            </v-list-tile-sub-title>
-                        </v-list-tile-content>
-                    </v-list-tile>
-                    <v-list-tile avatar>
-                        <v-list-tile-content>
-                            <v-list-tile-title>Password</v-list-tile-title>
-                            <v-list-tile-sub-title>Require password for purchase or use password to restrict
-                                purchase
-                            </v-list-tile-sub-title>
-                        </v-list-tile-content>
-                    </v-list-tile>
-                </v-list>
+                <v-layout row red lighten-1>
+                    <v-flex xs12 offset-xs5 style="padding-top: 60px; padding-bottom: 25px">
+                        <v-avatar
+                                :tile="false" size="100px" class="grey lighten-4"
+                        >
+                            <img src="../../assets/logo.png">
+                        </v-avatar>
+                    </v-flex>
+                </v-layout>
+                <v-layout>
+                    <v-flex xs4 >
+                        Email
+                    </v-flex>
+                    <v-flex xs4 offset-xs1 >
+
+
+                        <h5>Nome:</h5>
+                        <v-spacer></v-spacer>
+                        <v-text-field v-model="userName" :disabled="disName"></v-text-field>
+                        <v-btn fab dark small color="cyan" @click="disName = true">
+                        <v-icon dark>edit</v-icon>
+                        </v-btn>
+
+
+
+                    </v-flex>
+                    <v-flex xs4 offset-xs1> Data Nasc</v-flex>
+                </v-layout>
                 <v-divider></v-divider>
-                <v-list three-line subheader>
-                    <v-subheader>General</v-subheader>
-                    <v-list-tile avatar>
-                        <v-list-tile-action>
-                            <v-checkbox v-model="notifications"></v-checkbox>
-                        </v-list-tile-action>
-                        <v-list-tile-content>
-                            <v-list-tile-title>Notifications</v-list-tile-title>
-                            <v-list-tile-sub-title>Notify me about updates to apps or games that I
-                                downloaded
-                            </v-list-tile-sub-title>
-                        </v-list-tile-content>
-                    </v-list-tile>
-                    <v-list-tile avatar>
-                        <v-list-tile-action>
-                            <v-checkbox v-model="sound"></v-checkbox>
-                        </v-list-tile-action>
-                        <v-list-tile-content>
-                            <v-list-tile-title>Sound</v-list-tile-title>
-                            <v-list-tile-sub-title>Auto-update apps at any time. Data charges may apply
-                            </v-list-tile-sub-title>
-                        </v-list-tile-content>
-                    </v-list-tile>
-                    <v-list-tile avatar>
-                        <v-list-tile-action>
-                            <v-checkbox v-model="widgets"></v-checkbox>
-                        </v-list-tile-action>
-                        <v-list-tile-content>
-                            <v-list-tile-title>Auto-add widgets</v-list-tile-title>
-                            <v-list-tile-sub-title>Automatically add home screen widgets
-                            </v-list-tile-sub-title>
-                        </v-list-tile-content>
-                    </v-list-tile>
-                </v-list>
+
             </v-card>
         </v-dialog>
     </v-layout>
@@ -73,23 +49,43 @@
 <script>
   import bus from '../../util/bus'
 
+
   export default {
+
     data () {
       return {
         dialog: true,
+        userName:'',
+        disName: true,
       }
     },
-    methods:{
+    methods: {
       fecharDialog: function () {
         this.dialog = false
-        this.$router.push('/' + this.$route.query.ref.replace(/-/g, '/'));
+        this.$router.push('/' + this.$route.query.ref.replace(/-/g, '/'))
         if (this.diminuir) {
           this.$http.delete(Api.url + '/contagem')
         }
-      }
-    },
-    mounted(){
+      },
+      getUsuario: function () {
+        let jwtDecode = require('jwt-decode')
+        let token = localStorage.getItem('iflix-user-token')
+        let decoded = jwtDecode(token)
+        this.usuario = decoded.usuario
+        if (decoded.usuario.nome.length > 15) {
 
+          this.usuario.nome = decoded.usuario.nome.substring(0, 12) + '...'
+        }
+        else {
+          this.usuario.nome = decoded.usuario.nome
+        }
+        this.usuario.permissao = decoded.permicao
+         this.userName = this.usuario.nome
+      },
+
+    },
+    mounted () {
+      this.getUsuario()
 //        bus.$on('abreperfil', (dial)=> this.dialog = true)
 
     }
