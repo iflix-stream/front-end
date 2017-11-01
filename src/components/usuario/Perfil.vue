@@ -1,6 +1,6 @@
 <template>
   <v-layout row justify-center>
-    <v-toolbar dark primary fixed style="margin-bottom: 5vh">
+    <v-toolbar dark primary absolute >
       <v-btn icon @click="fecharDialog()" dark>
         <v-icon>close</v-icon>
       </v-btn>
@@ -12,7 +12,7 @@
     </v-toolbar>
     <v-layout column style="">
       <v-flex>
-        <v-layout column primary lighten-1 style="margin-top: 9.6vh; padding-top: 50px" class="text-xs-center">
+        <v-layout column primary lighten-1 style="padding-top: 50px" class="text-xs-center">
           <v-flex xs12 row>
             <v-avatar
               :tile="false" size="150px" class="white"
