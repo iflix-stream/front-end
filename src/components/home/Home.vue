@@ -39,9 +39,6 @@
 
 <script>
   /* eslint-disable no-trailing-spaces,padded-blocks,semi */
-
-  import bus from '../../util/bus'
-  import Vue from 'vue'
   import Perfil from '../usuario/Perfil.vue'
 
   import { Api } from '../../api'
@@ -63,12 +60,7 @@
       '$route.params.nomegenero': function () {
         this.getFilmes()
         this.getSeries()
-
-      },
-    },
-    components: {
-      Cinema,
-      Perfil
+      }
     },
     created () {
       document.addEventListener('beforeunload', this.handler)
@@ -76,6 +68,8 @@
     mounted () {
       this.getFilmes()
       this.getSeries()
+      this.routeNameVerify()
+
     },
     methods: {
       handler: function handler (event) {
@@ -84,36 +78,77 @@
         }
         return null
       },
-      fecharDialog: function () {
-//        this.dialogAssistir = false
-//        if (this.diminuir) {
-//          this.$http.post(Api.url + '/contagem', {subtrair: true}, {emulateJSON: true})
-//        }
-        bus.$emit('fecharCinema')
+
+      routeNameVerify: function () {
+        switch (this.$route.name) {
+          case 'rota-minha-lista':
+            this.getMinhaListaSeries()
+            this.getMinhaListaFilmes()
+            break
+        }
       },
 
       renderizarCinema: function (video) {
-//        bus.$emit('renderizarCinema', video)
         console.log(this.$route)
-        this.$router.push('/watch/' + video.tipo + '/' + video.id + '?ref=' + this.retornaReferencia())
+        this.$router.push('/watch/' + video.tipo + '/' + video.id)
       },
 
       retornaReferencia: function () {
-        let str = this.$route.fullPath.replace(/\//g, '-');
+        let str = this.$route.fullPath.replace(/\//g, '-')
         return str.substring(1)
       },
+      getMinhaListaFilmes: function () {
+        let token = localStorage.getItem('iflix-user-token')
+        this.$http.get(Api.url + '/lista/tipo/filme/usuario/' + jwtDecode(token).usuario.id + '/',
+          {
+            params: {
+              q: 'my'
+            }
+          }
+        ).then(response => {
+          this.filmes = response.body
 
-      getFilmes: function () {
+          if (this.filmes !== undefined) {
+            for (let i = 0; i < this.filmes.length; i++) {
+              this.filmes[i].tipo = 'filme'
+            }
+            this.mergeFilmesESeries()
+          }
+        })
+      },
+      getMinhaListaSeries: function () {
+        let token = localStorage.getItem('iflix-user-token')
+        this.$http.get(Api.url + '/lista/tipo/serie/usuario/' + jwtDecode(token).usuario.id + '/',
+          {
+            params: {
+              q: 'my'
+            }
+          }
+        ).then(response => {
+          this.series = response.body
+          if (this.series !== undefined) {
+            for (let i = 0; i < this.series.length; i++) {
+              this.series[i].tipo = 'serie'
+            }
+            this.mergeFilmesESeries()
+          }
+        })
+      },
+      getFilmes: function (id) {
         let url = Api.url + '/filme/'
         if (this.$route.params.nomegenero !== undefined) {
           url += 'genero/' + this.$route.params.nomegenero + '/'
+        }
+
+        if (id !== undefined) {
+          url += 'id/' + id
         }
         this.$http.get(url, {
           params: {
             user: jwtDecode(localStorage.getItem('iflix-user-token')).usuario.id
           },
           headers: {
-            'Authorization': '\'' + localStorage.getItem('iflix-user-token') + '\'',
+            'Authorization': '\'' + localStorage.getItem('iflix-user-token') + '\''
           }
         }).then(
           response => {
@@ -132,7 +167,8 @@
         if (this.$route.params.nomegenero !== undefined) {
           url = Api.url + '/serie/genero/' + this.$route.params.nomegenero + '/'
         }
-        this.$http.get(url, {
+        this.$http.get(url,
+          {
             params: {
               user: jwtDecode(localStorage.getItem('iflix-user-token')).usuario.id
             },
@@ -154,7 +190,7 @@
       },
       mergeFilmesESeries: function () {
         this.filmesAndSeries = this.filmes.concat(this.series).sort().reverse()
-      },
+      }
     }
   }
 </script>

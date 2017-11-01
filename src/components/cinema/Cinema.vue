@@ -1,143 +1,143 @@
 <template>
-    <v-flex>
-        <v-layout row style="width: 100%; ">
-            <v-dialog v-model="dialogAssistir" fullscreen transition="dialog-bottom-transition" hide-overlay=""
-                      :overlay="true"
-                      persistent v-if="ativadorDialog" style="">
-                <v-toolbar dark color="primary" fixed>
+  <v-flex>
+    <v-layout row style="width: 100%; ">
+      <v-dialog v-model="dialogAssistir" fullscreen transition="dialog-bottom-transition" hide-overlay=""
+                :overlay="true"
+                persistent v-if="ativadorDialog" style="">
+        <v-toolbar dark color="primary" fixed>
 
-                    <v-toolbar-title>Assistindo {{videoSelecionado.nome}}</v-toolbar-title>
-                    <v-spacer></v-spacer>
-                    <v-btn icon @click.native="fecharDialog()" dark>
-                        <v-icon>close</v-icon>
-                    </v-btn>
-                </v-toolbar>
-                <v-layout row wrap class="grey darken-4" :style="calculaAlturaCinema()">
+          <v-toolbar-title>Assistindo {{videoSelecionado.nome}}</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-btn icon @click.native="fecharDialog()" dark>
+            <v-icon>close</v-icon>
+          </v-btn>
+        </v-toolbar>
+        <v-layout row wrap class="grey darken-4" :style="calculaAlturaCinema()">
 
-                    <v-flex xs12 sm12 md9 lg9>
-                        <v-container fluid grid-list-md class="subtrai-paddings-tela"
-                                     style="">
-                            <v-layout row ref="playerDeVideo" style="width: 100%; margin: 0">
-                                <v-flex style="padding: 0">
-                                    <v-card>
-                                        <video-player class="vjs-custom-skin"
-                                                      ref="videoPlayer"
-                                                      :options="playerOptions"
-                                                      :playsinline="true"
-                                                      @play="onPlayerPlay($event)"
-                                                      @pause="onPlayerPause($event)"
-                                                      @ended="onPlayerEnded($event)"
-                                                      @loadeddata="onPlayerLoadeddata($event)"
-                                                      @waiting="onPlayerWaiting($event)"
-                                                      @playing="onPlayerPlaying($event)"
-                                                      @timeupdate="onPlayerTimeupdate($event)"
-                                                      @canplay="onPlayerCanplay($event)"
-                                                      @canplaythrough="onPlayerCanplaythrough($event)"
-                                                      @ready="playerReadied"
-                                                      @statechanged="playerStateChanged($event)">
-                                        </video-player>
-                                        <v-card-actions class="primary">
-                                            <v-spacer></v-spacer>
-                                            <v-btn icon @click.native="adicionarMinhaLista()"
-                                                   :style="isAdicionadoStyle">
-                                                <v-icon>favorite</v-icon>
-                                            </v-btn>
+          <v-flex xs12 sm12 md9 lg9>
+            <v-container fluid grid-list-md class="subtrai-paddings-tela"
+                         style="">
+              <v-layout row ref="playerDeVideo" style="width: 100%; margin: 0">
+                <v-flex style="padding: 0">
+                  <v-card>
+                    <video-player class="vjs-custom-skin"
+                                  ref="videoPlayer"
+                                  :options="playerOptions"
+                                  :playsinline="true"
+                                  @play="onPlayerPlay($event)"
+                                  @pause="onPlayerPause($event)"
+                                  @ended="onPlayerEnded($event)"
+                                  @loadeddata="onPlayerLoadeddata($event)"
+                                  @waiting="onPlayerWaiting($event)"
+                                  @playing="onPlayerPlaying($event)"
+                                  @timeupdate="onPlayerTimeupdate($event)"
+                                  @canplay="onPlayerCanplay($event)"
+                                  @canplaythrough="onPlayerCanplaythrough($event)"
+                                  @ready="playerReadied"
+                                  @statechanged="playerStateChanged($event)">
+                    </video-player>
+                    <v-card-actions class="primary">
+                      <v-spacer></v-spacer>
+                      <v-btn icon @click.native="adicionarMinhaLista()"
+                             :style="isAdicionadoStyle">
+                        <v-icon>favorite</v-icon>
+                      </v-btn>
 
-                                            <v-btn icon disabled>
-                                                <v-icon>share</v-icon>
-                                            </v-btn>
-                                        </v-card-actions>
-                                    </v-card>
-                                </v-flex>
-                            </v-layout>
+                      <v-btn icon disabled>
+                        <v-icon>share</v-icon>
+                      </v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-flex>
+              </v-layout>
+            </v-container>
+
+          </v-flex>
+          <v-flex xs12 sm12 md3 lg3 style="height: 60vh;margin: 0">
+            <div style="height: 60vh; overflow: auto">
+              <v-flex>
+                <v-card class="white--text primary">
+                  <v-container fluid grid-list-lg class="subtrai-margin-tela">
+                    <v-layout row>
+                      <v-flex xs5>
+                        <v-card-media
+                          :src="videoSelecionado.thumbnail"
+                          height="125px"
+
+                        ></v-card-media>
+                      </v-flex>
+                      <v-flex xs7>
+                        <v-container>
+                          <div class="headline">{{videoSelecionado.nome}}</div>
+                          <div>Classificação: {{videoSelecionado.classificacao}}</div>
                         </v-container>
+                      </v-flex>
 
+                    </v-layout>
+                    <v-flex xs12>
+                      <div v-if="!spoilerSinopse && !isMaiorQue183">
+                        Sinopse: {{decodeURIComponent(videoSelecionado.sinopse)}}
+                      </div>
+                      <div v-else-if="!spoilerSinopse && isMaiorQue183">
+                        Sinopse: {{decodeURIComponent(videoSelecionado.sinopsePequena)}}
+                      </div>
+                      <div v-else-if="spoilerSinopse && isMaiorQue183">
+                        Sinopse: {{decodeURIComponent(videoSelecionado.sinopseInteira)}}
+                      </div>
+                      <v-btn outline v-if="!spoilerSinopse && isBotaoSpoilerSinopse"
+                             @click.native="spoilerSinopse = true" dark>
+                        Mostrar mais
+                      </v-btn>
+                      <v-btn outline v-else-if="spoilerSinopse == true && isBotaoSpoilerSinopse"
+                             @click.native="spoilerSinopse = false" dark>
+                        Mostrar menos
+                      </v-btn>
                     </v-flex>
-                    <v-flex xs12 sm12 md3 lg3 style="height: 60vh;margin: 0">
-                        <div style="height: 60vh; overflow: auto">
-                            <v-flex>
-                                <v-card class="white--text primary">
-                                    <v-container fluid grid-list-lg class="subtrai-margin-tela">
-                                        <v-layout row>
-                                            <v-flex xs5>
-                                                <v-card-media
-                                                        :src="videoSelecionado.thumbnail"
-                                                        height="125px"
+                  </v-container>
+                </v-card>
+              </v-flex>
+              <v-list v-if="videoSelecionado.tipo == 'serie'" style="min-height: 40vh">
+                <v-list-group v-for="temporada in videoSelecionado.temporadas" :value="temporada.active"
+                              v-bind:key="temporada.nome">
+                  <v-list-tile slot="item" @click="">
 
-                                                ></v-card-media>
-                                            </v-flex>
-                                            <v-flex xs7>
-                                                <v-container>
-                                                    <div class="headline">{{videoSelecionado.nome}}</div>
-                                                    <div>Classificação: {{videoSelecionado.classificacao}}</div>
-                                                </v-container>
-                                            </v-flex>
+                    <v-list-tile-content>
+                      <v-list-tile-title>{{ temporada.numero }}º Temporada</v-list-tile-title>
+                    </v-list-tile-content>
+                    <v-list-tile-action>
+                      <v-icon>keyboard_arrow_down</v-icon>
+                    </v-list-tile-action>
+                  </v-list-tile>
+                  <v-list-tile v-for="episodio in temporada.episodios" v-bind:key="episodio.nome"
+                               @click="">
+                    <v-list-tile-content @click="setEpisode(episodio)">
+                      <v-list-tile-title>{{ episodio.nome }}</v-list-tile-title>
+                    </v-list-tile-content>
 
-                                        </v-layout>
-                                        <v-flex xs12>
-                                            <div v-if="!spoilerSinopse && !isMaiorQue183">
-                                                Sinopse: {{decodeURIComponent(videoSelecionado.sinopse)}}
-                                            </div>
-                                            <div v-else-if="!spoilerSinopse && isMaiorQue183">
-                                                Sinopse: {{decodeURIComponent(videoSelecionado.sinopsePequena)}}
-                                            </div>
-                                            <div v-else-if="spoilerSinopse && isMaiorQue183">
-                                                Sinopse: {{decodeURIComponent(videoSelecionado.sinopseInteira)}}
-                                            </div>
-                                            <v-btn outline v-if="!spoilerSinopse && isBotaoSpoilerSinopse"
-                                                   @click.native="spoilerSinopse = true" dark>
-                                                Mostrar mais
-                                            </v-btn>
-                                            <v-btn outline v-else-if="spoilerSinopse == true && isBotaoSpoilerSinopse"
-                                                   @click.native="spoilerSinopse = false" dark>
-                                                Mostrar menos
-                                            </v-btn>
-                                        </v-flex>
-                                    </v-container>
-                                </v-card>
-                            </v-flex>
-                            <v-list v-if="videoSelecionado.tipo == 'serie'" style="min-height: 40vh">
-                                <v-list-group v-for="temporada in videoSelecionado.temporadas" :value="temporada.active"
-                                              v-bind:key="temporada.nome">
-                                    <v-list-tile slot="item" @click="">
-
-                                        <v-list-tile-content>
-                                            <v-list-tile-title>{{ temporada.numero }}º Temporada</v-list-tile-title>
-                                        </v-list-tile-content>
-                                        <v-list-tile-action>
-                                            <v-icon>keyboard_arrow_down</v-icon>
-                                        </v-list-tile-action>
-                                    </v-list-tile>
-                                    <v-list-tile v-for="episodio in temporada.episodios" v-bind:key="episodio.nome"
-                                                 @click="">
-                                        <v-list-tile-content @click="setEpisode(episodio)">
-                                            <v-list-tile-title>{{ episodio.nome }}</v-list-tile-title>
-                                        </v-list-tile-content>
-
-                                    </v-list-tile>
-                                </v-list-group>
-                            </v-list>
-                        </div>
-                    </v-flex>
-                </v-layout>
-            </v-dialog>
+                  </v-list-tile>
+                </v-list-group>
+              </v-list>
+            </div>
+          </v-flex>
         </v-layout>
-        <v-snackbar
-                :timeout="3000"
-                :bottom="'bottom'"
-                v-model="snackbar.show"
-        >
-            {{ snackbar.text}}
-            <v-btn flat primary @click.native="snackbar.show = false">Fechar</v-btn>
-        </v-snackbar>
-    </v-flex>
+      </v-dialog>
+    </v-layout>
+    <v-snackbar
+      :timeout="3000"
+      :bottom="'bottom'"
+      v-model="snackbar.show"
+    >
+      {{ snackbar.text}}
+      <v-btn flat primary @click.native="snackbar.show = false">Fechar</v-btn>
+    </v-snackbar>
+  </v-flex>
 </template>
 <script>
-  import { Api } from '../../api'
+  import {Api} from '../../api'
   import jwtDecode from 'jwt-decode'
 
   export default {
-    data () {
+    data() {
       return {
         snackbar: {
           text: '',
@@ -166,7 +166,7 @@
       }
     },
 
-    mounted () {
+    mounted() {
       this.buscaVideo()
       var vm = this;
       this.dialogAssistir = true
@@ -200,7 +200,7 @@
       },
 
       configurarCinema: function () {
-        this.defineTipo();
+        this.defineTipo()
         this.ativadorDialog = true
         this.dialogAssistir = true
         this.isAdicionado()
@@ -212,7 +212,7 @@
       fecharDialog: function () {
         this.dialogAssistir = false
         this.AtivadorDialog = false
-        this.$router.push('/' + this.$route.query.ref.replace(/-/g, '/'));
+        this.$router.go(-1)
         if (this.diminuir) {
           this.$http.delete(Api.url + '/contagem')
         }
@@ -262,7 +262,7 @@
 
       adicionarMinhaLista: function () {
         let token = localStorage.getItem('iflix-user-token')
-        this.$http.post(Api.url + '/lista',
+        this.$http.post(Api.url + '/lista/?q=my',
           {
             tipo: this.videoSelecionado.tipo,
             usuario: jwtDecode(token).usuario.id,
@@ -277,14 +277,15 @@
       },
       isAdicionado: function () {
         let token = localStorage.getItem('iflix-user-token')
-        this.$http.get(Api.url + '/lista/tipo/' + this.videoSelecionado.tipo + '/usuario/' + jwtDecode(token).usuario.id
-          + '/id/' + this.videoSelecionado.id,
+        this.$http.get(Api.url + '/lista/tipo/' + this.videoSelecionado.tipo + '/usuario/' + jwtDecode(token).usuario.id +
+          '/id/' + this.videoSelecionado.id,
           {
-            tipo: this.videoSelecionado.tipo,
-            usuario: jwtDecode(token).usuario.id,
-            id: this.videoSelecionado.id
+            params: {
+              q: 'is-added'
+            }
           }
         ).then(response => {
+          console.log(response)
           if (response.body.isAdicionado === true) {
             this.isAdicionadoStyle = 'color: #EEEEEE'
           } else {
@@ -310,7 +311,7 @@
         })
       },
 
-      onPlayerPlay (player) {
+      onPlayerPlay(player) {
         this.diminuir = true
         let params = {
           tipo: this.videoSelecionado.tipo,
@@ -326,42 +327,42 @@
 
         }
       },
-      onPlayerPause (player) {
+      onPlayerPause(player) {
         this.podeSalvarDe15Em15 = false
         this.diminuir = false
         this.$http.delete(Api.url + '/contagem')
         this.salvarTempo(player)
 
       },
-      onPlayerEnded (player) {
+      onPlayerEnded(player) {
         this.diminuir = false
         this.$http.delete(Api.url + '/contagem')
         this.salvarTempo(player)
       },
-      onPlayerLoadeddata (player) {
+      onPlayerLoadeddata(player) {
         // console.log('player Loadeddata!', player)
       },
-      onPlayerWaiting (player) {
+      onPlayerWaiting(player) {
         // console.log('player Waiting!', player)
       },
-      onPlayerPlaying (player) {
+      onPlayerPlaying(player) {
         // console.log('player Playing!', player)
       },
-      onPlayerTimeupdate (player) {
+      onPlayerTimeupdate(player) {
         // console.log('player Timeupdate!', player.currentTime())
       },
-      onPlayerCanplay (player) {
+      onPlayerCanplay(player) {
         // console.log('player Canplay!', player)
       },
-      onPlayerCanplaythrough (player) {
+      onPlayerCanplaythrough(player) {
         // console.log('player Canplaythrough!', player)
       },
       // or listen state event
-      playerStateChanged (playerCurrentState) {
+      playerStateChanged(playerCurrentState) {
         // console.log('player current update state', playerCurrentState)
       },
       // player is ready
-      playerReadied (player) {
+      playerReadied(player) {
         let tempoAssistido = this.videoSelecionado.tempoAssistido
         if (this.videoSelecionado.tipo === 'serie' && this.episodioSelecionado !== undefined) {
           tempoAssistido = this.episodioSelecionado.tempoAssistido
@@ -375,72 +376,72 @@
 
 </script>
 <style>
-    @media screen and (max-width: 480px) {
-        .video-js {
-            /*position: inherit !important;*/
-            width: 100% !important;
-            height: 180px !important;
-        }
-
-        .subtrai-paddings-tela {
-            padding: 0 !important;
-            margin: 0 auto;
-        }
+  @media screen and (max-width: 480px) {
+    .video-js {
+      /*position: inherit !important;*/
+      width: 100% !important;
+      height: 180px !important;
     }
 
-    @media screen and (max-width: 600px) and (min-width: 481px) {
-        .video-js {
-            /*position: inherit !important;*/
-            width: 100% !important;
-            height: 260px !important;
-        }
+    .subtrai-paddings-tela {
+      padding: 0 !important;
+      margin: 0 auto;
+    }
+  }
 
-        .subtrai-paddings-tela {
-            padding: 0 !important;
-            margin: 0 auto;
-        }
+  @media screen and (max-width: 600px) and (min-width: 481px) {
+    .video-js {
+      /*position: inherit !important;*/
+      width: 100% !important;
+      height: 260px !important;
     }
 
-    @media screen and (max-width: 720px) and (min-width: 601px) {
-        .video-js {
-            /*position: inherit !important;*/
-            width: 100% !important;
-            height: 260px !important;
-        }
+    .subtrai-paddings-tela {
+      padding: 0 !important;
+      margin: 0 auto;
+    }
+  }
 
-        .subtrai-paddings-tela {
-            padding: 0 !important;
-            margin: 0 auto;
-        }
+  @media screen and (max-width: 720px) and (min-width: 601px) {
+    .video-js {
+      /*position: inherit !important;*/
+      width: 100% !important;
+      height: 260px !important;
     }
 
-    @media screen and (max-width: 960px) and (min-width: 601px) {
-        .video-js {
-            /*position: inherit !important;*/
-            width: 100% !important;
-            height: 260px !important;
-        }
+    .subtrai-paddings-tela {
+      padding: 0 !important;
+      margin: 0 auto;
+    }
+  }
 
-        .subtrai-paddings-tela {
-            padding: 0 !important;
-            margin: 0 auto;
-        }
+  @media screen and (max-width: 960px) and (min-width: 601px) {
+    .video-js {
+      /*position: inherit !important;*/
+      width: 100% !important;
+      height: 260px !important;
     }
 
-    @media screen and (min-width: 961px) {
-        .video-js {
-            /*position: inherit !important;*/
-            width: 100% !important;
-            height: calc(100vh - 20vh);
-        }
+    .subtrai-paddings-tela {
+      padding: 0 !important;
+      margin: 0 auto;
+    }
+  }
 
+  @media screen and (min-width: 961px) {
+    .video-js {
+      /*position: inherit !important;*/
+      width: 100% !important;
+      height: calc(100vh - 20vh);
     }
 
-    .vjs-poster {
-        /*position: absolute !important;*/
-        left: 0;
-        right: 0;
-        top: 0;
-        bottom: 0;
-    }
+  }
+
+  .vjs-poster {
+    /*position: absolute !important;*/
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+  }
 </style>
