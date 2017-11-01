@@ -1,21 +1,21 @@
 <template>
   <v-layout row justify-center>
-    <v-toolbar dark primary fixed>
+    <v-toolbar dark primary fixed style="margin-bottom: 5vh">
       <v-btn icon @click="fecharDialog()" dark>
         <v-icon>close</v-icon>
       </v-btn>
       <v-toolbar-title>Perfil</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items>
-        <v-btn dark flat @click.native="dialog = false">Salvar</v-btn>
+        <v-btn dark flat @click.native="salvar()">Salvar</v-btn>
       </v-toolbar-items>
     </v-toolbar>
     <v-layout column style="">
       <v-flex>
-        <v-layout column red lighten-1 style="margin-top: 9.6vh; padding-top: 50px" class="text-xs-center">
+        <v-layout column primary lighten-1 style="margin-top: 9.6vh; padding-top: 50px" class="text-xs-center">
           <v-flex xs12 row>
             <v-avatar
-              :tile="false" size="150px" class="grey lighten-4"
+              :tile="false" size="150px" class="white"
             >
               <img src="../../assets/logo.png">
             </v-avatar>
@@ -35,11 +35,11 @@
 
       <v-flex grey lighten-2 xs12>
 
-        <v-layout row wrap style="margin-bottom: 10px;">
+        <v-layout row wrap>
 
           <v-flex offset-md1 offset-lg1></v-flex>
           <v-flex xs12 sm12 md8 lg8 white>
-            <v-card>
+            <v-card class="grey darken-4">
               <v-card-title primary-title>
                 <div>
                   <h5>Informações</h5>
@@ -50,11 +50,11 @@
                   <v-layout column>
                     <v-flex xs12>
                       <section>
-                        <v-subheader>Pessoais</v-subheader>
-                        <v-container>
+                        <h5>Pessoais</h5>
+
                           <v-layout row wrap>
                             <v-flex xs12 sm12 md6 lg6 xl6>
-                              <v-text-field autofocus
+                              <v-text-field
                                             label="Nome"
 
                               ></v-text-field>
@@ -73,16 +73,16 @@
                               ></v-text-field>
                             </v-flex>
                           </v-layout>
-                        </v-container>
+
                       </section>
 
                     </v-flex>
                     <v-divider></v-divider>
                     <v-flex>
                       <section style="margin-top: 15px">
-                        <v-container>
-                          <v-subheader>Configuracionais</v-subheader>
-                          <v-layout row>
+
+                          <h5>Configuracionais</h5>
+                          <v-layout row wrap>
                             <v-flex xs12 sm12 md6 lg6 xl6>
                               <v-switch label="Mandar emails de novos filmes/series"></v-switch>
                               <v-switch label="Receber emails semanais de notícias"></v-switch>
@@ -93,7 +93,6 @@
 
                             </v-flex>
                           </v-layout>
-                        </v-container>
                       </section>
 
                     </v-flex>
@@ -102,9 +101,9 @@
                 </v-form>
               </v-card-text>
               <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn secondary>Cancelar</v-btn>
-                <v-btn primary>Enviar</v-btn>
+                <!--<v-spacer></v-spacer>-->
+                <!--<v-btn secondary>Cancelar</v-btn>-->
+                <!--<v-btn primary>Enviar</v-btn>-->
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -128,10 +127,8 @@
     },
     methods: {
       fecharDialog: function () {
-        this.$router.push(-1)
-        if (this.diminuir) {
-          this.$http.delete(Api.url + '/contagem')
-        }
+        this.$router.go(-1)
+
       },
       getUsuario: function () {
         let token = localStorage.getItem('iflix-user-token')
@@ -144,11 +141,15 @@
         }
         this.usuario.permissao = decoded.permicao
         this.userName = this.usuario.nome
+      },
+      salvar:function () {
+        console.log('salvou de mentirinha')
+        this.fecharDialog();
       }
 
     },
     mounted () {
-
+      this.getUsuario()
     }
   }
 </script>

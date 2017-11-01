@@ -1,8 +1,7 @@
 <template>
-  <v-app dark>
+  <v-app dark style="height: 100vh">
     <header>
-      <v-toolbar fixed class="grey darken-4 hidden-sm-and-down">
-
+      <v-toolbar class="primary" absolute>
         <v-toolbar-items>
           <v-btn to="/home" flat>IFlix</v-btn>
           <v-menu>
@@ -15,17 +14,9 @@
               </v-list-tile>
             </v-list>
           </v-menu>
-          <v-menu v-if="usuario.permissao === 'admin'">
-            <v-btn flat slot="activator">Cadastros</v-btn>
-            <v-list style="background-color: rgba(20,20,20,0.9);position: fixed;top: 64px">
-              <v-list-tile v-for="cadastro in menuCadastros" :key="cadastro.id"
-                           :to="'/'+cadastro.acao">
-                <v-list-tile-title class="white--text" v-text="cadastro.nome"></v-list-tile-title>
-              </v-list-tile>
-            </v-list>
-          </v-menu>
 
         </v-toolbar-items>
+
         <v-flex style="margin-right: 25px">
           <v-layout align-center row spacer slot="header" style="float: right">
             <v-flex>
@@ -36,8 +27,15 @@
                     <v-list-tile-title class="white--text" v-text="usuario.nome"></v-list-tile-title>
                   </v-list-tile>
                 </v-list>
+
                 <div slot="activator">
-                  <v-flex>
+
+                  <v-flex class="hidden-sm-and-up">
+                    <v-btn icon>
+                      <v-icon>more_vert</v-icon>
+                    </v-btn>
+                  </v-flex>
+                  <v-flex class="hidden-sm-and-down">
                     <v-avatar size="36px">
                       <img :src="api.shortUrl +'/assets/avatares/'+ usuario.avatar + '.png'"
                            alt="Imagem de perfil"/>
@@ -56,37 +54,32 @@
     <v-layout column>
       <v-flex>
         <main>
-          <v-container fluid>
-            <router-view></router-view>
-          </v-container>
+
+          <router-view style="overflow: auto; height: 80vh; margin-top: 10vh; margin-bottom:10vh"
+                       class="grey darken-4"></router-view>
+
         </main>
       </v-flex>
-      <v-flex>
-        <aside>
-          <v-card class="hidden-md-and-up " style="z-index: 1 ;position: fixed; bottom: 0; right: 0; left: 0;">
-            <v-bottom-nav
-              absolute
-              shift
-              :value="true"
-              :active.sync="bottomTabs"
-              primary
-            >
-              <v-btn dark :to="'/'+this.formataNomeParaUrl()+'/minha-lista'">
-                <span>Favoritos</span>
-                <v-icon>favorite</v-icon>
-              </v-btn>
-              <v-btn dark to="/home">
-                <span>Início</span>
-                <v-icon>home</v-icon>
-              </v-btn>
-              <v-btn dark :to="'/perfil'">
-                <span>Configurações</span>
-                <v-icon>settings</v-icon>
-              </v-btn>
-            </v-bottom-nav>
-          </v-card>
-        </aside>
-      </v-flex>
+      <v-bottom-nav class="hidden-md-and-up"
+                    absolute
+                    shift
+                    :value="true"
+                    :active.sync="bottomTabs"
+                    primary
+      >
+        <v-btn dark :to="'/'+this.formataNomeParaUrl()+'/minha-lista'">
+          <span>Favoritos</span>
+          <v-icon>favorite</v-icon>
+        </v-btn>
+        <v-btn dark to="/home">
+          <span>Início</span>
+          <v-icon>home</v-icon>
+        </v-btn>
+        <v-btn dark :to="'/perfil'">
+          <span>Configurações</span>
+          <v-icon>settings</v-icon>
+        </v-btn>
+      </v-bottom-nav>
     </v-layout>
   </v-app>
 </template>

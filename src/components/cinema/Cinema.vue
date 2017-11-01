@@ -1,11 +1,7 @@
-<template>
+<template >
   <v-flex>
-    <v-layout row style="width: 100%; ">
-      <v-dialog v-model="dialogAssistir" fullscreen transition="dialog-bottom-transition" hide-overlay=""
-                :overlay="true"
-                persistent v-if="ativadorDialog" style="">
-        <v-toolbar dark color="primary" fixed>
-
+    <v-layout row >
+        <v-toolbar dark color="primary" absolute>
           <v-toolbar-title>Assistindo {{videoSelecionado.nome}}</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-btn icon @click.native="fecharDialog()" dark>
@@ -13,7 +9,6 @@
           </v-btn>
         </v-toolbar>
         <v-layout row wrap class="grey darken-4" :style="calculaAlturaCinema()">
-
           <v-flex xs12 sm12 md9 lg9>
             <v-container fluid grid-list-md class="subtrai-paddings-tela"
                          style="">
@@ -53,8 +48,8 @@
             </v-container>
 
           </v-flex>
-          <v-flex xs12 sm12 md3 lg3 style="height: 60vh;margin: 0">
-            <div style="height: 60vh; overflow: auto">
+          <v-flex xs12 sm12 md3 lg3 style="">
+            <div style="">
               <v-flex>
                 <v-card class="white--text primary">
                   <v-container fluid grid-list-lg class="subtrai-margin-tela">
@@ -120,7 +115,6 @@
             </div>
           </v-flex>
         </v-layout>
-      </v-dialog>
     </v-layout>
     <v-snackbar
       :timeout="3000"
@@ -221,9 +215,9 @@
       calculaAlturaCinema: function () {
 
         if (this.videoSelecionado.tipo === 'serie') {
-          return 'margin-top:58px;  width: 100% !important; height: 64vh'
+//          return 'margin-top:58px;  width: 100% !important; height: 64vh'
         }
-        return 'margin-top:58px;  width: 100% !important; height: 91vh'
+//        return 'margin-top:58px;  width: 100% !important; height: 91vh'
       },
 
       formatarSinopse: function () {

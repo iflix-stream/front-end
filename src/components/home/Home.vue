@@ -1,40 +1,42 @@
-<template>
-  <v-layout column class="subtrai-margin-top">
-    <section id="lancamentos">
-      <v-flex xs12>
-        <h5>Lançamentos</h5>
-      </v-flex>
+<template >
+  <v-container fluid>
+    <v-layout column class="subtrai-margin-top">
+      <section id="lancamentos">
+        <v-flex xs12>
+          <h5>Lançamentos</h5>
+        </v-flex>
+        <v-flex>
+          <v-layout row wrap>
+            <v-flex v-for="video in filmesAndSeries" xs12 sm6 md4 lg3 xl2
+                    :key="video.id">
+              <v-card class="card-filmes" v-on:click="renderizarCinema(video)">
+                <v-card-media class="image-card-filme"
+                              :src="video.thumbnail"
+                              height="200px">
+                  <v-container fill-height fluid>
+                    <v-layout fill-height>
+                      <v-flex xs12 align-end flexbox>
+                        <span class="headline white--text" v-text="video.nome"></span>
+                      </v-flex>
+                    </v-layout>
+
+                  </v-container>
+                  <v-progress-linear style="position: absolute;bottom: 0;" value="80" color-front="primary"
+                                     color-back="blue-grey"></v-progress-linear>
+
+                </v-card-media>
+              </v-card>
+            </v-flex>
+          </v-layout>
+        </v-flex>
+      </section>
       <v-flex>
-        <v-layout row wrap>
-          <v-flex v-for="video in filmesAndSeries" xs12 sm6 md4 lg3 xl2
-                  :key="video.id">
-            <v-card class="card-filmes" v-on:click="renderizarCinema(video)">
-              <v-card-media class="image-card-filme"
-                            :src="video.thumbnail"
-                            height="200px">
-                <v-container fill-height fluid>
-                  <v-layout fill-height>
-                    <v-flex xs12 align-end flexbox>
-                      <span class="headline white--text" v-text="video.nome"></span>
-                    </v-flex>
-                  </v-layout>
-
-                </v-container>
-                <v-progress-linear style="position: absolute;bottom: 0;" value="80" color-front="primary"
-                                   color-back="blue-grey"></v-progress-linear>
-
-              </v-card-media>
-            </v-card>
-          </v-flex>
-        </v-layout>
+        <!--<aside>-->
+        <!--<cinema></cinema>-->
+        <!--</aside>-->
       </v-flex>
-    </section>
-    <v-flex>
-      <!--<aside>-->
-      <!--<cinema></cinema>-->
-      <!--</aside>-->
-    </v-flex>
-  </v-layout>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
