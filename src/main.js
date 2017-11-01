@@ -17,8 +17,7 @@ import Registrar from './components/Registrar.vue'
 import Cinema from './components/cinema/Cinema.vue'
 import VueMask from 'v-mask'
 
-
-Vue.use(VueMask);
+Vue.use(VueMask)
 Vue.use(VueResource)
 Vue.use(VueRouter)
 Vue.use(Vuetify)
@@ -37,7 +36,7 @@ const routes = [
 
   {
     path: '/registrar',
-    component: Registrar,
+    component: Registrar
   },
   {
     path: '/',
@@ -46,7 +45,7 @@ const routes = [
     meta: {
       requireAuth: true
     },
-    children:[
+    children: [
       {
         path: 'dashboard',
         component: Dashboard
@@ -57,7 +56,7 @@ const routes = [
       },
       {
         path: 'perfil',
-        component: Perfil,
+        component: Perfil
       },
       {
         path: 'filme',
@@ -74,6 +73,11 @@ const routes = [
       {
         path: 'watch/:tipo/:id',
         component: Cinema
+      },
+      {
+        name: 'rota-minha-lista',
+        path: ':nomeusuario/minha-lista',
+        component: Home
       }
     ]
   }
@@ -94,28 +98,23 @@ router.beforeEach((to, from, next) => {
         next({
           path: '/login'
         })
-      }
-      else if (to.fullPath === '/login') {
+      } else if (to.fullPath === '/login') {
         next({
           path: '/home'
         })
-      }
-      else {
+      } else {
         next()
       }
-    }
-    else {
+    } else {
       if (token === null && to.fullPath !== '/login') {
         next({
           path: '/login'
         })
-      }
-      else {
+      } else {
         next()
       }
     }
-  }
-  else {
+  } else {
     next()
   }
 })

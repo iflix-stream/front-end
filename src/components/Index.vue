@@ -32,7 +32,7 @@
               <v-menu>
                 <v-list style="background-color: rgba(20,20,20,0.9); position: fixed; top: 64px">
                   <v-list-tile v-for="usuario in menuUsuario" :key="usuario.id" @click="go(usuario.acao)"
-                                >
+                  >
                     <v-list-tile-title class="white--text" v-text="usuario.nome"></v-list-tile-title>
                   </v-list-tile>
                 </v-list>
@@ -71,15 +71,15 @@
               :active.sync="bottomTabs"
               primary
             >
-              <v-btn dark>
+              <v-btn dark :to="'/'+this.formataNomeParaUrl()+'/minha-lista'">
                 <span>Favoritos</span>
                 <v-icon>favorite</v-icon>
               </v-btn>
-              <v-btn dark to="/home" :disabled="bottomTabs === 1 || this.$route.fullPath === '/home'">
+              <v-btn dark to="/home">
                 <span>Início</span>
                 <v-icon>home</v-icon>
               </v-btn>
-              <v-btn dark>
+              <v-btn dark :to="'/perfil'">
                 <span>Configurações</span>
                 <v-icon>settings</v-icon>
               </v-btn>
@@ -94,6 +94,7 @@
   import { Api } from '../api'
   import perfil from '../components/usuario/Perfil.vue'
   import bus from '../util/bus'
+
   export default {
     name: 'app',
     data: () => ({
@@ -117,9 +118,7 @@
           id: 0,
           nome: 'Perfil',
           acao: 'perfil',
-          path: '/perfil?ref=',
-
-
+          path: '/perfil'
         },
         {
           id: 1,
@@ -139,7 +138,7 @@
       this.getGeneros()
       this.getUsuario()
     },
-    components:{
+    components: {
       perfil
     },
     methods: {
@@ -149,7 +148,7 @@
 //            perfil.dialog = true
 //            alert(perfil.dialog);
 //            bus.$emit('abreperfil', this.dial)
-            this.$router.push(this.menuUsuario[0].path+this.retornaReferencia())
+            this.$router.push(this.menuUsuario[0].path)
             break
           case 'sair':
             localStorage.removeItem('iflix-user-token')
@@ -158,8 +157,27 @@
         }
       },
       retornaReferencia: function () {
-        let str = this.$route.fullPath.replace(/\//g, '-');
+        let str = this.$route.fullPath.replace(/\//g, '-')
         return str.substring(1)
+      },
+      formataNomeParaUrl: function () {
+        let jwtDecode = require('jwt-decode')
+        let string = jwtDecode(localStorage.getItem('iflix-user-token')).usuario.nome
+        let mapaAcentosHex = {
+          a: /[\xE0-\xE6]/g,
+          e: /[\xE8-\xEB]/g,
+          i: /[\xEC-\xEF]/g,
+          o: /[\xF2-\xF6]/g,
+          u: /[\xF9-\xFC]/g,
+          c: /\xE7/g,
+          n: /\xF1/g
+        }
+
+        for (var letra in mapaAcentosHex) {
+          var expressaoRegular = mapaAcentosHex[letra]
+          string = string.replace(expressaoRegular, letra).replace(' ', '-')
+        }
+        return string.toLowerCase()
       },
 
       getUsuario: function () {
