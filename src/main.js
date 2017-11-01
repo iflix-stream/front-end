@@ -80,6 +80,10 @@ const routes = [
         component: Home
       }
     ]
+  },
+  {
+    path: '/:nomeusuario/perfil',
+    component: Perfil
   }
 ]
 

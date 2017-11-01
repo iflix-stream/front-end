@@ -1,92 +1,153 @@
 <template>
-    <v-layout row justify-center>
-        <v-dialog v-model="dialog" fullscreen transition="dialog-bottom-transition" :overlay=false>
+  <v-layout row justify-center>
+    <v-toolbar dark primary fixed>
+      <v-btn icon @click="fecharDialog()" dark>
+        <v-icon>close</v-icon>
+      </v-btn>
+      <v-toolbar-title>Perfil</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-toolbar-items>
+        <v-btn dark flat @click.native="dialog = false">Salvar</v-btn>
+      </v-toolbar-items>
+    </v-toolbar>
+    <v-layout column style="">
+      <v-flex>
+        <v-layout column red lighten-1 style="margin-top: 9.6vh; padding-top: 50px" class="text-xs-center">
+          <v-flex xs12 row>
+            <v-avatar
+              :tile="false" size="150px" class="grey lighten-4"
+            >
+              <img src="../../assets/logo.png">
+            </v-avatar>
+          </v-flex>
+          <v-container>
+            <v-layout row wrap class="text-xs-center">
+              <v-flex offset-md1 offset-lg1></v-flex>
+              <v-flex xs12 sm3 md3 lg3><span>Email</span></v-flex>
+              <v-flex xs12 sm4 md4 lg4><span>Nome</span></v-flex>
+              <v-flex xs12 sm3 md3 lg3><span>Nascimento</span></v-flex>
+              <v-flex offset-md1 offset-lg1></v-flex>
+            </v-layout>
+          </v-container>
+          <v-divider></v-divider>
+        </v-layout>
+      </v-flex>
+
+      <v-flex grey lighten-2 xs12>
+
+        <v-layout row wrap style="margin-bottom: 10px;">
+
+          <v-flex offset-md1 offset-lg1></v-flex>
+          <v-flex xs12 sm12 md8 lg8 white>
             <v-card>
-                <v-toolbar dark primary>
-                    <v-btn icon @click="fecharDialog()" dark>
-                        <v-icon>close</v-icon>
-                    </v-btn>
-                    <v-toolbar-title>Configurações de Perfil</v-toolbar-title>
-                    <v-spacer></v-spacer>
-                    <v-toolbar-items>
-                        <v-btn dark flat @click.native="dialog = false">Salvar</v-btn>
-                    </v-toolbar-items>
-                </v-toolbar>
-                <v-layout row red lighten-1>
-                    <v-flex xs12 offset-xs5 style="padding-top: 60px; padding-bottom: 25px">
-                        <v-avatar
-                                :tile="false" size="100px" class="grey lighten-4"
-                        >
-                            <img src="../../assets/logo.png">
-                        </v-avatar>
+              <v-card-title primary-title>
+                <div>
+                  <h5>Informações</h5>
+                </div>
+              </v-card-title>
+              <v-card-text>
+                <v-form>
+                  <v-layout column>
+                    <v-flex xs12>
+                      <section>
+                        <v-subheader>Pessoais</v-subheader>
+                        <v-container>
+                          <v-layout row wrap>
+                            <v-flex xs12 sm12 md6 lg6 xl6>
+                              <v-text-field autofocus
+                                            label="Nome"
+
+                              ></v-text-field>
+                              <v-text-field
+                                label="E-mail"
+
+                              ></v-text-field>
+                            </v-flex>
+                            <v-flex xs12 sm12 md6 lg6 xl6>
+                              <v-text-field
+                                label="Senha"
+                                type="password"
+                              ></v-text-field>
+                              <v-text-field
+                                label="Nascimento"
+                              ></v-text-field>
+                            </v-flex>
+                          </v-layout>
+                        </v-container>
+                      </section>
+
                     </v-flex>
-                </v-layout>
-                <v-layout>
-                    <v-flex xs4 >
-                        Email
+                    <v-divider></v-divider>
+                    <v-flex>
+                      <section style="margin-top: 15px">
+                        <v-container>
+                          <v-subheader>Configuracionais</v-subheader>
+                          <v-layout row>
+                            <v-flex xs12 sm12 md6 lg6 xl6>
+                              <v-switch label="Mandar emails de novos filmes/series"></v-switch>
+                              <v-switch label="Receber emails semanais de notícias"></v-switch>
+                              <v-switch label="Mostrar que estou online"></v-switch>
+
+                            </v-flex>
+                            <v-flex xs12 sm12 md6 lg6 xl6>
+
+                            </v-flex>
+                          </v-layout>
+                        </v-container>
+                      </section>
+
                     </v-flex>
-                    <v-flex xs4 offset-xs1 >
 
-
-                        <h5>Nome:</h5>
-                        <v-spacer></v-spacer>
-                        <v-text-field v-model="userName" :disabled="disName"></v-text-field>
-                        <v-btn fab dark small color="cyan" @click="disName = true">
-                        <v-icon dark>edit</v-icon>
-                        </v-btn>
-
-
-
-                    </v-flex>
-                    <v-flex xs4 offset-xs1> Data Nasc</v-flex>
-                </v-layout>
-                <v-divider></v-divider>
-
+                  </v-layout>
+                </v-form>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn secondary>Cancelar</v-btn>
+                <v-btn primary>Enviar</v-btn>
+              </v-card-actions>
             </v-card>
-        </v-dialog>
+          </v-flex>
+          <v-flex offset-md1 offset-lg1></v-flex>
+        </v-layout>
+      </v-flex>
     </v-layout>
+  </v-layout>
 </template>
 <script>
-  import bus from '../../util/bus'
-
+  import {Api} from '../../api'
+  import jwtDecode from 'jwt-decode'
 
   export default {
 
     data () {
       return {
-        dialog: true,
-        userName:'',
-        disName: true,
+        userName: '',
+        disName: true
       }
     },
     methods: {
       fecharDialog: function () {
-        this.dialog = false
-        this.$router.push('/' + this.$route.query.ref.replace(/-/g, '/'))
+        this.$router.push(-1)
         if (this.diminuir) {
           this.$http.delete(Api.url + '/contagem')
         }
       },
       getUsuario: function () {
-        let jwtDecode = require('jwt-decode')
         let token = localStorage.getItem('iflix-user-token')
         let decoded = jwtDecode(token)
         this.usuario = decoded.usuario
         if (decoded.usuario.nome.length > 15) {
-
           this.usuario.nome = decoded.usuario.nome.substring(0, 12) + '...'
-        }
-        else {
+        } else {
           this.usuario.nome = decoded.usuario.nome
         }
         this.usuario.permissao = decoded.permicao
-         this.userName = this.usuario.nome
-      },
+        this.userName = this.usuario.nome
+      }
 
     },
     mounted () {
-      this.getUsuario()
-//        bus.$on('abreperfil', (dial)=> this.dialog = true)
 
     }
   }
