@@ -15,6 +15,7 @@ import VueVideoPlayer from 'vue-video-player'
 import VeeValidate from 'vee-validate'
 import Registrar from './components/Registrar.vue'
 import Cinema from './components/cinema/Cinema.vue'
+import Meus from './components/meus/Meu.vue'
 import VueMask from 'v-mask'
 
 Vue.use(VueMask)
@@ -75,9 +76,8 @@ const routes = [
         component: Cinema
       },
       {
-        name: 'rota-minha-lista',
         path: ':nomeusuario/minha-lista',
-        component: Home
+        component: Meus
       },
       {
         path: '/:nomeusuario/perfil',

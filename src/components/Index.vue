@@ -76,8 +76,8 @@
           <v-icon>home</v-icon>
         </v-btn>
         <v-btn dark :to="'/perfil'">
-          <span>Configurações</span>
-          <v-icon>settings</v-icon>
+          <span>Perfil</span>
+          <v-icon>account_circle</v-icon>
         </v-btn>
       </v-bottom-nav>
     </v-layout>
@@ -148,10 +148,6 @@
             this.$router.go('/login')
             break
         }
-      },
-      retornaReferencia: function () {
-        let str = this.$route.fullPath.replace(/\//g, '-')
-        return str.substring(1)
       },
       formataNomeParaUrl: function () {
         let jwtDecode = require('jwt-decode')
