@@ -1,21 +1,21 @@
 <template>
 
-  <v-flex style="height: 100vh; background-image: url('https://conta.nubank.com.br/images/sunrise.jpg');
-background-position: center; background-repeat: no-repeat; background-size:cover">
+  <v-flex style="height: 100vh;" ref="flexBackground">
 
 
     <v-container>
 
-      <v-flex offset-sm2 offset-md3 offset-lg4 xs12 sm12 md6 lg4 style="position: relative;">
-        <v-card style="margin-top: 25%">
+      <v-flex offset-sm2 offset-md3 offset-lg4 xs12 sm12 md6 lg4 style="position: relative; margin-top: 5vh">
+        <h3 style="text-align: center;">iFlix</h3>
+        <v-card >
           <v-card-text>
 
-            <h3 style="text-align: center;">iFlix</h3>
+
             <v-alert :class="corAlert" :icon="icone" dismissible v-model="alert">
               {{mensagem}}
             </v-alert>
             <v-flex xs12>
-              <v-form v-model="valido" ref="registerForm">
+              <v-form v-model="valido" ref="registerForm" lazy-validation>
                 <v-container grid-list-x1>
                   <v-text-field autofocus
                                 label="Nome"
@@ -70,7 +70,7 @@ background-position: center; background-repeat: no-repeat; background-size:cover
                     </v-dialog>
                   </v-flex>
                   <v-flex>
-                    <v-btn block primary large v-on:click="registrar" :disabled="!valido">Registrar</v-btn>
+                    <v-btn block primary large v-on:click="registrar" :disabled="valido">Registrar</v-btn>
                     <a href="#/login">Voltar ao login</a>
                   </v-flex>
 
@@ -93,13 +93,14 @@ background-position: center; background-repeat: no-repeat; background-size:cover
 <script>
   import { Api } from '../api'
   import {IflixMailer} from '../util/mailer'
+  import {Gradiente} from '../util/gradiente'
 
   export default {
     name: 'app',
     data () {
       return {
         e1: true,
-        valido: false,
+        valido: true,
 
         regrasDeNome: [
           (v) => !!v || 'O nome é requirido',
@@ -124,6 +125,9 @@ background-position: center; background-repeat: no-repeat; background-size:cover
         alert: false,
         mensagem: ''
       }
+    },
+    mounted () {
+      Gradiente.initGradiente(this.$refs.flexBackground)
     },
     methods: {
       registrar: function () {

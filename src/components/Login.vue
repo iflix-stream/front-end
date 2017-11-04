@@ -14,7 +14,7 @@
               {{mensagem}}
             </v-alert>
             <v-flex xs12>
-              <v-form v-model="valido" ref="loginForm">
+              <v-form v-model="valido" ref="loginForm" lazy-validation>
                 <v-container grid-list-x1>
                   <v-text-field autofocus
                                 label="E-mail"
@@ -39,15 +39,12 @@
                   </v-flex>
 
                   <v-flex>
-                    <v-btn block primary large @click="login"
-                           :disabled="!valido">Login
+                    <v-btn block primary large @click="login" :disabled="!valido">Login
                     </v-btn>
                   </v-flex>
                   <v-flex>
                     <v-btn block outline accent large to="registrar">Registrar</v-btn>
                   </v-flex>
-
-
                 </v-container>
               </v-form>
             </v-flex>
@@ -74,7 +71,7 @@
     data () {
       return {
         e1: true,
-        valido: false,
+        valido: true,
         emailRules: [
           (v) => !!v || 'O e-mail é requirido.',
           (v) => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'O e-mail tem que ser válido.'

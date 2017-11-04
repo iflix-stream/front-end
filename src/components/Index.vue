@@ -5,7 +5,7 @@
         <v-toolbar-items>
           <v-btn to="/home" flat>IFlix</v-btn>
           <v-menu>
-            <v-btn flat slot="activator" disabled>Gêneros</v-btn>
+            <v-btn flat slot="activator" >Gêneros</v-btn>
             <v-list style="background-color: rgba(20,20,20,0.9);position: fixed;top:64px">
 
               <v-list-tile v-for="genero in menuGeneros" :key="genero.id"
@@ -21,15 +21,7 @@
           <v-layout align-center row spacer slot="header" style="float: right">
             <v-flex>
               <v-menu>
-                <v-list style="background-color: rgba(20,20,20,0.9); position: fixed; top: 64px">
-                  <v-list-tile v-for="usuario in menuUsuario" :key="usuario.id" @click="go(usuario.acao)"
-                  >
-                    <v-list-tile-title class="white--text" v-text="usuario.nome"></v-list-tile-title>
-                  </v-list-tile>
-                </v-list>
-
                 <div slot="activator">
-
                   <v-flex class="hidden-sm-and-up">
                     <v-btn icon>
                       <v-icon>more_vert</v-icon>
@@ -43,7 +35,12 @@
                     <strong>{{usuario.nome}}</strong>
                   </v-flex>
                 </div>
-
+                <v-list style="background-color: rgba(20,20,20,0.9); position: fixed; top: 64px">
+                  <v-list-tile v-for="usuario in menuUsuario" :key="usuario.id" @click="go(usuario.acao)"
+                  >
+                    <v-list-tile-title class="white--text" v-text="usuario.nome"></v-list-tile-title>
+                  </v-list-tile>
+                </v-list>
               </v-menu>
 
             </v-flex>
