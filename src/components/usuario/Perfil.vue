@@ -2,7 +2,7 @@
   <v-layout row justify-center>
     <v-toolbar dark primary absolute >
       <v-btn icon @click="fecharDialog()" dark>
-        <v-icon>close</v-icon>
+        <v-icon>keyboard_arrow_left</v-icon>
       </v-btn>
       <v-toolbar-title>Perfil</v-toolbar-title>
       <v-spacer></v-spacer>

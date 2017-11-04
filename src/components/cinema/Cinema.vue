@@ -2,20 +2,19 @@
   <v-flex>
     <v-layout row >
         <v-toolbar dark color="primary" absolute>
-          <v-toolbar-title>Assistindo {{videoSelecionado.nome}}</v-toolbar-title>
-          <v-spacer></v-spacer>
           <v-btn icon @click.native="fecharDialog()" dark>
-            <v-icon>close</v-icon>
+            <v-icon>keyboard_arrow_left</v-icon>
           </v-btn>
+          <v-toolbar-title>Assistindo {{videoSelecionado.nome}}</v-toolbar-title>
         </v-toolbar>
-        <v-layout row wrap class="grey darken-4" :style="calculaAlturaCinema()">
+        <v-layout row wrap class="grey darken-4" :style="calculaAlturaCinema()" style="margin-top: 58px">
           <v-flex xs12 sm12 md9 lg9>
             <v-container fluid grid-list-md class="subtrai-paddings-tela"
                          style="">
               <v-layout row ref="playerDeVideo" style="width: 100%; margin: 0">
                 <v-flex style="padding: 0">
                   <v-card>
-                    <video-player class="vjs-custom-skin"
+                    <video-player class="vjs-custom-skin" v-if="playerPronto"
                                   ref="videoPlayer"
                                   :options="playerOptions"
                                   :playsinline="true"
@@ -137,6 +136,7 @@
           text: '',
           show: false
         },
+        playerPronto: false,
         videoSelecionado: '',
         dialogAssistir: true,
         diminuir: false,
@@ -190,6 +190,7 @@
         }).then(res => {
           this.videoSelecionado = res.body[0]
           this.configurarCinema()
+          this.playerPronto = true;
         })
       },
 

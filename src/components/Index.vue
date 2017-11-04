@@ -1,7 +1,7 @@
 <template>
   <v-app dark style="height: 100vh">
     <header>
-      <v-toolbar class="primary" absolute>
+      <v-toolbar class="primary" absolute >
         <v-toolbar-items>
           <v-btn to="/home" flat>IFlix</v-btn>
           <v-menu>
@@ -55,7 +55,7 @@
       <v-flex>
         <main>
 
-          <router-view style="overflow: auto; height: 80vh; margin-top: 10vh; margin-bottom:10vh"
+          <router-view style="overflow: auto; height: 100vh;"
                        class="grey darken-4"></router-view>
 
         </main>

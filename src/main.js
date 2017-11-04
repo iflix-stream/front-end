@@ -78,13 +78,14 @@ const routes = [
         name: 'rota-minha-lista',
         path: ':nomeusuario/minha-lista',
         component: Home
+      },
+      {
+        path: '/:nomeusuario/perfil',
+        component: Perfil
       }
     ]
-  },
-  {
-    path: '/:nomeusuario/perfil',
-    component: Perfil
   }
+
 ]
 
 const router = new VueRouter({

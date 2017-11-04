@@ -213,9 +213,9 @@
   }
 
   @media screen and (max-width: 480px) {
-    .subtrai-margin-top {
-      margin-top: 0;
-    }
+    /*.subtrai-margin-top {*/
+      /*margin-top: 0;*/
+    /*}*/
 
     .video-js {
       /*position: inherit !important;*/
