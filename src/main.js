@@ -3,7 +3,6 @@ import VueRouter from 'vue-router'
 import VueResource from 'vue-resource'
 
 import Vuetify from 'vuetify'
-import 'vuetify/dist/vuetify.min.css'
 import App from './App.vue'
 import Home from './components/home/Home.vue'
 import Index from './components/Index.vue'

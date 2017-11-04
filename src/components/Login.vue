@@ -1,20 +1,20 @@
 <template>
 
-  <v-flex style="height: 100vh; background-image: url('https://conta.nubank.com.br/images/sunrise.jpg');
-background-position: center; background-repeat: no-repeat; background-size:cover">
+  <v-flex style="height: 100vh;" ref="flexBackground">
 
     <v-container>
 
-      <v-flex offset-sm2 offset-md3 offset-lg4 xs12 sm12 md6 lg4>
-        <v-card style="margin-top: 15vh">
-          <v-card-text>
+      <v-flex offset-sm2 offset-md3 offset-lg4 xs12 sm12 md6 lg4 style="margin-top: 15vh; color: white">
 
-            <h3 style="text-align: center;">iFlix</h3>
+
+        <h3 style="text-align: center;">iFlix</h3>
+        <v-card class="white" style="opacity: 0.9">
+          <v-card-text>
             <v-alert class="red" icon="warning" dismissible v-model="alert">
               {{mensagem}}
             </v-alert>
             <v-flex xs12>
-              <v-form v-model="valido" ref="loginForm" >
+              <v-form v-model="valido" ref="loginForm">
                 <v-container grid-list-x1>
                   <v-text-field autofocus
                                 label="E-mail"
@@ -44,7 +44,7 @@ background-position: center; background-repeat: no-repeat; background-size:cover
                     </v-btn>
                   </v-flex>
                   <v-flex>
-                    <v-btn block accent large to="registrar">Registrar</v-btn>
+                    <v-btn block outline accent large to="registrar">Registrar</v-btn>
                   </v-flex>
 
 
@@ -52,8 +52,8 @@ background-position: center; background-repeat: no-repeat; background-size:cover
               </v-form>
             </v-flex>
           </v-card-text>
-
         </v-card>
+
 
       </v-flex>
       <!--<v-footer class="pa-3 grey darken-4">-->
@@ -66,6 +66,7 @@ background-position: center; background-repeat: no-repeat; background-size:cover
 
 <script>
   import { Api } from '../api'
+  import { Gradiente } from '../util/gradiente'
 
   var jwtDecode = require('jwt-decode')
   export default {
@@ -87,6 +88,9 @@ background-position: center; background-repeat: no-repeat; background-size:cover
         alert: false,
         mensagem: ''
       }
+    },
+    mounted () {
+      Gradiente.initGradiente(this.$refs.flexBackground)
     },
     methods: {
       login: function () {
