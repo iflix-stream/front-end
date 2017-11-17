@@ -65,7 +65,6 @@
   import { Api } from '../api'
   import { Gradiente } from '../util/gradiente'
 
-  var jwtDecode = require('jwt-decode')
   export default {
     name: 'app',
     data () {
@@ -105,6 +104,7 @@
                 this.alert = true
               }
               if (response.data.token !== undefined) {
+                localStorage.setItem('urls', response.data.urls)
                 localStorage.setItem('iflix-user-token', response.data.token)
                 this.$router.go('/home')
               }

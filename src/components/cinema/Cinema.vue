@@ -1,119 +1,119 @@
-<template >
+<template>
   <v-flex>
-    <v-layout row >
-        <v-toolbar dark color="primary" absolute>
-          <v-btn icon @click.native="fecharDialog()" dark>
-            <v-icon>keyboard_arrow_left</v-icon>
-          </v-btn>
-          <v-toolbar-title>Assistindo {{videoSelecionado.nome}}</v-toolbar-title>
-        </v-toolbar>
-        <v-layout row wrap class="grey darken-4" :style="calculaAlturaCinema()" style="margin-top: 58px">
-          <v-flex xs12 sm12 md9 lg9>
-            <v-container fluid grid-list-md class="subtrai-paddings-tela"
-                         style="">
-              <v-layout row ref="playerDeVideo" style="width: 100%; margin: 0">
-                <v-flex style="padding: 0">
-                  <v-card>
-                    <video-player class="vjs-custom-skin" v-if="playerPronto"
-                                  ref="videoPlayer"
-                                  :options="playerOptions"
-                                  :playsinline="true"
-                                  @play="onPlayerPlay($event)"
-                                  @pause="onPlayerPause($event)"
-                                  @ended="onPlayerEnded($event)"
-                                  @loadeddata="onPlayerLoadeddata($event)"
-                                  @waiting="onPlayerWaiting($event)"
-                                  @playing="onPlayerPlaying($event)"
-                                  @timeupdate="onPlayerTimeupdate($event)"
-                                  @canplay="onPlayerCanplay($event)"
-                                  @canplaythrough="onPlayerCanplaythrough($event)"
-                                  @ready="playerReadied"
-                                  @statechanged="playerStateChanged($event)">
-                    </video-player>
-                    <v-card-actions class="primary">
-                      <v-spacer></v-spacer>
-                      <v-btn icon @click.native="adicionarMinhaLista()"
-                             :style="isAdicionadoStyle">
-                        <v-icon>favorite</v-icon>
-                      </v-btn>
+    <v-layout row>
+      <v-toolbar dark color="primary" absolute>
+        <v-btn icon @click.native="fecharDialog()" dark>
+          <v-icon>keyboard_arrow_left</v-icon>
+        </v-btn>
+        <v-toolbar-title>Assistindo {{videoSelecionado.nome}}</v-toolbar-title>
+      </v-toolbar>
+      <v-layout row wrap class="grey darken-4" :style="calculaAlturaCinema()" style="margin-top: 58px">
+        <v-flex xs12 sm12 md9 lg9>
+          <v-container fluid grid-list-md class="subtrai-paddings-tela"
+                       style="">
+            <v-layout row ref="playerDeVideo" style="width: 100%; margin: 0">
+              <v-flex style="padding: 0">
+                <v-card>
+                  <video-player class="vjs-custom-skin" v-if="playerPronto"
+                                ref="videoPlayer"
+                                :options="playerOptions"
+                                :playsinline="true"
+                                @play="onPlayerPlay($event)"
+                                @pause="onPlayerPause($event)"
+                                @ended="onPlayerEnded($event)"
+                                @loadeddata="onPlayerLoadeddata($event)"
+                                @waiting="onPlayerWaiting($event)"
+                                @playing="onPlayerPlaying($event)"
+                                @timeupdate="onPlayerTimeupdate($event)"
+                                @canplay="onPlayerCanplay($event)"
+                                @canplaythrough="onPlayerCanplaythrough($event)"
+                                @ready="playerReadied"
+                                @statechanged="playerStateChanged($event)">
+                  </video-player>
+                  <v-card-actions class="primary">
+                    <v-spacer></v-spacer>
+                    <v-btn icon @click.native="adicionarMinhaLista()"
+                           :style="isAdicionadoStyle">
+                      <v-icon>favorite</v-icon>
+                    </v-btn>
 
-                      <v-btn icon disabled>
-                        <v-icon>share</v-icon>
-                      </v-btn>
-                    </v-card-actions>
-                  </v-card>
-                </v-flex>
-              </v-layout>
-            </v-container>
-
-          </v-flex>
-          <v-flex xs12 sm12 md3 lg3 style="">
-            <div style="">
-              <v-flex>
-                <v-card class="white--text primary">
-                  <v-container fluid grid-list-lg class="subtrai-margin-tela">
-                    <v-layout row>
-                      <v-flex xs5>
-                        <v-card-media
-                          :src="videoSelecionado.thumbnail"
-                          height="125px"
-
-                        ></v-card-media>
-                      </v-flex>
-                      <v-flex xs7>
-                        <v-container>
-                          <div class="headline">{{videoSelecionado.nome}}</div>
-                          <div>Classificação: {{videoSelecionado.classificacao}}</div>
-                        </v-container>
-                      </v-flex>
-
-                    </v-layout>
-                    <v-flex xs12>
-                      <div v-if="!spoilerSinopse && !isMaiorQue183">
-                        Sinopse: {{decodeURIComponent(videoSelecionado.sinopse)}}
-                      </div>
-                      <div v-else-if="!spoilerSinopse && isMaiorQue183">
-                        Sinopse: {{decodeURIComponent(videoSelecionado.sinopsePequena)}}
-                      </div>
-                      <div v-else-if="spoilerSinopse && isMaiorQue183">
-                        Sinopse: {{decodeURIComponent(videoSelecionado.sinopseInteira)}}
-                      </div>
-                      <v-btn outline v-if="!spoilerSinopse && isBotaoSpoilerSinopse"
-                             @click.native="spoilerSinopse = true" dark>
-                        Mostrar mais
-                      </v-btn>
-                      <v-btn outline v-else-if="spoilerSinopse == true && isBotaoSpoilerSinopse"
-                             @click.native="spoilerSinopse = false" dark>
-                        Mostrar menos
-                      </v-btn>
-                    </v-flex>
-                  </v-container>
+                    <v-btn icon disabled>
+                      <v-icon>share</v-icon>
+                    </v-btn>
+                  </v-card-actions>
                 </v-card>
               </v-flex>
-              <v-list v-if="videoSelecionado.tipo == 'serie'" style="min-height: 40vh">
-                <v-list-group v-for="temporada in videoSelecionado.temporadas" :value="temporada.active"
-                              v-bind:key="temporada.nome">
-                  <v-list-tile slot="item" @click="">
+            </v-layout>
+          </v-container>
 
-                    <v-list-tile-content>
-                      <v-list-tile-title>{{ temporada.numero }}º Temporada</v-list-tile-title>
-                    </v-list-tile-content>
-                    <v-list-tile-action>
-                      <v-icon>keyboard_arrow_down</v-icon>
-                    </v-list-tile-action>
-                  </v-list-tile>
-                  <v-list-tile v-for="episodio in temporada.episodios" v-bind:key="episodio.nome"
-                               @click="">
-                    <v-list-tile-content @click="setEpisode(episodio)">
-                      <v-list-tile-title>{{ episodio.nome }}</v-list-tile-title>
-                    </v-list-tile-content>
+        </v-flex>
+        <v-flex xs12 sm12 md3 lg3 style="">
+          <div style="">
+            <v-flex>
+              <v-card class="white--text primary">
+                <v-container fluid grid-list-lg class="subtrai-margin-tela">
+                  <v-layout row>
+                    <v-flex xs5>
+                      <v-card-media
+                        :src="videoSelecionado.thumbnail"
+                        height="125px"
 
-                  </v-list-tile>
-                </v-list-group>
-              </v-list>
-            </div>
-          </v-flex>
-        </v-layout>
+                      ></v-card-media>
+                    </v-flex>
+                    <v-flex xs7>
+                      <v-container>
+                        <div class="headline">{{videoSelecionado.nome}}</div>
+                        <div>Classificação: {{videoSelecionado.classificacao}}</div>
+                      </v-container>
+                    </v-flex>
+
+                  </v-layout>
+                  <v-flex xs12>
+                    <div v-if="!spoilerSinopse && !isMaiorQue183">
+                      Sinopse: {{decodeURIComponent(videoSelecionado.sinopse)}}
+                    </div>
+                    <div v-else-if="!spoilerSinopse && isMaiorQue183">
+                      Sinopse: {{decodeURIComponent(videoSelecionado.sinopsePequena)}}
+                    </div>
+                    <div v-else-if="spoilerSinopse && isMaiorQue183">
+                      Sinopse: {{decodeURIComponent(videoSelecionado.sinopseInteira)}}
+                    </div>
+                    <v-btn outline v-if="!spoilerSinopse && isBotaoSpoilerSinopse"
+                           @click.native="spoilerSinopse = true" dark>
+                      Mostrar mais
+                    </v-btn>
+                    <v-btn outline v-else-if="spoilerSinopse == true && isBotaoSpoilerSinopse"
+                           @click.native="spoilerSinopse = false" dark>
+                      Mostrar menos
+                    </v-btn>
+                  </v-flex>
+                </v-container>
+              </v-card>
+            </v-flex>
+            <v-list v-if="videoSelecionado.tipo == 'serie'" style="min-height: 40vh">
+              <v-list-group v-for="temporada in videoSelecionado.temporadas" :value="temporada.active"
+                            v-bind:key="temporada.nome">
+                <v-list-tile slot="item" @click="">
+
+                  <v-list-tile-content>
+                    <v-list-tile-title>{{ temporada.numero }}º Temporada</v-list-tile-title>
+                  </v-list-tile-content>
+                  <v-list-tile-action>
+                    <v-icon>keyboard_arrow_down</v-icon>
+                  </v-list-tile-action>
+                </v-list-tile>
+                <v-list-tile v-for="episodio in temporada.episodios" v-bind:key="episodio.nome"
+                             @click="">
+                  <v-list-tile-content @click="setEpisode(episodio)">
+                    <v-list-tile-title>{{ episodio.nome }}</v-list-tile-title>
+                  </v-list-tile-content>
+
+                </v-list-tile>
+              </v-list-group>
+            </v-list>
+          </div>
+        </v-flex>
+      </v-layout>
     </v-layout>
     <v-snackbar
       :timeout="3000"
@@ -126,11 +126,11 @@
   </v-flex>
 </template>
 <script>
-  import {Api} from '../../api'
+  import { Api } from '../../api'
   import jwtDecode from 'jwt-decode'
 
   export default {
-    data() {
+    data () {
       return {
         snackbar: {
           text: '',
@@ -160,16 +160,19 @@
       }
     },
 
-    mounted() {
+    mounted () {
       this.buscaVideo()
-      var vm = this;
+      let vm = this
       this.dialogAssistir = true
-      window.addEventListener('beforeunload', function (e) {
-        if (vm.diminuir) {
-          vm.$http.delete(Api.url + '/contagem')
-        }
-        return undefined;
-      })
+      if (this.$route.path.indexOf('/watch') !== -1) {
+        window.addEventListener('beforeunload', function (e) {
+          if (vm.diminuir) {
+            vm.$http.delete(Api.url + '/contagem')
+          }
+          e.returnValue = undefined
+          return undefined
+        })
+      }
 //      bus.$on('configurarCinema', (video) => this.configurarCinema(video))
 
 //      bus.$on('fecharCinema', this.fecharDialog())
@@ -190,7 +193,7 @@
         }).then(res => {
           this.videoSelecionado = res.body[0]
           this.configurarCinema()
-          this.playerPronto = true;
+          this.playerPronto = true
         })
       },
 
@@ -238,7 +241,7 @@
         if (video.tipo === 'serie') {
           this.setEpisode(video.primeiro_episodio)
           this.playerOptions.sources[0].src = Api.url + '/' + video.tipo + '/?stream=true&id=' + video.primeiro_episodio.caminho
-          if (video.ultimo_ep_assistido != 0) {
+          if (video.ultimo_ep_assistido !== 0) {
             this.setEpisode(video.ultimo_ep_assistido)
             this.playerOptions.sources[0].src = Api.url + '/' + video.tipo + '/?stream=true&id=' + video.ultimo_ep_assistido.caminho
           }
@@ -280,7 +283,7 @@
             }
           }
         ).then(response => {
-          console.log(response)
+
           if (response.body.isAdicionado === true) {
             this.isAdicionadoStyle = 'color: #EEEEEE'
           } else {
@@ -306,7 +309,7 @@
         })
       },
 
-      onPlayerPlay(player) {
+      onPlayerPlay (player) {
         this.diminuir = true
         let params = {
           tipo: this.videoSelecionado.tipo,
@@ -322,47 +325,49 @@
 
         }
       },
-      onPlayerPause(player) {
+      onPlayerPause (player) {
         this.podeSalvarDe15Em15 = false
         this.diminuir = false
         this.$http.delete(Api.url + '/contagem')
         this.salvarTempo(player)
 
       },
-      onPlayerEnded(player) {
+      onPlayerEnded (player) {
         this.diminuir = false
         this.$http.delete(Api.url + '/contagem')
         this.salvarTempo(player)
       },
-      onPlayerLoadeddata(player) {
+      onPlayerLoadeddata (player) {
         // console.log('player Loadeddata!', player)
       },
-      onPlayerWaiting(player) {
+      onPlayerWaiting (player) {
         // console.log('player Waiting!', player)
       },
-      onPlayerPlaying(player) {
+      onPlayerPlaying (player) {
         // console.log('player Playing!', player)
       },
-      onPlayerTimeupdate(player) {
+      onPlayerTimeupdate (player) {
         // console.log('player Timeupdate!', player.currentTime())
       },
-      onPlayerCanplay(player) {
+      onPlayerCanplay (player) {
         // console.log('player Canplay!', player)
       },
-      onPlayerCanplaythrough(player) {
+      onPlayerCanplaythrough (player) {
         // console.log('player Canplaythrough!', player)
       },
       // or listen state event
-      playerStateChanged(playerCurrentState) {
+      playerStateChanged (playerCurrentState) {
         // console.log('player current update state', playerCurrentState)
       },
       // player is ready
-      playerReadied(player) {
+      playerReadied (player) {
         let tempoAssistido = this.videoSelecionado.tempoAssistido
         if (this.videoSelecionado.tipo === 'serie' && this.episodioSelecionado !== undefined) {
           tempoAssistido = this.episodioSelecionado.tempoAssistido
         }
-        player.currentTime(tempoAssistido)
+        if (tempoAssistido !== null) {
+          player.currentTime(tempoAssistido)
+        }
         // console.log('example 01: the player is readied', player)
       }
 
