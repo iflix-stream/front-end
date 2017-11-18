@@ -1,11 +1,11 @@
 <template>
   <v-app dark style="height: 100vh">
     <header>
-      <v-toolbar class="primary" absolute >
+      <v-toolbar class="primary" absolute>
         <v-toolbar-items>
           <v-btn to="/home" flat>IFlix</v-btn>
           <v-menu>
-            <v-btn flat slot="activator" >Gêneros</v-btn>
+            <v-btn flat slot="activator">Gêneros</v-btn>
             <v-list style="background-color: rgba(20,20,20,0.9);position: fixed;top:64px">
 
               <v-list-tile v-for="genero in menuGeneros" :key="genero.id"
@@ -16,9 +16,19 @@
           </v-menu>
 
         </v-toolbar-items>
+        <v-spacer></v-spacer>
 
         <v-flex style="margin-right: 25px">
           <v-layout align-center row spacer slot="header" style="float: right">
+            <v-flex style="margin-right: 25px;">
+              <v-form>
+                <v-text-field class="pesquisa"
+                              label="Pesquisar"
+                              prepend-icon="search"
+                ></v-text-field>
+              </v-form>
+            </v-flex>
+
             <v-flex>
               <v-menu>
                 <div slot="activator">
@@ -192,5 +202,13 @@
 </script>
 
 <style>
+  .pesquisa .input-group__details:after {
+    background: #f4f4f4;
+  }
+
+  .pesquisa.input-group.input-group--focused .input-group__prepend-icon {
+    color: #f4f4f4;
+  }
+
 
 </style>
