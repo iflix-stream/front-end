@@ -87,13 +87,20 @@
     },
     mounted () {
       Gradiente.initGradiente(this.$refs.flexBackground)
+      this.getGeoIp();
     },
     methods: {
-      login: function () {
+      getGeoIp: function () {
+        this.$http.get('http://freegeoip.net/json/').then(r => {
+          this.geoIp = r.data
+        });
+      },
 
+      login: function () {
         const formData = {
           email: this.email,
-          senha: this.senha
+          senha: this.senha,
+          geoInfo: this.geoIp
         }
 
         if (this.$refs.loginForm.validate()) {
@@ -104,7 +111,9 @@
                 this.alert = true
               }
               if (response.data.token !== undefined) {
-                localStorage.setItem('urls', response.data.urls)
+                if (response.data.urls !== undefined) {
+                  localStorage.setItem('urls', response.data.urls)
+                }
                 localStorage.setItem('iflix-user-token', response.data.token)
                 this.$router.go('/home')
               }

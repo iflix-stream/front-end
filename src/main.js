@@ -24,7 +24,7 @@ Vue.use(Vuetify)
 Vue.use(VueVideoPlayer)
 Vue.use(VeeValidate)
 
-Vue.http.headers.common['Authorization'] = localStorage.getItem('iflix-user-token')
+// Vue.http.headers.common['Authorization'] = localStorage.getItem('iflix-user-token')
 const routes = [
   {
     path: '/login',
