@@ -260,7 +260,7 @@
 
       adicionarMinhaLista: function () {
         let token = localStorage.getItem('iflix-user-token')
-        this.$http.post(Api.url + '/lista/?q=my',
+        LoginService.post(Api.url + '/lista/?q=my',
           {
             tipo: this.videoSelecionado.tipo,
             usuario: jwtDecode(token).usuario.id,
@@ -301,7 +301,7 @@
         if (this.videoSelecionado.tipo === 'serie') {
           params.id = this.episodioSelecionado.id
         }
-        this.$http.post(Api.url + '/tempo',
+        LoginService.post(Api.url + '/tempo',
           params,
           {
             emulateJSON: true
@@ -315,7 +315,7 @@
           tipo: this.videoSelecionado.tipo,
           id: this.videoSelecionado.id
         }
-        this.$http.post(Api.url + '/contagem',
+        LoginService.post(Api.url + '/contagem',
           params, {emulateJSON: true}).then(res => {
         })
         if (this.podeSalvarDe15Em15) {

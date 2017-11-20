@@ -59,10 +59,6 @@ const routes = [
         component: Perfil
       },
       {
-        path: 'filme',
-        component: CadastroFilme
-      },
-      {
         path: 'genero/:nomegenero',
         component: Home
       },
@@ -81,6 +77,10 @@ const routes = [
       {
         path: '/:nomeusuario/perfil',
         component: Perfil
+      },
+      {
+        path: '/cadastro/filme',
+        component: CadastroFilme
       }
     ]
   }

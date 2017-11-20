@@ -1,6 +1,6 @@
 <template>
 
-  <v-flex style="height: 100vh;" ref="flexBackground">
+  <v-flex style="height: 100vh;" ref="flexBackground" v-show="carregou">
 
     <v-container>
 
@@ -64,6 +64,7 @@
 <script>
   import { Api } from '../api'
   import { Gradiente } from '../util/gradiente'
+  import LoginService from '../services/LoginService'
 
   export default {
     name: 'app',
@@ -71,6 +72,7 @@
       return {
         e1: true,
         valido: true,
+        carregou: false,
         emailRules: [
           (v) => !!v || 'O e-mail é requirido.',
           (v) => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'O e-mail tem que ser válido.'
@@ -87,13 +89,15 @@
     },
     mounted () {
       Gradiente.initGradiente(this.$refs.flexBackground)
-      this.getGeoIp();
+      this.carregou = true
+      this.getGeoIp()
     },
+
     methods: {
       getGeoIp: function () {
         this.$http.get('http://freegeoip.net/json/').then(r => {
           this.geoIp = r.data
-        });
+        })
       },
 
       login: function () {
@@ -104,24 +108,39 @@
         }
 
         if (this.$refs.loginForm.validate()) {
-          this.$http.post(Api.url + '/login', formData, {emulateJSON: true})
+          LoginService.post(formData)
             .then(response => {
-              if (response.data.code === 500) {
-                this.mensagem = response.data.message
-                this.alert = true
+              console.log(response)
+              if (this.salvaTokenUsuario(response)) {
+                this.salvaUrls(response)
+                this.redirecionaUsuario()
               }
-              if (response.data.token !== undefined) {
-                if (response.data.urls !== undefined) {
-                  localStorage.setItem('urls', response.data.urls)
-                }
-                localStorage.setItem('iflix-user-token', response.data.token)
-                this.$router.go('/home')
+              if (response.data.code !== null && response.data.code === 500) {
+                this.retornaMsgs(response.data.message)
               }
-            }, function () {
-              this.mensagem = 'Ops, o servidor parece estar offline.'
-              this.alert = true
+            }, () => {
+              this.retornaMsgs('Oops, o servidor parece estar em manutenção')
             })
         }
+      },
+      retornaMsgs: function (mensagem) {
+        this.mensagem = mensagem
+        this.alert = true
+
+      },
+      salvaTokenUsuario: function (response) {
+        if (response.data.token !== undefined) {
+          localStorage.setItem('iflix-user-token', response.data.token)
+          return true
+        }
+      },
+      salvaUrls: function (response) {
+        if (response.data.urls !== undefined) {
+          localStorage.setItem('urls', response.data.urls)
+        }
+      },
+      redirecionaUsuario: function () {
+        this.$router.go('/home')
       }
     }
   }

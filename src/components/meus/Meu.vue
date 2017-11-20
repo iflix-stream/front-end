@@ -70,7 +70,7 @@
     methods: {
       handler: function handler (event) {
         if (this.diminuir) {
-          this.$http.post(Api.url + '/contagem', {subtrair: true}, {emulateJSON: true})
+          LoginService.post(Api.url + '/contagem', {subtrair: true}, {emulateJSON: true})
         }
         return null
       },

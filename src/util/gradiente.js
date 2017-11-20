@@ -5,12 +5,11 @@ export const Gradiente = new Vue({
   data () {
     return {
       el: '#app',
-      cores: [[111, 94, 229],
-        [96, 226, 96],
-        [201, 74, 110],
-        [79, 128, 210],
-        [201, 74, 110],
-        [33, 124, 182]],
+      cores: [[129, 71, 255],
+        [72, 64, 232],
+        [83, 121, 255],
+        [64, 145, 232],
+        [71, 208, 255]],
       passo: 0,
       indiceDeCores: [0, 1, 2, 3],
       velocidadeGradiente: 0.002
@@ -51,8 +50,8 @@ export const Gradiente = new Vue({
       }
     },
 
-    initGradiente: function (el) {
-      setInterval(function(){Gradiente.gradiente(el)}, 500)
+    initGradiente: async function (el) {
+     await setInterval(function(){Gradiente.gradiente(el)}, 500)
     }
   }
 })
