@@ -237,13 +237,13 @@
       },
 
       updatePlayerOptionsWithSelectedVideo: function (video) {
-        this.playerOptions.sources[0].src = Api.url + '/' + video.tipo + '/?stream=true&id=' + video.caminho
+        this.playerOptions.sources[0].src = Api.url + '/' + video.tipo + '/?stream=true&id=' + video.id
         if (video.tipo === 'serie') {
           this.setEpisode(video.primeiro_episodio)
-          this.playerOptions.sources[0].src = Api.url + '/' + video.tipo + '/?stream=true&id=' + video.primeiro_episodio.caminho
+          this.playerOptions.sources[0].src = Api.url + '/' + video.tipo + '/?stream=true&id=' + video.primeiro_episodio.id
           if (video.ultimo_ep_assistido !== 0) {
             this.setEpisode(video.ultimo_ep_assistido)
-            this.playerOptions.sources[0].src = Api.url + '/' + video.tipo + '/?stream=true&id=' + video.ultimo_ep_assistido.caminho
+            this.playerOptions.sources[0].src = Api.url + '/' + video.tipo + '/?stream=true&id=' + video.ultimo_ep_assistido.id
           }
 
         }
@@ -255,7 +255,7 @@
       setEpisode: function (episodio) {
         this.podeSalvarDe15Em15 = false
         this.episodioSelecionado = episodio
-        this.playerOptions.sources[0].src = Api.url + '/serie/?stream=true&id=' + episodio.caminho
+        this.playerOptions.sources[0].src = Api.url + '/serie/?stream=true&id=' + episodio.id
       },
 
       adicionarMinhaLista: function () {
