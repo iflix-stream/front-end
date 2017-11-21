@@ -145,33 +145,9 @@
       salvar: function () {
         console.log('salvou de mentirinha')
         this.fecharDialog()
-      },
-      fazerCorPredominanteImgPerfil: function () {
-        let img = document.createElement('img');
-        img.setAttribute('src', '../../assets/logo.png')
-
-        img.addEventListener('load', function() {
-          let vibrant = new Vibrant(img);
-          let swatches = vibrant.swatches()
-          for (let swatch in swatches)
-            if (swatches.hasOwnProperty(swatch) && swatches[swatch])
-              console.log(swatch, swatches[swatch].getHex())
-
-          /*
-           * Results into:
-           * Vibrant #7a4426
-           * Muted #7b9eae
-           * DarkVibrant #348945
-           * DarkMuted #141414
-           * LightVibrant #f3ccb4
-           */
-        });
-
       }
-
     },
     mounted () {
-      this.fazerCorPredominanteImgPerfil()
       this.getUsuario()
     }
   }
