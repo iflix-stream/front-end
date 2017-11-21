@@ -147,7 +147,7 @@
         })
       },
       getFilmes: function (id) {
-        let url = Api.url + '/filme/?pag='+this.cont
+        let url = Api.url + '/filme/'
         if (this.$route.params.nomegenero !== undefined) {
           url += 'genero/' + this.$route.params.nomegenero + '/'
         }
@@ -207,8 +207,7 @@
         let offset =  e.target.scrollTop;
         let elHeight = this.$refs.containerVideo.offsetHeight*0.70;
         if(offset > elHeight){
-            this.getFilmes();
-            this,g
+
         }
        }
     }
