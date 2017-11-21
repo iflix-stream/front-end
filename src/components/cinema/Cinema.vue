@@ -161,11 +161,12 @@
     },
 
     mounted () {
+
       this.buscaVideo()
       let vm = this
       this.dialogAssistir = true
       if (this.$route.path.indexOf('/watch') !== -1) {
-        window.addEventListener('beforeunload', (e)=> {
+        window.addEventListener('beforeunload', (e) => {
           if (this.diminuir) {
             this.$http.delete(Api.url + '/contagem')
           }
@@ -292,21 +293,23 @@
         })
       },
       salvarTempo: function (player) {
-        let params = {
-          usuario: jwtDecode(localStorage.getItem('iflix-user-token')).usuario.id,
-          id: this.videoSelecionado.id,
-          tipo: this.videoSelecionado.tipo,
-          tempo: player.currentTime(),
+        if (player !== null) {
+          let params = {
+            usuario: jwtDecode(localStorage.getItem('iflix-user-token')).usuario.id,
+            id: this.videoSelecionado.id,
+            tipo: this.videoSelecionado.tipo,
+            tempo: player.currentTime(),
+          }
+          if (this.videoSelecionado.tipo === 'serie') {
+            params.id = this.episodioSelecionado.id
+          }
+          this.$http.post(Api.url + '/tempo',
+            params,
+            {
+              emulateJSON: true
+            }).then(res => {
+          })
         }
-        if (this.videoSelecionado.tipo === 'serie') {
-          params.id = this.episodioSelecionado.id
-        }
-        this.$http.post(Api.url + '/tempo',
-          params,
-          {
-            emulateJSON: true
-          }).then(res => {
-        })
       },
 
       onPlayerPlay (player) {

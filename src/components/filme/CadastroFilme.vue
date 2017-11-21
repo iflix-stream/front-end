@@ -64,6 +64,8 @@
               item-text="text"
               required
             ></v-select>
+            <span>{{porcentagemUpload}}% completado</span>
+            <v-progress-linear v-model="porcentagemUpload"></v-progress-linear>
             <input type="file" @change="upload" ref="inputUpload">
             <v-card-actions>
               <v-btn @click="submit">submit</v-btn>
@@ -78,16 +80,16 @@
 
 <script>
   import { Api } from '../../api'
-  import {UploadService} from '../../services/UploadService'
+  import { UploadService } from '../../services/UploadService'
 
   export default {
-    $validates: true,
     data () {
       return {
         valid: false,
         nome: '',
         sinopse: '',
         file: '',
+        porcentagemUpload: 0,
         form: {},
         generos: [],
         idadesRecomendadas: [
@@ -126,34 +128,32 @@
         )
 
       },
-      upload: (e)=>{
+      upload: (e) => {
         e.preventDefault()
         let files = e.target.files
         this.file = files[0]
       },
       submit () {
-
-
-            this.$http.post(Api.url + '/filme', this.form, {emulateJSON: true})
-              .then(response => {
-                let data = new FormData();
-
-                data.append('file', this.$refs.inputUpload.files[0])
-                data.append('id', response.data.id)
-                data.append('tipo', 'filme')
-
-                UploadService.post(data, {
-                  progress(e) {
-                    if (e.lengthComputable) {
-//                      console.log('e.loaded: %o, e.total: %o, percent: %o', e.loaded, e.total, (e.loaded / e.total ) * 100)
-                    }
+        this.$http.post(Api.url + '/filme', this.form, {emulateJSON: true})
+          .then(response => {
+            if (response.data.id !== undefined) {
+              let data = new FormData()
+              data.append('file', this.$refs.inputUpload.files[0])
+              data.append('id', response.data.id)
+              data.append('tipo', 'filme')
+              let vm = this
+              UploadService.post(data, {
+                progress (e) {
+                  if (e.lengthComputable) {
+                    vm.porcentagemUpload = Math.round((e.loaded / e.total ) * 100)
                   }
-                }).then(function (response) {
-                  console.log(response)
-                })
-              }, response => {
-//                                console.error(response.body)
+                }
+              }).then(function (response) {
               })
+            }
+          }, response => {
+            console.error(response.body)
+          })
 
       },
       clear () {
