@@ -115,7 +115,6 @@
 <script>
   import { Api } from '../../api'
   import jwtDecode from 'jwt-decode'
-  import Vibrant from 'node-vibrant'
 
   export default {
 
