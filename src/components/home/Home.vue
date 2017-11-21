@@ -1,4 +1,4 @@
-<template >
+<template>
   <v-container fluid>
     <v-layout column class="subtrai-margin-top">
       <section id="lancamentos">
@@ -21,7 +21,8 @@
                     </v-layout>
 
                   </v-container>
-                  <v-progress-linear style="position: absolute;bottom: 0;" value="80" color-front="primary"
+                  <v-progress-linear style="position: absolute;bottom: 0;" :value="porcentagemVista(video)"
+                                     color-front="primary"
                                      color-back="blue-grey"></v-progress-linear>
 
                 </v-card-media>
@@ -80,7 +81,21 @@
         }
         return null
       },
+      porcentagemVista: function (video) {
+        if (video.tipo === 'filme') {
+          return ((video.tempoAssistido / video.duracao) * 100)
+        }
+        let totalSegEpsAss = 0
+        let totalSegEps = 0
 
+        for (let i = 0; i < video.temporadas.length; i++) {
+          for (let j = 0; j < video.temporadas[i].episodios.length; j++) {
+            totalSegEpsAss += eval(video.temporadas[i].episodios[j].tempoAssistido);
+            totalSegEps += eval(video.temporadas[i].episodios[j].duracao);
+          }
+        }
+        return ((totalSegEpsAss / totalSegEps) * 100)
+      },
       routeNameVerify: function () {
         switch (this.$route.name) {
           case 'rota-minha-lista':
@@ -91,7 +106,6 @@
       },
 
       renderizarCinema: function (video) {
-        console.log(this.$route)
         this.$router.push('/watch/' + video.tipo + '/' + video.id)
       },
       getMinhaListaFilmes: function () {
@@ -209,9 +223,8 @@
 
   @media screen and (max-width: 480px) {
     /*.subtrai-margin-top {*/
-      /*margin-top: 0;*/
+    /*margin-top: 0;*/
     /*}*/
-
     .video-js {
       /*position: inherit !important;*/
       width: 100% !important;

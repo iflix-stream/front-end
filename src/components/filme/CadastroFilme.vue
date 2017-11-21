@@ -23,13 +23,7 @@
               data-vv-name="form.sinopse"
               required
             ></v-text-field>
-            <v-text-field
-              label="Duracao"
-              v-model="form.duracao"
-              v-validate="'required'"
-              data-vv-name="form.duracao"
-              required
-            ></v-text-field>
+
             <v-text-field
               label="Thumbnail"
               v-model="form.thumbnail"
@@ -66,7 +60,7 @@
             ></v-select>
             <span>{{porcentagemUpload}}% completado</span>
             <v-progress-linear v-model="porcentagemUpload"></v-progress-linear>
-            <input type="file" @change="upload" ref="inputUpload">
+            <input type="file" @change="upload" ref="inputUpload" id="inputUpload">
             <v-card-actions>
               <v-btn @click="submit">submit</v-btn>
               <v-btn @click="clear">clear</v-btn>
@@ -128,12 +122,22 @@
         )
 
       },
-      upload: (e) => {
+      upload: function(e) {
         e.preventDefault()
         let files = e.target.files
-        this.file = files[0]
+        if(files[0] !== undefined) {
+          this.setDuration(files[0]);
+        }
+      },
+      setDuration: function(file){
+        let video = document.createElement('video')
+        video.src = URL.createObjectURL(file)
+        video.ondurationchange = () => {
+          this.form.duracao = video.duration
+        }
       },
       submit () {
+        console.log(this.form)
         this.$http.post(Api.url + '/filme', this.form, {emulateJSON: true})
           .then(response => {
             if (response.data.id !== undefined) {

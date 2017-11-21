@@ -1,7 +1,7 @@
 <template>
-  <v-app dark style="height: 100vh">
+  <v-app dark >
     <header>
-      <v-toolbar class="primary" absolute>
+      <v-toolbar class="primary" >
         <v-toolbar-items>
           <v-btn to="/home" flat>IFlix</v-btn>
           <v-menu>
@@ -62,13 +62,14 @@
       <v-flex>
         <main>
 
-          <router-view style="overflow: auto; height: 100vh;"
-                       class="grey darken-4"></router-view>
+          <router-view style="overflow: auto; height: 85vh;"
+                       class="grey darken-4 fazer-margins"></router-view>
 
         </main>
       </v-flex>
+      <v-flex>
       <v-bottom-nav class="hidden-md-and-up"
-                    absolute
+
                     shift
                     :value="true"
                     :active.sync="bottomTabs"
@@ -87,6 +88,14 @@
           <v-icon>account_circle</v-icon>
         </v-btn>
       </v-bottom-nav>
+      </v-flex>
+      <v-flex>
+        <v-footer class="pa-3 blue-grey darken-4 hidden-md-and-down">
+          iFlix Streaming
+          <v-spacer></v-spacer>
+          <div>© {{ new Date().getFullYear() }}</div>
+        </v-footer>
+      </v-flex>
     </v-layout>
   </v-app>
 </template>
@@ -209,6 +218,10 @@
   .pesquisa.input-group.input-group--focused .input-group__prepend-icon {
     color: #f4f4f4;
   }
-
+  @media screen and (max-width: 600px)  {
+    .fazer-margins {
+      padding-bottom: 500px;
+    }
+  }
 
 </style>
