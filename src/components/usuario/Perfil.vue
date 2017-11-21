@@ -1,6 +1,6 @@
 <template>
   <v-layout row justify-center>
-    <v-toolbar dark primary absolute >
+    <v-toolbar dark primary absolute>
       <v-btn icon @click="fecharDialog()" dark>
         <v-icon>keyboard_arrow_left</v-icon>
       </v-btn>
@@ -12,20 +12,20 @@
     </v-toolbar>
     <v-layout column style="">
       <v-flex>
-        <v-layout column primary lighten-1 style="padding-top: 50px" class="text-xs-center">
+        <v-layout column primary lighten-1 style="padding-top: 25px" class="text-xs-center">
           <v-flex xs12 row>
             <v-avatar
               :tile="false" size="150px" class="white"
             >
-              <img src="../../assets/logo.png">
+              <img src="../../assets/logo.png" ref="imgPerfil">
             </v-avatar>
           </v-flex>
           <v-container>
             <v-layout row wrap class="text-xs-center">
               <v-flex offset-md1 offset-lg1></v-flex>
-              <v-flex xs12 sm3 md3 lg3><span>Email</span></v-flex>
-              <v-flex xs12 sm4 md4 lg4><span>Nome</span></v-flex>
-              <v-flex xs12 sm3 md3 lg3><span>Nascimento</span></v-flex>
+              <v-flex xs12 sm3 md3 lg3></v-flex>
+              <v-flex xs12 sm4 md4 lg4><h5>Nome</h5></v-flex>
+              <v-flex xs12 sm3 md3 lg3></v-flex>
               <v-flex offset-md1 offset-lg1></v-flex>
             </v-layout>
           </v-container>
@@ -33,34 +33,32 @@
         </v-layout>
       </v-flex>
 
-      <v-flex grey lighten-2 xs12>
+      <v-flex xs12>
 
         <v-layout row wrap>
 
           <v-flex offset-md1 offset-lg1></v-flex>
-          <v-flex xs12 sm12 md8 lg8 white>
-            <v-card class="grey darken-4">
+          <v-flex xs12 sm12 md8 lg8>
+            <v-card class="grey darken-4 elevation-0">
               <v-card-title primary-title>
                 <div>
                   <h5>Informações</h5>
                 </div>
               </v-card-title>
               <v-card-text>
-                <v-form>
-                  <v-layout column>
-                    <v-flex xs12>
-                      <section>
-                        <h5>Pessoais</h5>
-
+                <v-container grid-list-md>
+                  <v-form>
+                    <v-layout column>
+                      <v-flex xs12>
+                        <section>
+                          <h5>Pessoais</h5>
                           <v-layout row wrap>
                             <v-flex xs12 sm12 md6 lg6 xl6>
                               <v-text-field
-                                            label="Nome"
-
+                                label="Nome"
                               ></v-text-field>
                               <v-text-field
                                 label="E-mail"
-
                               ></v-text-field>
                             </v-flex>
                             <v-flex xs12 sm12 md6 lg6 xl6>
@@ -74,12 +72,12 @@
                             </v-flex>
                           </v-layout>
 
-                      </section>
+                        </section>
 
-                    </v-flex>
-                    <v-divider></v-divider>
-                    <v-flex>
-                      <section style="margin-top: 15px">
+                      </v-flex>
+                      <v-divider></v-divider>
+                      <v-flex>
+                        <section style="margin-top: 15px">
 
                           <h5>Configuracionais</h5>
                           <v-layout row wrap>
@@ -93,12 +91,13 @@
 
                             </v-flex>
                           </v-layout>
-                      </section>
+                        </section>
 
-                    </v-flex>
+                      </v-flex>
 
-                  </v-layout>
-                </v-form>
+                    </v-layout>
+                  </v-form>
+                </v-container>
               </v-card-text>
               <v-card-actions>
                 <!--<v-spacer></v-spacer>-->
@@ -114,8 +113,9 @@
   </v-layout>
 </template>
 <script>
-  import {Api} from '../../api'
+  import { Api } from '../../api'
   import jwtDecode from 'jwt-decode'
+  import Vibrant from 'node-vibrant'
 
   export default {
 
@@ -142,13 +142,36 @@
         this.usuario.permissao = decoded.permicao
         this.userName = this.usuario.nome
       },
-      salvar:function () {
+      salvar: function () {
         console.log('salvou de mentirinha')
-        this.fecharDialog();
+        this.fecharDialog()
+      },
+      fazerCorPredominanteImgPerfil: function () {
+        let img = document.createElement('img');
+        img.setAttribute('src', '../../assets/logo.png')
+
+        img.addEventListener('load', function() {
+          let vibrant = new Vibrant(img);
+          let swatches = vibrant.swatches()
+          for (let swatch in swatches)
+            if (swatches.hasOwnProperty(swatch) && swatches[swatch])
+              console.log(swatch, swatches[swatch].getHex())
+
+          /*
+           * Results into:
+           * Vibrant #7a4426
+           * Muted #7b9eae
+           * DarkVibrant #348945
+           * DarkMuted #141414
+           * LightVibrant #f3ccb4
+           */
+        });
+
       }
 
     },
     mounted () {
+      this.fazerCorPredominanteImgPerfil()
       this.getUsuario()
     }
   }
