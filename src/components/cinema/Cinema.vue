@@ -165,9 +165,9 @@
       let vm = this
       this.dialogAssistir = true
       if (this.$route.path.indexOf('/watch') !== -1) {
-        window.addEventListener('beforeunload', function (e) {
-          if (vm.diminuir) {
-            vm.$http.delete(Api.url + '/contagem')
+        window.addEventListener('beforeunload', (e)=> {
+          if (this.diminuir) {
+            this.$http.delete(Api.url + '/contagem')
           }
           e.returnValue = undefined
           return undefined
@@ -260,7 +260,7 @@
 
       adicionarMinhaLista: function () {
         let token = localStorage.getItem('iflix-user-token')
-        LoginService.post(Api.url + '/lista/?q=my',
+        this.$http.post(Api.url + '/lista/?q=my',
           {
             tipo: this.videoSelecionado.tipo,
             usuario: jwtDecode(token).usuario.id,
@@ -301,7 +301,7 @@
         if (this.videoSelecionado.tipo === 'serie') {
           params.id = this.episodioSelecionado.id
         }
-        LoginService.post(Api.url + '/tempo',
+        this.$http.post(Api.url + '/tempo',
           params,
           {
             emulateJSON: true
@@ -315,7 +315,7 @@
           tipo: this.videoSelecionado.tipo,
           id: this.videoSelecionado.id
         }
-        LoginService.post(Api.url + '/contagem',
+        this.$http.post(Api.url + '/contagem',
           params, {emulateJSON: true}).then(res => {
         })
         if (this.podeSalvarDe15Em15) {

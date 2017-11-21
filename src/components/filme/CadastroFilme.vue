@@ -12,7 +12,6 @@
             <v-text-field
               label="Nome"
               v-model="form.nome"
-              :error-messages="errors.collect('form.nome')"
               v-validate="'required'"
               data-vv-name="form.nome"
               required
@@ -20,7 +19,6 @@
             <v-text-field
               label="Sinopse"
               v-model="form.sinopse"
-              :error-messages="errors.collect('form.sinopse')"
               v-validate="'required'"
               data-vv-name="form.sinopse"
               required
@@ -28,7 +26,6 @@
             <v-text-field
               label="Duracao"
               v-model="form.duracao"
-              :error-messages="errors.collect('form.duracao')"
               v-validate="'required'"
               data-vv-name="form.duracao"
               required
@@ -36,7 +33,6 @@
             <v-text-field
               label="Thumbnail"
               v-model="form.thumbnail"
-              :error-messages="errors.collect('form.thumbnail')"
               v-validate="'required'"
               data-vv-name="form.thumbnail"
               required
@@ -44,7 +40,6 @@
             <v-text-field
               label="Caminho do filme"
               v-model="form.caminho"
-              :error-messages="errors.collect('form.caminho')"
               v-validate="'required'"
               data-vv-name="form.caminho"
               required
@@ -52,7 +47,6 @@
             <v-select
               label="Gênero"
               v-model="form.genero"
-              :error-messages="errors.collect('form.genero')"
               v-validate="'required'"
               data-vv-name="form.genero"
               item-value="id"
@@ -64,14 +58,13 @@
               label="Idade recomendada"
               v-model="form.idadeRecomendada"
               :items="idadesRecomendadas"
-              :error-messages="errors.collect('form.idadeRecomendada')"
               v-validate="'required'"
               data-vv-name="form.idadeRecomendada"
-              item-value="id"
+              item-value="value"
               item-text="text"
               required
             ></v-select>
-            <input type="file" @change="upload">
+            <input type="file" @change="upload" ref="inputUpload">
             <v-card-actions>
               <v-btn @click="submit">submit</v-btn>
               <v-btn @click="clear">clear</v-btn>
@@ -100,7 +93,7 @@
         idadesRecomendadas: [
           {
             text: 'L',
-            value: 'L'
+            value: '-1'
           }, {
             text: '10',
             value: '10'
@@ -133,26 +126,26 @@
         )
 
       },
-      upload: (e) =>{
+      upload: (e)=>{
         e.preventDefault()
         let files = e.target.files
         this.file = files[0]
       },
       submit () {
 
-        this.$validator.validateAll().then((result) => {
-          if (result) {
+
             this.$http.post(Api.url + '/filme', this.form, {emulateJSON: true})
               .then(response => {
-                console.log(response)
-                let data = new FormData()
-                data.append('file', this.file)
+                let data = new FormData();
+
+                data.append('file', this.$refs.inputUpload.files[0])
                 data.append('id', response.data.id)
                 data.append('tipo', 'filme')
+
                 UploadService.post(data, {
-                  progress (e) {
+                  progress(e) {
                     if (e.lengthComputable) {
-                      console.log('e.loaded: %o, e.total: %o, percent: %o', e.loaded, e.total, (e.loaded / e.total ) * 100)
+//                      console.log('e.loaded: %o, e.total: %o, percent: %o', e.loaded, e.total, (e.loaded / e.total ) * 100)
                     }
                   }
                 }).then(function (response) {
@@ -161,10 +154,7 @@
               }, response => {
 //                                console.error(response.body)
               })
-          } else {
-//                        console.log("Erro");
-          }
-        })
+
       },
       clear () {
         this.form = {}

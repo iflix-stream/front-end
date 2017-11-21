@@ -140,7 +140,7 @@
           senha: this.senha
         }
         if (this.$refs.registerForm.validate()) {
-          LoginService.post(Api.url + '/usuario', formData, {emulateJSON: true})
+          this.$http.post(Api.url + '/usuario', formData, {emulateJSON: true})
             .then(response => {
               if (response.data.type === 'success') {
                 this.mensagem = response.data.message

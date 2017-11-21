@@ -20,7 +20,7 @@ export const IflixMailer = new Vue({
   },
   methods: {
     send: function () {
-      LoginService.post(Api.url + '/email', this.formData, {emulateJson:true});
+      this.$http.post(Api.url + '/email', this.formData, {emulateJson:true});
     }
   }
 })
