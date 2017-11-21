@@ -1,12 +1,13 @@
 <template>
-  <v-container fluid>
+  <v-container fluid id="containerFilmes">
     <v-layout column class="subtrai-margin-top">
       <section id="lancamentos">
         <v-flex xs12>
           <h5>Lançamentos</h5>
         </v-flex>
-        <v-flex>
-          <v-layout row wrap>
+        <v-flex   v-scroll="{target:'#containerFilmes', callback: carregarOnScroll}">
+          <v-layout row wrap ref="containerVideo" >
+
             <v-flex v-for="video in filmesAndSeries" xs12 sm6 md4 lg3 xl2
                     :key="video.id">
               <v-card class="card-filmes" v-on:click="renderizarCinema(video)">
@@ -146,7 +147,7 @@
         })
       },
       getFilmes: function (id) {
-        let url = Api.url + '/filme/'
+        let url = Api.url + '/filme/?pag='+this.cont
         if (this.$route.params.nomegenero !== undefined) {
           url += 'genero/' + this.$route.params.nomegenero + '/'
         }
@@ -201,7 +202,15 @@
       },
       mergeFilmesESeries: function () {
         this.filmesAndSeries = this.filmes.concat(this.series).sort().reverse()
-      }
+      },
+       carregarOnScroll:function(e){
+        let offset =  e.target.scrollTop;
+        let elHeight = this.$refs.containerVideo.offsetHeight*0.70;
+        if(offset > elHeight){
+            this.getFilmes();
+            this,g
+        }
+       }
     }
   }
 </script>
