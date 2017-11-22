@@ -4,8 +4,8 @@ export const Api = new Vue({
   data () {
     return {
       url: 'http://localhost/iflix/api',
-      shortUrl: 'http://192.168.1.2/iflix',
-      frontUrl: 'http://192.168.1.2:8080'
+      shortUrl: 'http://localhost/iflix',
+      frontUrl: 'http://localhost:8080'
     }
   },
   mounted () {

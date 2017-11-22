@@ -62,7 +62,7 @@
       <v-flex>
         <main>
 
-          <router-view style="overflow: auto; height: 85vh;"
+          <router-view style="overflow: auto; height: 84.5vh;"
                        class="grey darken-4 fazer-margins"></router-view>
 
         </main>

@@ -17,14 +17,14 @@
             <v-avatar
               :tile="false" size="150px" class="white"
             >
-              <img src="../../assets/logo.png" ref="imgPerfil">
+              <img :src="api.shortUrl+'/assets/avatares/' +usuario.avatar+'.png'" ref="imgPerfil">
             </v-avatar>
           </v-flex>
           <v-container>
             <v-layout row wrap class="text-xs-center">
               <v-flex offset-md1 offset-lg1></v-flex>
               <v-flex xs12 sm3 md3 lg3></v-flex>
-              <v-flex xs12 sm4 md4 lg4><h5>Nome</h5></v-flex>
+              <v-flex xs12 sm4 md4 lg4><h5>{{usuario.nome}}</h5></v-flex>
               <v-flex xs12 sm3 md3 lg3></v-flex>
               <v-flex offset-md1 offset-lg1></v-flex>
             </v-layout>
@@ -55,18 +55,22 @@
                           <v-layout row wrap>
                             <v-flex xs12 sm12 md6 lg6 xl6>
                               <v-text-field
+                                v-model="usuario.nome"
                                 label="Nome"
                               ></v-text-field>
                               <v-text-field
+                                v-model="usuario.email"
                                 label="E-mail"
                               ></v-text-field>
                             </v-flex>
                             <v-flex xs12 sm12 md6 lg6 xl6>
                               <v-text-field
+                                v-model="usuario.senha"
                                 label="Senha"
                                 type="password"
                               ></v-text-field>
                               <v-text-field
+                                v-model="usuario.dataNascimento"
                                 label="Nascimento"
                               ></v-text-field>
                             </v-flex>
@@ -78,13 +82,12 @@
                       <v-divider></v-divider>
                       <v-flex>
                         <section style="margin-top: 15px">
-
                           <h5>Configuracionais</h5>
                           <v-layout row wrap>
                             <v-flex xs12 sm12 md6 lg6 xl6>
-                              <v-switch label="Mandar emails de novos filmes/series"></v-switch>
-                              <v-switch label="Receber emails semanais de notícias"></v-switch>
-                              <v-switch label="Mostrar que estou online"></v-switch>
+                              <v-switch v-model="receberEmailsFilmesNovos" label="Mandar emails de novos filmes/series"></v-switch>
+
+                              <v-switch v-model="mostrarSeEstouOnline" label="Mostrar que estou online"></v-switch>
 
                             </v-flex>
                             <v-flex xs12 sm12 md6 lg6 xl6>
@@ -121,7 +124,11 @@
     data () {
       return {
         userName: '',
-        disName: true
+        disName: true,
+        api: {},
+        usuario: {},
+        receberEmailsFilmesNovos: true,
+        mostrarSeEstouOnline: false
       }
     },
     methods: {
@@ -147,6 +154,7 @@
       }
     },
     mounted () {
+      this.api  = Api
       this.getUsuario()
     }
   }

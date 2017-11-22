@@ -7,7 +7,7 @@
         </v-btn>
         <v-toolbar-title>Assistindo {{videoSelecionado.nome}}</v-toolbar-title>
       </v-toolbar>
-      <v-layout row wrap class="grey darken-4" :style="calculaAlturaCinema()" style="margin-top: 58px">
+      <v-layout row wrap class="grey darken-4" :style="calculaAlturaCinema()">
         <v-flex xs12 sm12 md9 lg9>
           <v-container fluid grid-list-md class="subtrai-paddings-tela"
                        style="">
@@ -435,7 +435,7 @@
     .video-js {
       /*position: inherit !important;*/
       width: 100% !important;
-      height: calc(100vh - 20vh);
+      height: calc(100vh - 27vh);
     }
 
   }

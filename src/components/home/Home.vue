@@ -1,6 +1,6 @@
 <template>
     <v-container fluid >
-        <v-layout column class="subtrai-margin-top">
+        <v-layout column>
             <section id="lancamentos" >
                 <v-flex xs12>
                     <h5>Lançamentos</h5>
@@ -244,9 +244,6 @@
         opacity: 0.8;
     }
 
-    .subtrai-margin-top {
-        margin-top: 67px;
-    }
 
     @media screen and (max-width: 480px) {
         /*.subtrai-margin-top {*/
