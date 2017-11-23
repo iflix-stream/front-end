@@ -137,7 +137,6 @@
         }
       },
       submit () {
-        console.log(this.form)
         this.$http.post(Api.url + '/filme', this.form, {emulateJSON: true})
           .then(response => {
             if (response.data.id !== undefined) {

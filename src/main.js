@@ -19,6 +19,7 @@ import Meus from './components/meus/Meu.vue'
 
 const filters = require('./filters/filters');
 
+
 Vue.use(VueResource)
 Vue.use(VueRouter)
 Vue.use(Vuetify)
@@ -26,7 +27,9 @@ Vue.use(VueVideoPlayer)
 Vue.use(VeeValidate)
 Vue.use(VueTheMask)
 
+
 Vue.http.headers.common['Authorization'] = localStorage.getItem('iflix-user-token')
+Vue.http.options.emulateJSON = true
 const routes = [
   {
     path: '/login',

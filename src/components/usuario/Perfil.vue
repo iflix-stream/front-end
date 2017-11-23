@@ -68,8 +68,8 @@
                                 label="Nome"
                               ></v-text-field>
                               <v-text-field disabled
-                                v-model="usuario.email"
-                                label="E-mail"
+                                            v-model="usuario.email"
+                                            label="E-mail"
                               ></v-text-field>
                             </v-flex>
 
@@ -92,11 +92,6 @@
                           <v-switch color="indigo" v-model="mudaSenha" label="Mudar senha"></v-switch>
                           <v-layout column>
                             <v-flex xs12 sm12 md6 lg6 xl6 v-if="mudaSenha">
-                              <v-text-field
-                                v-model="usuario.senhaAtual"
-                                label="Senha atual"
-                                type="password"
-                              ></v-text-field>
                               <v-text-field
                                 v-model="usuario.novaSenha"
                                 label="Nova Senha"
@@ -220,7 +215,7 @@
       getUsuario: function () {
         let token = localStorage.getItem('iflix-user-token')
         let decoded = jwtDecode(token)
-        this.$http.get(`${Api.url}/usuario/id/${decoded.usuario.id}`).then(response =>{
+        this.$http.get(`${Api.url}/usuario/id/${decoded.usuario.id}`).then(response => {
           this.usuario = response.data
           this.configuraUsuarioToDisplay()
         })
@@ -265,23 +260,29 @@
       },
 
       salvar: function () {
-       this.usuario.dataNascimento = this.formataDataParaOServidor()
+        this.usuario.dataNascimento = this.formataDataParaOServidor()
+
         let user = {
+          id: this.usuario.id,
           nome: this.usuario.nome,
           avatar: this.avatarSelecionado
         }
-        if(this.mudaSenha){
-          if (this.verificaSenhas() ) {
-            user.senha = this.usuario.senha
-            user.novaSenha = this.usuario.novaSenha
-
+        if (this.mudaSenha) {
+          if (this.verificaSenhas()) {
+            user.senha = this.usuario.novaSenha
           } else {
             this.compilaAlert('warning', 'As senhas devem conferir')
           }
         }
-        this.$http.put(`${Api.url}/usuario`, user).then(response => {
+        this.$http.put(`${Api.url}/usuario`,
+          {
+            id: user.id,
+            nome: user.nome
+          }
+          ).then(response => {
+          console.log(response)
           this.compilaAlert(response.data.type, response.data.message)
-        }, err =>{
+        }, err => {
           console.log(err)
         })
 //        console.log('salvou de mentirinha')
