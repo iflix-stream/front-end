@@ -174,13 +174,15 @@
 
 </template>
 <script>
-  import { Api } from '../../api'
+  import {Api} from '../../api'
   import jwtDecode from 'jwt-decode'
   import moment from 'moment'
+  import axios from 'axios'
+  import VueAxios from 'vue-axios'
 
   export default {
 
-    data () {
+    data() {
       return {
         mudaSenha: false,
         dialogSelecionaAvatar: false,
@@ -274,12 +276,8 @@
             this.compilaAlert('warning', 'As senhas devem conferir')
           }
         }
-        this.$http.put(`${Api.url}/usuario`,
-          {
-            id: user.id,
-            nome: user.nome
-          }
-          ).then(response => {
+
+        this.$http.put(`${Api.url}/usuario`, user).then(response => {
           console.log(response)
           this.compilaAlert(response.data.type, response.data.message)
         }, err => {
@@ -289,15 +287,15 @@
 //        this.fecharDialog()
       },
 
-      formataDataDoServidor () {
+      formataDataDoServidor() {
         return moment(this.usuario.dataNascimento, 'YYYY-MM-DD').format('DD/MM/YYYY')
       },
 
-      formataDataParaOServidor () {
+      formataDataParaOServidor() {
         return moment(this.usuario.dataNascimento, 'DD-MM-YYYY').format('YYYY-MM-DD')
       }
     },
-    mounted () {
+    mounted() {
       moment.locale()
       this.getAvatares()
       this.api = Api

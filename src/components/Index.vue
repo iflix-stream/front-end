@@ -1,7 +1,7 @@
 <template>
-  <v-app dark >
+  <v-app dark>
     <header>
-      <v-toolbar class="primary" >
+      <v-toolbar class="primary">
         <v-toolbar-items>
           <v-btn to="/home" flat>IFlix</v-btn>
           <v-menu>
@@ -68,26 +68,26 @@
         </main>
       </v-flex>
       <v-flex>
-      <v-bottom-nav class="hidden-md-and-up"
+        <v-bottom-nav class="hidden-md-and-up"
 
-                    shift
-                    :value="true"
-                    :active.sync="bottomTabs"
-                    primary
-      >
-        <v-btn dark :to="'/'+this.formataNomeParaUrl()+'/minha-lista'">
-          <span>Favoritos</span>
-          <v-icon>favorite</v-icon>
-        </v-btn>
-        <v-btn dark to="/home">
-          <span>Início</span>
-          <v-icon>home</v-icon>
-        </v-btn>
-        <v-btn dark :to="'/perfil'">
-          <span>Perfil</span>
-          <v-icon>account_circle</v-icon>
-        </v-btn>
-      </v-bottom-nav>
+                      shift
+                      :value="true"
+                      :active.sync="bottomTabs"
+                      primary
+        >
+          <v-btn dark :to="'/'+this.formataNomeParaUrl()+'/minha-lista'">
+            <span>Favoritos</span>
+            <v-icon>favorite</v-icon>
+          </v-btn>
+          <v-btn dark to="/home">
+            <span>Início</span>
+            <v-icon>home</v-icon>
+          </v-btn>
+          <v-btn dark :to="'/perfil'">
+            <span>Perfil</span>
+            <v-icon>account_circle</v-icon>
+          </v-btn>
+        </v-bottom-nav>
       </v-flex>
       <v-flex>
         <v-footer class="pa-3 blue-grey darken-4 hidden-md-and-down">
@@ -100,9 +100,8 @@
   </v-app>
 </template>
 <script>
-  import { Api } from '../api'
+  import {Api} from '../api'
   import perfil from '../components/usuario/Perfil.vue'
-  import bus from '../util/bus'
 
   export default {
     name: 'app',
@@ -143,7 +142,7 @@
         avatar: ''
       }
     }),
-    mounted () {
+    mounted() {
       this.getGeneros()
       this.getUsuario()
     },
@@ -190,6 +189,9 @@
         let token = localStorage.getItem('iflix-user-token')
         let decoded = jwtDecode(token)
         this.usuario = decoded.usuario
+        this.$http.get(`${Api.url}/usuario/id/${decoded.usuario.id}`).then(res => {
+          this.usuario = res.data
+        })
         if (decoded.usuario.nome.length > 15) {
 
           this.usuario.nome = decoded.usuario.nome.substring(0, 12) + '...'
@@ -218,7 +220,8 @@
   .pesquisa.input-group.input-group--focused .input-group__prepend-icon {
     color: #f4f4f4;
   }
-  @media screen and (max-width: 600px)  {
+
+  @media screen and (max-width: 600px) {
     .fazer-margins {
       padding-bottom: 500px;
     }

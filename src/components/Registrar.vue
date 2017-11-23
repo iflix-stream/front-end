@@ -7,7 +7,7 @@
 
       <v-flex offset-sm2 offset-md3 offset-lg4 xs12 sm12 md6 lg4 style="position: relative; margin-top: 5vh">
         <h3 style="text-align: center;">iFlix</h3>
-        <v-card >
+        <v-card>
           <v-card-text>
 
 
@@ -42,23 +42,13 @@
                     required
                     v-model="senha"
                   ></v-text-field>
+                  <v-text-field
+                    label="Data de nascimento"
+                    v-model="dataNascimentoFormatada"
+                    v-mask="'##/##/####'"
+                  ></v-text-field>
                   <v-flex>
-                    <v-dialog
-                      persistent
-                      v-model="modalData"
-                      lazy
-                      full-width
-                    >
-                      <v-text-field
-                        slot="activator"
-                        label="Data de nascimento"
-                        v-model="dataNascimentoFormatada"
-                        v-mask="'##/##/####'"
-                      ></v-text-field>
-                    </v-dialog>
-                  </v-flex>
-                  <v-flex>
-                    <v-btn block primary large v-on:click="registrar" :disabled="valido">Registrar</v-btn>
+                    <v-btn block primary large v-on:click="registrar">Registrar</v-btn>
                     <a href="#/login">Voltar ao login</a>
                   </v-flex>
 
@@ -79,16 +69,16 @@
 </template>
 
 <script>
-  import { Api } from '../api'
-  import {IflixMailer} from '../util/mailer'
+  import {Api} from '../api'
   import {Gradiente} from '../util/gradiente'
+  import moment from 'moment'
 
   export default {
     name: 'app',
-    data () {
+    data() {
       return {
         e1: true,
-        valido: true,
+        valido: false,
 
         regrasDeNome: [
           (v) => !!v || 'O nome é requirido',
@@ -107,47 +97,48 @@
         modalData: '',
         data_nascimento: '',
         dataNascimentoFormatada: null,
-        avatar: 1,
+        avatar: '1.png',
         email: '',
         senha: '',
         alert: false,
         mensagem: ''
       }
     },
-    mounted () {
+    mounted() {
       Gradiente.initGradiente(this.$refs.flexBackground)
     },
     methods: {
+      formataDataParaOServidor() {
+        return moment(this.dataNascimentoFormatada, 'DD-MM-YYYY').format('YYYY-MM-DD')
+      },
       registrar: function () {
 
         const formData = {
           nome: this.nome,
-          data_nascimento: this.data_nascimento,
+          data_nascimento: this.formataDataParaOServidor(),
           avatar: this.avatar,
           email: this.email,
           senha: this.senha
         }
-        if (this.$refs.registerForm.validate()) {
-          this.$http.post(Api.url + '/usuario', formData, {emulateJSON: true})
-            .then(response => {
-              if (response.data.type === 'success') {
-                this.mensagem = response.data.message
-                this.alert = true
-                this.icone = 'done'
-                this.corAlert = 'green'
-              } else if (response.data.type === 'error') {
-                this.mensagem = response.data.message
-                this.alert = true
-                this.icone = 'error'
-                this.corAlert = 'red'
-              }
 
-            }, response => {
-              console.error(response.body)
-            })
-          IflixMailer.send();
-        }
+        this.$http.post(Api.url + '/usuario', formData, {emulateJSON: true})
+          .then(response => {
+            console.log(response)
+            if (response.data.type === 'success') {
+              this.mensagem = response.data.message
+              this.alert = true
+              this.icone = 'done'
+              this.corAlert = 'green'
+            } else if (response.data.type === 'error') {
+              this.mensagem = response.data.message
+              this.alert = true
+              this.icone = 'error'
+              this.corAlert = 'red'
+            }
 
+          }, response => {
+            console.error(response.body)
+          })
       }
     }
   }
