@@ -53,20 +53,8 @@
                         slot="activator"
                         label="Data de nascimento"
                         v-model="dataNascimentoFormatada"
-                        readonly
+                        v-mask="'##/##/####'"
                       ></v-text-field>
-                      <v-date-picker v-model="data_nascimento" locale="pt-br" v-mask="'##/##/####'"
-                                     :date-format="date=>
-                                      new Date(date).toLocaleDateString()"
-                                     :formatted-value.sync="dataNascimentoFormatada">
-                        <template slot-scope="{ save, cancel }">
-                          <v-card-actions>
-                            <v-spacer></v-spacer>
-                            <v-btn flat color="primary" @click="cancel">Cancelar</v-btn>
-                            <v-btn flat color="primary" @click="save">OK</v-btn>
-                          </v-card-actions>
-                        </template>
-                      </v-date-picker>
                     </v-dialog>
                   </v-flex>
                   <v-flex>
@@ -147,12 +135,6 @@
                 this.alert = true
                 this.icone = 'done'
                 this.corAlert = 'green'
-                IflixMailer.formData.assunto = 'Usuario Criado com sucesso!'
-                IflixMailer.formData.para.email = this.email
-                IflixMailer.formData.para.nome = this.nome
-                IflixMailer.formData.template = 'novo-usuario'
-                IflixMailer.formData.variaveisTemplates.nomepessoa = this.nome
-                IflixMailer.formData.url = Api.frontUrl + '/#/login'
               } else if (response.data.type === 'error') {
                 this.mensagem = response.data.message
                 this.alert = true

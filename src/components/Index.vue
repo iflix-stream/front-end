@@ -39,7 +39,7 @@
                   </v-flex>
                   <v-flex class="hidden-sm-and-down">
                     <v-avatar size="36px">
-                      <img :src="api.shortUrl +'/assets/avatares/'+ usuario.avatar + '.png'"
+                      <img :src="`${api.shortUrl}/assets/avatares/${usuario.avatar}`"
                            alt="Imagem de perfil"/>
                     </v-avatar>
                     <strong>{{usuario.nome}}</strong>

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import VueResource from 'vue-resource'
+import VueTheMask from 'vue-the-mask'
 
 import Vuetify from 'vuetify'
 import App from './App.vue'
@@ -15,14 +16,15 @@ import VeeValidate from 'vee-validate'
 import Registrar from './components/Registrar.vue'
 import Cinema from './components/cinema/Cinema.vue'
 import Meus from './components/meus/Meu.vue'
-import VueMask from 'v-mask'
 
-Vue.use(VueMask)
+const filters = require('./filters/filters');
+
 Vue.use(VueResource)
 Vue.use(VueRouter)
 Vue.use(Vuetify)
 Vue.use(VueVideoPlayer)
 Vue.use(VeeValidate)
+Vue.use(VueTheMask)
 
 Vue.http.headers.common['Authorization'] = localStorage.getItem('iflix-user-token')
 const routes = [
@@ -128,6 +130,7 @@ new Vue({
 
   el: '#app',
   router,
+  filters: filters,
 
   render: h => h(App)
 })
