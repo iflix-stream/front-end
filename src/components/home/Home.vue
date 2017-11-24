@@ -5,7 +5,7 @@
                 <v-flex xs12>
                     <h5>Lançamentos</h5>
                 </v-flex>
-                <v-flex v-scroll="{target:'#lancamentos', callback: carregarOnScroll}">
+                <v-flex>
                     <v-layout row wrap ref="containerVideo">
 
                         <v-flex v-for="video in filmesAndSeries" xs12 sm6 md4 lg3 xl2
@@ -60,7 +60,7 @@
             filmes: [],
             series: [],
             filmesAndSeries: [],
-            pag: 1
+
         }),
         watch: {
             '$route.params.nomegenero': function () {
@@ -148,18 +148,10 @@
                     }
                 })
             },
-            getFilmes: function (id, pag) {
-                let url = Api.url + '/filme';
-                if(pag !== undefined){
-                    url +='/?pag='+pag;
-                }
-
+            getFilmes: function () {
+                let url = Api.url + '/filme/';
                 if (this.$route.params.nomegenero !== undefined) {
                     url += 'genero/' + this.$route.params.nomegenero + '/'
-                }
-
-                if (id !== undefined) {
-                    url += 'id/' + id
                 }
                 this.$http.get(url, {
                     params: {
@@ -171,9 +163,7 @@
                 }).then(
                     response => {
                         this.filmes = response.body;
-                        if(pag !== undefined){
-                            this.filmes.push(response.body)
-                        }
+
                         if (this.filmes !== undefined) {
                             for (let i = 0; i < this.filmes.length; i++) {
                                 this.filmes[i].tipo = 'filme'
@@ -183,14 +173,12 @@
                     }
                 )
             },
-            getSeries: function (pag) {
-                let url = Api.url + '/serie/pag=' + this.pag;
+            getSeries: function () {
+                let url = Api.url + '/serie/';
                 if (this.$route.params.nomegenero !== undefined) {
                     url = Api.url + '/serie/genero/' + this.$route.params.nomegenero + '/'
                 }
-                if(pag !== undefined){
-                    url +='/?pag='+pag;
-                }
+
                 this.$http.get(url,
                     {
                         params: {
@@ -203,9 +191,7 @@
                 ).then(
                     response => {
                         this.series = response.body
-                        if(pag !== undefined){
-                            this.series.push(response.body)
-                        }
+
                         if (this.series !== undefined) {
                             for (let i = 0; i < this.series.length; i++) {
                                 this.series[i].tipo = 'serie'
@@ -217,17 +203,6 @@
             },
             mergeFilmesESeries: function () {
                 this.filmesAndSeries = this.filmes.concat(this.series).sort().reverse()
-            },
-            carregarOnScroll: function (e) {
-                let offset = e.target.scrollTop;
-                let elHeight = this.$refs.containerVideo.offsetHeight * 0.70;
-
-                if (offset > elHeight) {
-                    this.pag++;
-                    this.getFilmes(undefined, this.pag)
-                    this.getSeries(this.pag)
-                    console.log(offset)
-                }
             }
         }
     }

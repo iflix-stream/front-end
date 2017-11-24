@@ -135,7 +135,6 @@
       },
       getUltimasBuscas: function () {
         this.$http.get(`${Api.url}/pesquisa/contexto/midias`).then(res => {
-          console.log(res)
           this.ultimasBuscas = res.data
         })
       },
@@ -214,17 +213,6 @@
       mergeFilmesESeries: function () {
         this.filmesAndSeries = this.filmes.concat(this.series).sort().reverse()
         this.renderizaMelhorResultado = true
-      },
-      carregarOnScroll: function (e) {
-        let offset = e.target.scrollTop
-        let elHeight = this.$refs.containerVideo.offsetHeight * 0.70
-
-        if (offset > elHeight) {
-          this.pag++
-          this.getFilmes(undefined, this.pag)
-          this.getSeries(this.pag)
-          console.log(offset)
-        }
       }
     }
   }

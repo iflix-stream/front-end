@@ -19,13 +19,10 @@
 
         <v-flex style="margin-right: 25px">
           <v-layout align-center row spacer slot="header" style="float: right">
-            <v-flex style="margin-right: 25px;">
-              <v-form>
-                <v-text-field class="pesquisa hidden-sm-and-down"
-                              label="Pesquisar"
-                              prepend-icon="search"
-                ></v-text-field>
-              </v-form>
+            <v-flex class="hidden-sm-and-down">
+              <v-btn flat icon color="white" to="/search">
+                <v-icon>search</v-icon>
+              </v-btn>
             </v-flex>
 
             <v-flex>
@@ -60,7 +57,7 @@
     <v-layout column>
       <v-flex>
         <main>
-          <router-view style="overflow: auto; height: 83.1vh;"
+          <router-view style="overflow: auto; height: 85vh;"
                        class="grey darken-4 fazer-margins"></router-view>
         </main>
       </v-flex>
@@ -90,7 +87,7 @@
         </v-bottom-nav>
       </v-flex>
       <v-flex>
-        <v-footer class="pa-3 blue-grey darken-4">
+        <v-footer class="pa-3 blue-grey darken-4" style="bottom: 0; width: 100%; position: fixed">
           iFlix Streaming
           <v-spacer></v-spacer>
           <div>© {{ new Date().getFullYear() }}</div>
@@ -100,7 +97,7 @@
   </v-app>
 </template>
 <script>
-  import { Api } from '../api'
+  import {Api} from '../api'
   import perfil from '../components/usuario/Perfil.vue'
 
   export default {
@@ -143,7 +140,7 @@
         avatar: ''
       }
     }),
-    mounted () {
+    mounted() {
       this.getGeneros()
       this.getUsuario()
     },
