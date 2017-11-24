@@ -1,5 +1,5 @@
 <template>
-  <v-app dark>
+  <v-app dark class="grey darken-4">
     <header>
       <v-toolbar class="primary">
         <v-toolbar-items>
@@ -60,7 +60,7 @@
     <v-layout column>
       <v-flex>
         <main>
-          <router-view style="overflow: auto; height: 84.5vh;"
+          <router-view style="overflow: auto; height: 83.1vh;"
                        class="grey darken-4 fazer-margins"></router-view>
         </main>
       </v-flex>
@@ -90,7 +90,7 @@
         </v-bottom-nav>
       </v-flex>
       <v-flex>
-        <v-footer class="pa-3 blue-grey darken-4 hidden-md-and-down">
+        <v-footer class="pa-3 blue-grey darken-4">
           iFlix Streaming
           <v-spacer></v-spacer>
           <div>© {{ new Date().getFullYear() }}</div>
@@ -229,7 +229,7 @@
 
   @media screen and (max-width: 600px) {
     .fazer-margins {
-      padding-bottom: 500px;
+      padding-bottom: 80px;
     }
   }
 
