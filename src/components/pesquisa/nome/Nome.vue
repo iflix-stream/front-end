@@ -1,27 +1,52 @@
 <template>
   <v-layout column>
-    <section id="pesquisa" >
+    <section id="pesquisa">
       <v-container fluid>
         <v-layout>
           <v-flex xs12 class="text-xs-center">
-            <v-form>
               <v-text-field
-                v-on:keyup="getFilmes(); getSeries()"
+                v-on:blur="cadastraPesquisa()"
+                v-on:paste="getFilmes(); getSeries()"
+                v-on:keyup="pesquisar($event)"
                 label="Buscar"
                 v-model="busca"
               ></v-text-field>
-            </v-form>
           </v-flex>
         </v-layout>
       </v-container>
     </section>
-    <section id="resultados" v-if="busca !== ''">
-      <article id="melhor-resultado">
+    <section id="resultados">
+      <article id="ultimos-buscados" v-if="busca == ''">
+        <v-flex class="text-xs-center">
+          <h4>Ultimos buscados</h4>
+        </v-flex>
+        <v-layout column>
+          <v-flex>
+            <v-list one-line>
+              <template v-for="(item, index) in ultimasBuscas">
+                <v-list-tile avatar ripple v-bind:key="index" @click="busca = item.texto; getFilmes(); getSeries()">
+                  <v-list-tile-content>
+                    <v-list-tile-title>{{ item.texto }}</v-list-tile-title>
+
+                  </v-list-tile-content>
+                </v-list-tile>
+                <v-divider v-if="index + 1 < ultimasBuscas"></v-divider>
+              </template>
+            </v-list>
+          </v-flex>
+        </v-layout>
+      </article>
+      <article id="erro-nenhum-achado" v-if="busca !== '' && filmesAndSeries[0] === undefined">
+        <v-flex class="text-xs-center">
+          <h4>Oops, parece que não encontramos o que procurava</h4>
+        </v-flex>
+      </article>
+      <article id="melhor-resultado" v-if="busca !== '' && filmesAndSeries[0] !== undefined">
         <v-container fluid>
           <v-layout column>
             <v-flex class="text-xs-center"><h4>Melhor resultado</h4></v-flex>
             <v-flex xs12>
-              <v-card v-if="renderizaMelhorResultado">
+              <v-card v-if="renderizaMelhorResultado" @click="renderizarCinema(filmesAndSeries[0])">
                 <v-card-media :src="filmesAndSeries[0].thumbnail" height="200px">
                 </v-card-media>
                 <v-card-title primary-title>
@@ -35,7 +60,7 @@
           </v-layout>
         </v-container>
       </article>
-      <article id="demais-resultados">
+      <article id="demais-resultados" v-if="busca !== '' && filmesAndSeries !== undefined && filmesAndSeries.length >1">
         <v-flex class="text-xs-center">
           <h4>Demais resultados</h4>
         </v-flex>
@@ -43,7 +68,7 @@
           <v-flex>
             <v-list two-line>
               <template v-for="(item, index) in filmesAndSeries.slice(1)">
-                <v-list-tile avatar ripple v-bind:key="index" @click="">
+                <v-list-tile avatar ripple v-bind:key="index" @click="renderizarCinema(item)">
                   <v-list-tile-content>
                     <v-list-tile-title>{{ item.nome }}</v-list-tile-title>
                     <v-list-tile-sub-title>Classificação: {{ item.classificacao}}</v-list-tile-sub-title>
@@ -70,6 +95,7 @@
     name: 'app',
     data: () => ({
       videoSelecionado: '',
+      ultimasBuscas: [],
       filmes: [],
       series: [],
       filmesAndSeries: [],
@@ -80,13 +106,39 @@
     created () {
       document.addEventListener('beforeunload', this.handler)
     },
+    watch: {
+      'this.busca' :function () {
+        if(this.busca === ''){
+          this.getUltimasBuscas()
+        }
+      }
+    },
     mounted () {
-      this.getFilmes()
-      this.getSeries()
-
+      this.getUltimasBuscas()
     },
     methods: {
+      pesquisar: function(event) {
+        if(event.keyCode === 13){
+          this.getFilmes(); this.getSeries()
+        }else{
+          this.getFilmes(); this.getSeries()
+        }
+      },
 
+      cadastraPesquisa: function () {
+        if (this.busca !== '' && this.busca !== undefined) {
+          this.$http.post(`${Api.url}/pesquisa/`, {
+            contexto: 'midias',
+            texto: this.busca
+          })
+        }
+      },
+      getUltimasBuscas: function () {
+        this.$http.get(`${Api.url}/pesquisa/contexto/midias`).then(res => {
+          console.log(res)
+          this.ultimasBuscas = res.data
+        })
+      },
       porcentagemVista: function (video) {
         if (video.tipo === 'filme') {
           return ((video.tempoAssistido / video.duracao) * 100)

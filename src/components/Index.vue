@@ -71,6 +71,10 @@
                       :value="isShowTabs"
                       :active.sync="bottomTabs"
         >
+          <v-btn dark to="/home">
+            <span>Início</span>
+            <v-icon>home</v-icon>
+          </v-btn>
           <v-btn dark :to="'/'+this.formataNomeParaUrl()+'/minha-lista'">
             <span>Favoritos</span>
             <v-icon>favorite</v-icon>
@@ -78,10 +82,6 @@
           <v-btn dark to="/search">
             <span>Pesquisar</span>
             <v-icon>search</v-icon>
-          </v-btn>
-          <v-btn dark to="/home">
-            <span>Início</span>
-            <v-icon>home</v-icon>
           </v-btn>
           <v-btn dark :to="'/perfil'">
             <span>Perfil</span>
@@ -106,7 +106,7 @@
   export default {
     name: 'app',
     data: () => ({
-      bottomTabs: 1,
+      bottomTabs: 0,
       isShowTabs: true,
       dialog: false,
       notifications: false,
@@ -152,7 +152,7 @@
     },
     watch: {
       '$route': function () {
-        this.isShowTabs = this.$route.name !== 'cinema';
+        this.isShowTabs = this.$route.name !== 'cinema'
       }
     },
     methods: {
