@@ -22,7 +22,7 @@
           <v-layout align-center row spacer slot="header" style="float: right">
             <v-flex style="margin-right: 25px;">
               <v-form>
-                <v-text-field class="pesquisa"
+                <v-text-field class="pesquisa hidden-sm-and-down"
                               label="Pesquisar"
                               prepend-icon="search"
                 ></v-text-field>
