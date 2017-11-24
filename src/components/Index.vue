@@ -14,7 +14,6 @@
               </v-list-tile>
             </v-list>
           </v-menu>
-
         </v-toolbar-items>
         <v-spacer></v-spacer>
 
@@ -61,23 +60,24 @@
     <v-layout column>
       <v-flex>
         <main>
-
           <router-view style="overflow: auto; height: 84.5vh;"
                        class="grey darken-4 fazer-margins"></router-view>
-
         </main>
       </v-flex>
       <v-flex>
         <v-bottom-nav class="hidden-md-and-up"
-
+                      color="transparent"
                       shift
-                      :value="true"
+                      :value="isShowTabs"
                       :active.sync="bottomTabs"
-                      primary
         >
           <v-btn dark :to="'/'+this.formataNomeParaUrl()+'/minha-lista'">
             <span>Favoritos</span>
             <v-icon>favorite</v-icon>
+          </v-btn>
+          <v-btn dark to="/search">
+            <span>Pesquisar</span>
+            <v-icon>search</v-icon>
           </v-btn>
           <v-btn dark to="/home">
             <span>Início</span>
@@ -100,13 +100,14 @@
   </v-app>
 </template>
 <script>
-  import {Api} from '../api'
+  import { Api } from '../api'
   import perfil from '../components/usuario/Perfil.vue'
 
   export default {
     name: 'app',
     data: () => ({
       bottomTabs: 1,
+      isShowTabs: true,
       dialog: false,
       notifications: false,
       sound: true,
@@ -142,12 +143,17 @@
         avatar: ''
       }
     }),
-    mounted() {
+    mounted () {
       this.getGeneros()
       this.getUsuario()
     },
     components: {
       perfil
+    },
+    watch: {
+      '$route': function () {
+        this.isShowTabs = this.$route.name !== 'cinema';
+      }
     },
     methods: {
       go: function (a) {

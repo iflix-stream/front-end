@@ -16,6 +16,7 @@ import VeeValidate from 'vee-validate'
 import Registrar from './components/Registrar.vue'
 import Cinema from './components/cinema/Cinema.vue'
 import Meus from './components/meus/Meu.vue'
+import Nome from './components/pesquisa/nome/Nome.vue'
 
 const filters = require('./filters/filters');
 
@@ -69,9 +70,14 @@ const routes = [
       },
       {
         path: 'search/:nome',
-        component: Home
+        component: Nome
       },
       {
+        path: 'search',
+        component: Nome
+      },
+      {
+        name: "cinema",
         path: 'watch/:tipo/:id',
         component: Cinema
       },
