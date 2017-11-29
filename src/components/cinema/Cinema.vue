@@ -126,11 +126,11 @@
   </v-flex>
 </template>
 <script>
-  import { Api } from '../../api'
+  import {Api} from '../../api'
   import jwtDecode from 'jwt-decode'
 
   export default {
-    data () {
+    data() {
       return {
         snackbar: {
           text: '',
@@ -160,7 +160,7 @@
       }
     },
 
-    mounted () {
+    mounted() {
 
       this.buscaVideo()
       let vm = this
@@ -192,18 +192,18 @@
             user: jwtDecode(localStorage.getItem('iflix-user-token')).usuario.id
           }
         }).then(res => {
-          this.videoSelecionado = res.body[0]
-          this.configurarCinema()
+          this.videoSelecionado = res.body[0];
+          this.configurarCinema();
           this.playerPronto = true
         })
       },
 
       configurarCinema: function () {
-        this.defineTipo()
-        this.ativadorDialog = true
-        this.dialogAssistir = true
-        this.isAdicionado()
-        this.updatePlayerOptionsWithSelectedVideo(this.videoSelecionado)
+        this.defineTipo();
+        this.ativadorDialog = true;
+        this.dialogAssistir = true;
+        this.isAdicionado();
+        this.updatePlayerOptionsWithSelectedVideo(this.videoSelecionado);
         this.formatarSinopse()
 //        this.calcularAlturaPlayer()
       },
@@ -238,25 +238,24 @@
       },
 
       updatePlayerOptionsWithSelectedVideo: function (video) {
-        this.playerOptions.sources[0].src = Api.url + '/' + video.tipo + '/?stream=true&id=' + video.id
+        this.playerOptions.sources[0].src = Api.url + '/' + video.tipo + '/?stream=true&id=' + video.id;
+        this.playerOptions.poster = `${Api.shortUrl}/video/filme/backgrounds/${video.id}.jpg`;
         if (video.tipo === 'serie') {
           this.setEpisode(video.primeiro_episodio)
           this.playerOptions.sources[0].src = Api.url + '/' + video.tipo + '/?stream=true&id=' + video.primeiro_episodio.id
+          this.playerOptions.poster = `${Api.shortUrl}/video/serie/backgrounds/${episodio.id}.jpg`;
           if (video.ultimo_ep_assistido !== 0) {
             this.setEpisode(video.ultimo_ep_assistido)
+            this.playerOptions.poster = `${Api.shortUrl}/video/serie/backgrounds/${video.ultimo_ep_assistido.id}.jpg`;
             this.playerOptions.sources[0].src = Api.url + '/' + video.tipo + '/?stream=true&id=' + video.ultimo_ep_assistido.id
           }
-
         }
-
-        this.playerOptions.poster = video.thumbnail
-
       },
 
       setEpisode: function (episodio) {
-        this.podeSalvarDe15Em15 = false
-        this.episodioSelecionado = episodio
-        this.playerOptions.sources[0].src = Api.url + '/serie/?stream=true&id=' + episodio.id
+        this.podeSalvarDe15Em15 = false;
+        this.episodioSelecionado = episodio;
+        this.playerOptions.sources[0].src = Api.url + '/serie/?stream=true&id=' + episodio.id;
       },
 
       adicionarMinhaLista: function () {
@@ -312,7 +311,7 @@
         }
       },
 
-      onPlayerPlay (player) {
+      onPlayerPlay(player) {
         this.diminuir = true
         let params = {
           tipo: this.videoSelecionado.tipo,
@@ -328,42 +327,42 @@
 
         }
       },
-      onPlayerPause (player) {
+      onPlayerPause(player) {
         this.podeSalvarDe15Em15 = false
         this.diminuir = false
         this.$http.delete(Api.url + '/contagem')
         this.salvarTempo(player)
 
       },
-      onPlayerEnded (player) {
+      onPlayerEnded(player) {
         this.diminuir = false
         this.$http.delete(Api.url + '/contagem')
         this.salvarTempo(player)
       },
-      onPlayerLoadeddata (player) {
+      onPlayerLoadeddata(player) {
         // console.log('player Loadeddata!', player)
       },
-      onPlayerWaiting (player) {
+      onPlayerWaiting(player) {
         // console.log('player Waiting!', player)
       },
-      onPlayerPlaying (player) {
+      onPlayerPlaying(player) {
         // console.log('player Playing!', player)
       },
-      onPlayerTimeupdate (player) {
+      onPlayerTimeupdate(player) {
         // console.log('player Timeupdate!', player.currentTime())
       },
-      onPlayerCanplay (player) {
+      onPlayerCanplay(player) {
         // console.log('player Canplay!', player)
       },
-      onPlayerCanplaythrough (player) {
+      onPlayerCanplaythrough(player) {
         // console.log('player Canplaythrough!', player)
       },
       // or listen state event
-      playerStateChanged (playerCurrentState) {
+      playerStateChanged(playerCurrentState) {
         // console.log('player current update state', playerCurrentState)
       },
       // player is ready
-      playerReadied (player) {
+      playerReadied(player) {
         let tempoAssistido = this.videoSelecionado.tempoAssistido
         if (this.videoSelecionado.tipo === 'serie' && this.episodioSelecionado !== undefined) {
           tempoAssistido = this.episodioSelecionado.tempoAssistido
