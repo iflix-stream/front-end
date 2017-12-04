@@ -30,6 +30,7 @@ Vue.use(VueTheMask)
 
 
 Vue.http.headers.common['Authorization'] = localStorage.getItem('iflix-user-token')
+Vue.http.headers.common['Content-Language'] = navigator.language
 Vue.http.options.emulateJSON = true
 const routes = [
   {
