@@ -39,7 +39,7 @@
                   </v-flex>
 
                   <v-flex>
-                    <v-btn block primary large @click="login" :disabled="!valido">Login
+                    <v-btn block primary large @click="login" @keyup.enter="login" :disabled="!valido">Login
                     </v-btn>
                   </v-flex>
                   <v-flex>

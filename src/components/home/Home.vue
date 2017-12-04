@@ -163,7 +163,6 @@
                 }).then(
                     response => {
                         this.filmes = response.body;
-
                         if (this.filmes !== undefined) {
                             for (let i = 0; i < this.filmes.length; i++) {
                                 this.filmes[i].tipo = 'filme'

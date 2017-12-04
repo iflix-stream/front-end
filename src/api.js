@@ -3,9 +3,9 @@ import Vue from 'vue'
 export const Api = new Vue({
   data () {
     return {
-      url: 'http://10.1.6.23/iflix/api',
-      shortUrl: 'http://10.1.6.23/iflix',
-      frontUrl: 'http://10.1.6.23/iflix'
+      url: 'http://localhost/iflix/api',
+      shortUrl: 'http://localhost/iflix',
+      frontUrl: 'http://localhost:8080'
     }
   },
   mounted () {

@@ -136,6 +136,7 @@
           text: '',
           show: false
         },
+        usuario: jwtDecode(localStorage.getItem('iflix-user-token')).usuario,
         playerPronto: false,
         videoSelecionado: '',
         dialogAssistir: true,
@@ -148,8 +149,7 @@
         podeSalvarDe15Em15: true,
         playerOptions: {
           muted: false,
-          language: 'pt',
-          playbackRates: [0.7, 1.0, 1.5, 2.0],
+          language: 'pt-br',
           sources: [{
             type: 'video/mp4',
             src: ''
@@ -187,14 +187,11 @@
       },
 
       buscaVideo: function () {
-        this.$http.get(Api.url + '/' + this.$route.params.tipo + '/id/' + this.$route.params.id + '/', {
-          params: {
-            user: jwtDecode(localStorage.getItem('iflix-user-token')).usuario.id
-          }
+        this.$http.get(Api.url + '/' + this.$route.params.tipo + '/id/' + this.$route.params.id + '/?user='+this.usuario.id, {
         }).then(res => {
           this.videoSelecionado = res.body[0];
           this.configurarCinema();
-          this.playerPronto = true
+          this.playerPronto = true;
         })
       },
 
@@ -240,10 +237,13 @@
       updatePlayerOptionsWithSelectedVideo: function (video) {
         this.playerOptions.sources[0].src = Api.url + '/' + video.tipo + '/?stream=true&id=' + video.id;
         this.playerOptions.poster = `${Api.shortUrl}/video/filme/backgrounds/${video.id}.jpg`;
+
         if (video.tipo === 'serie') {
+
           this.setEpisode(video.primeiro_episodio)
-          this.playerOptions.sources[0].src = Api.url + '/' + video.tipo + '/?stream=true&id=' + video.primeiro_episodio.id
-          this.playerOptions.poster = `${Api.shortUrl}/video/serie/backgrounds/${episodio.id}.jpg`;
+          this.playerOptions.sources[0].src =
+            Api.url + '/' + video.tipo + '/?stream=true&id=' + video.primeiro_episodio.id
+          this.playerOptions.poster = `${Api.shortUrl}/video/serie/backgrounds/${video.id}.jpg`;
           if (video.ultimo_ep_assistido !== 0) {
             this.setEpisode(video.ultimo_ep_assistido)
             this.playerOptions.poster = `${Api.shortUrl}/video/serie/backgrounds/${video.ultimo_ep_assistido.id}.jpg`;
